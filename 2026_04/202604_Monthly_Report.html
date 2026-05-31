@@ -327,9 +327,71 @@
   <div class="section-title">資產配置明細 <span class="en">Asset Allocation Detail</span></div>
 
   <div class="two-col" style="margin-bottom:20px">
-    <div class="card">
-      <div class="card-title">資產配置概覽</div>
-      <div class="chart-wrap"><canvas id="chartAlloc"></canvas></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+
+      <!-- USD -->
+      <div class="card" style="border-left:3px solid #1d4ed8;padding:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="padding:2px 9px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-weight:700;font-size:12px">USD</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+        </div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">銀行存款</span><span style="font-variant-numeric:tabular-nums">5,669 USD</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:0.3%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">債券</span><span style="font-weight:600;font-variant-numeric:tabular-nums">2,703,330 USD</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:100%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
+          <span>利率範圍</span><span>1.35% ~ 9.56%</span>
+        </div>
+      </div>
+
+      <!-- GBP -->
+      <div class="card" style="border-left:3px solid #6d28d9;padding:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="padding:2px 9px;background:#ede9fe;color:#6d28d9;border-radius:4px;font-weight:700;font-size:12px">GBP</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+        </div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">銀行存款</span><span style="font-variant-numeric:tabular-nums">1,341 GBP</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:0.1%;height:100%;background:#6d28d9;border-radius:2px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">債券</span><span style="font-weight:600;font-variant-numeric:tabular-nums">1,935,478 GBP</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:100%;height:100%;background:#6d28d9;border-radius:2px"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
+          <span>利率範圍</span><span>1.22% ~ 5.81%</span>
+        </div>
+      </div>
+
+      <!-- TWD -->
+      <div class="card" style="border-left:3px solid #C9A961;padding:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="padding:2px 9px;background:rgba(201,169,97,.15);color:#7a5200;border-radius:4px;font-weight:700;font-size:12px">TWD</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+        </div>
+        <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">銀行存款</span><span style="font-variant-numeric:tabular-nums">492,235 TWD</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:9.5%;height:100%;background:#C9A961;border-radius:2px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">特別股</span><span style="font-weight:600;font-variant-numeric:tabular-nums">4,703,900 TWD</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:90.5%;height:100%;background:#C9A961;border-radius:2px"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
+          <span>利率範圍</span><span>1.20% ~ 4.50%</span>
+        </div>
+      </div>
+
     </div>
     <div class="card">
       <div class="card-title">各類資產明細</div>
@@ -849,21 +911,6 @@ new Chart(document.getElementById('chartAnnual'), {
   }
 });
 
-// Asset allocation donut
-new Chart(document.getElementById('chartAlloc'), {
-  type:'doughnut',
-  data:{
-    labels:['債券(USD)','債券(GBP)','特別股(TWD)','銀行存款','應收利息','其他'],
-    datasets:[{ data:[2703330,1935478,4703900,499245,113896,8009],
-      backgroundColor:['#1A3A2A','#2D5C41','#C9A961','#8aab98','#d4c4a0','#aaa'],
-      borderWidth:1, borderColor:'#fff' }]
-  },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, padding:10 } } },
-    cutout:'58%'
-  }
-});
 
 // P&L trend
 new Chart(document.getElementById('chartPnl'), {
