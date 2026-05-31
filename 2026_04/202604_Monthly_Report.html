@@ -7,8 +7,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --green:#7C2D12; --green-dark:#5C1E08; --green-light:#9A3412;
-    --gold:#C9A961; --gold-dark:#A88740;
+    --green:#6D3A0F; --green-dark:#2C1503; --green-light:#A05C1A;
+    --gold:#B8860B; --gold-dark:#9A6E08;
     --cream:#FAF7F2; --ink:#1C1917; --muted:#6B6560; --border:#E8E2D8;
     --pos:#15803D; --pos-bg:#DCFCE7; --neg:#B91C1C; --neg-bg:#FEE2E2;
     --card:#FFFFFF;
@@ -16,7 +16,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--cream);color:var(--ink);font-family:'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;line-height:1.5;font-size:14px}
 
-  .topbar{background:linear-gradient(135deg,var(--green-dark) 0%,var(--green) 55%,var(--green-light) 100%);color:#fff;padding:16px 32px;box-shadow:0 2px 8px rgba(0,0,0,.15);border-bottom:1px solid rgba(201,169,97,.2)}
+  .topbar{background:linear-gradient(135deg,var(--green-dark) 0%,var(--green) 55%,var(--green-light) 100%);color:#fff;padding:16px 32px;box-shadow:0 2px 8px rgba(0,0,0,.15);border-bottom:1px solid rgba(184,134,11,.2)}
   .topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:14px}
   .logo{width:44px;height:44px;border:2px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gold);letter-spacing:0;background:rgba(0,0,0,.15)}
@@ -30,7 +30,7 @@
   .tabs{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.05)}
   .tabs-inner{max-width:1400px;margin:0 auto;display:flex;gap:2px;padding:0 24px;overflow-x:auto}
   .tab{padding:13px 18px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;font-family:inherit;margin-bottom:-2px}
-  .tab:hover{color:var(--green);background:rgba(124,45,18,.04)}
+  .tab:hover{color:var(--green);background:rgba(109,58,15,.04)}
   .tab.active{color:var(--green);border-bottom-color:var(--gold);font-weight:700}
   .tab .icon{margin-right:6px}
 
@@ -68,14 +68,14 @@
   .chip{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
   .chip.up{background:var(--pos-bg);color:var(--pos)}
   .chip.down{background:var(--neg-bg);color:var(--neg)}
-  .chip.gold{background:rgba(201,169,97,.15);color:var(--gold-dark)}
+  .chip.gold{background:rgba(184,134,11,.15);color:var(--gold-dark)}
 
   table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
   th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border)}
   th{background:#f8f5ef;font-weight:600;color:var(--ink);font-size:11px;letter-spacing:.3px;position:sticky;top:0}
   th:first-child,td:first-child{text-align:left}
   tr:last-child td{border-bottom:none}
-  tr:hover td{background:rgba(124,45,18,.025)}
+  tr:hover td{background:rgba(109,58,15,.025)}
   .tfoot-row td{background:#f0ece4;font-weight:700;border-top:2px solid var(--gold)}
   .table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
 
@@ -94,10 +94,10 @@
   .chart-wrap-sm{position:relative;height:200px}
 
   .perf-table-wrap{overflow-x:auto}
-  .perf-table td.this{background:rgba(124,45,18,.06);font-weight:700;color:var(--green)}
+  .perf-table td.this{background:rgba(109,58,15,.06);font-weight:700;color:var(--green)}
   .perf-table td.best{color:var(--pos);font-weight:600}
   .perf-table td.worst{color:var(--neg)}
-  .highlight-row td{background:rgba(201,169,97,.08)}
+  .highlight-row td{background:rgba(184,134,11,.08)}
 
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   @media(max-width:900px){.two-col{grid-template-columns:1fr}}
@@ -372,19 +372,19 @@
       </div>
 
       <!-- TWD -->
-      <div class="card" style="border-left:3px solid #C9A961;padding:14px">
+      <div class="card" style="border-left:3px solid #B8860B;padding:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-          <span style="padding:2px 9px;background:rgba(201,169,97,.15);color:#7a5200;border-radius:4px;font-weight:700;font-size:12px">TWD</span>
+          <span style="padding:2px 9px;background:rgba(184,134,11,.15);color:#7a5200;border-radius:4px;font-weight:700;font-size:12px">TWD</span>
           <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
         </div>
         <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">銀行存款</span><span style="font-variant-numeric:tabular-nums">492,235 TWD</span></div>
-            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:9.5%;height:100%;background:#C9A961;border-radius:2px"></div></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:9.5%;height:100%;background:#B8860B;border-radius:2px"></div></div>
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">特別股</span><span style="font-weight:600;font-variant-numeric:tabular-nums">4,703,900 TWD</span></div>
-            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:90.5%;height:100%;background:#C9A961;border-radius:2px"></div></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:90.5%;height:100%;background:#B8860B;border-radius:2px"></div></div>
           </div>
         </div>
         <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
@@ -617,7 +617,7 @@
 // Each benchmark: key, label, color, dash style, dataset index in charts
 const BM_CFG = {
   sp:   { key:'sp',   label:'S&P 10Y公債',  color:'#6B7280', dash:[5,3],  dsIdx:1 },
-  ml:   { key:'ml',   label:'美林 IG 債',    color:'#C9A961', dash:[4,3],  dsIdx:2 },
+  ml:   { key:'ml',   label:'美林 IG 債',    color:'#B8860B', dash:[4,3],  dsIdx:2 },
   b720: { key:'b720', label:'00720B',        color:'#2563EB', dash:[2,2],  dsIdx:3 },
   b772: { key:'b772', label:'00772B',        color:'#7C3AED', dash:[6,2],  dsIdx:4 },
   b785: { key:'b785', label:'00785B',        color:'#DC2626', dash:[3,3],  dsIdx:5 },
@@ -701,7 +701,7 @@ const CF_GBP = [
   { yr:2035, int:11702,  prin:200000,  tot:211702 },
 ];
 
-const GREEN = '#7C2D12', GOLD = '#C9A961', LIGHT_GREEN = '#9A3412';
+const GREEN = '#6D3A0F', GOLD = '#B8860B', LIGHT_GREEN = '#A05C1A';
 const fmt = n => typeof n==='number' ? n.toLocaleString('en-US',{maximumFractionDigits:0}) : n;
 const fmtPct = n => (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
 const pctClass = n => n > 0 ? 'up' : (n < 0 ? 'down' : '');
@@ -832,7 +832,7 @@ function buildPerfDatasets(reversed) {
   return [
     // idx 0 — P&J (always visible)
     { label:'P&J 組合', data:src.map(d=>d.pj),
-      borderColor:GREEN, backgroundColor:'rgba(124,45,18,.1)',
+      borderColor:GREEN, backgroundColor:'rgba(109,58,15,.1)',
       borderWidth:2.5, pointRadius:3, tension:.3, fill:true, hidden:false },
     // idx 1 — S&P (hidden by default)
     { label:'S&P 10Y公債', data:src.map(d=>d.sp),
@@ -902,7 +902,7 @@ new Chart(document.getElementById('chartAnnual'), {
   type:'bar',
   data:{
     labels:['2023 Q4','2024','2025','2026 YTD'],
-    datasets:[{ label:'年度報酬', data:[6.23,8.41,9.08,1.33], backgroundColor:[GREEN,GREEN,'rgba(124,45,18,.7)',GOLD], borderRadius:4 }]
+    datasets:[{ label:'年度報酬', data:[6.23,8.41,9.08,1.33], backgroundColor:[GREEN,GREEN,'rgba(109,58,15,.7)',GOLD], borderRadius:4 }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
@@ -919,7 +919,7 @@ new Chart(document.getElementById('chartPnl'), {
     labels:['累計已實現損益','累計未實現損益','本年已實現','本年未實現'],
     datasets:[{
       data:[385379,172881,62278,-59835],
-      backgroundColor:v => v.raw >= 0 ? 'rgba(124,45,18,.75)' : 'rgba(185,28,28,.65)',
+      backgroundColor:v => v.raw >= 0 ? 'rgba(109,58,15,.75)' : 'rgba(185,28,28,.65)',
       borderRadius:4
     }]
   },
@@ -969,7 +969,7 @@ new Chart(document.getElementById('chartRating'), {
   type:'bar',
   data:{
     labels:['B','BB','BBB','≥A'],
-    datasets:[{ label:'比例', data:[0,0,48,52], backgroundColor:[GOLD,'rgba(201,169,97,.6)',LIGHT_GREEN,GREEN], borderRadius:4 }]
+    datasets:[{ label:'比例', data:[0,0,48,52], backgroundColor:[GOLD,'rgba(184,134,11,.6)',LIGHT_GREEN,GREEN], borderRadius:4 }]
   },
   options:{
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
@@ -988,8 +988,8 @@ new Chart(document.getElementById('chartCashflow'), {
   data:{
     labels: cfLabels,
     datasets:[
-      { label:'USD 利息', data:CF_USD.map(d=>d.int), backgroundColor:'rgba(124,45,18,.75)', stack:'usd', borderRadius:2 },
-      { label:'USD 本金', data:CF_USD.map(d=>d.prin), backgroundColor:'rgba(201,169,97,.85)', stack:'usd', borderRadius:2 },
+      { label:'USD 利息', data:CF_USD.map(d=>d.int), backgroundColor:'rgba(109,58,15,.75)', stack:'usd', borderRadius:2 },
+      { label:'USD 本金', data:CF_USD.map(d=>d.prin), backgroundColor:'rgba(184,134,11,.85)', stack:'usd', borderRadius:2 },
       { label:'GBP 利息', data:CF_GBP.map(d=>d.int), backgroundColor:'rgba(45,92,65,.65)', stack:'gbp', borderRadius:2 },
       { label:'GBP 本金', data:CF_GBP.map(d=>d.prin), backgroundColor:'rgba(185,28,28,.55)', stack:'gbp', borderRadius:2 },
     ]

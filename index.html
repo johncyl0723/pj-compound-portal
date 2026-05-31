@@ -7,20 +7,20 @@
 <script src="./portal-config.js"></script>
 <style>
   :root {
-    --green: #7C2D12;
-    --green-dark: #5C1E08;
-    --green-light: #9A3412;
-    --gold: #C9A961;
-    --gold-dark: #A88740;
+    --green: #6D3A0F;
+    --green-dark: #2C1503;
+    --green-light: #A05C1A;
+    --gold: #B8860B;
+    --gold-dark: #9A6E08;
     --cream: #FAF7F2;
     --ink: #1C1917;
     --muted: #6B6560;
     --border: #E8E2D8;
-    --sidebar-bg: #4A1600;
-    --sidebar-hover: rgba(201,169,97,0.14);
-    --sidebar-active: rgba(201,169,97,0.25);
-    --sidebar-text: #E8D4B8;
-    --sidebar-muted: rgba(232,212,184,0.5);
+    --sidebar-bg: #1E0D02;
+    --sidebar-hover: rgba(184,134,11,0.14);
+    --sidebar-active: rgba(184,134,11,0.25);
+    --sidebar-text: #E8D5A0;
+    --sidebar-muted: rgba(232,213,160,0.5);
     --sidebar-width: 268px;
     --banner-height: 64px;
   }
@@ -43,12 +43,12 @@
     gap: 16px;
     z-index: 100;
     box-shadow: 0 2px 12px rgba(0,0,0,.3);
-    border-bottom: 1px solid rgba(201,169,97,.25);
+    border-bottom: 1px solid rgba(184,134,11,.25);
   }
   .banner-logo-box {
     width: 40px; height: 40px; flex-shrink: 0;
-    background: rgba(201,169,97,.15);
-    border: 1.5px solid rgba(201,169,97,.5);
+    background: rgba(184,134,11,.15);
+    border: 1.5px solid rgba(184,134,11,.5);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     font-size: 18px; font-weight: 700; color: var(--gold);
@@ -61,8 +61,8 @@
   .banner-badge {
     margin-left: auto;
     padding: 4px 12px;
-    background: rgba(201,169,97,.12);
-    border: 1px solid rgba(201,169,97,.3);
+    background: rgba(184,134,11,.12);
+    border: 1px solid rgba(184,134,11,.3);
     border-radius: 16px;
     font-size: 11px; color: var(--gold); font-weight: 600; letter-spacing: .5px;
   }
@@ -82,10 +82,10 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(201,169,97,.18);
+    border-right: 1px solid rgba(184,134,11,.18);
   }
   .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: rgba(201,169,97,.3); border-radius: 2px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(184,134,11,.3); border-radius: 2px; }
   .sidebar::-webkit-scrollbar-track { background: transparent; }
 
   .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -163,7 +163,7 @@
     flex: 1;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(135deg, #2A0A00 0%, #4A1600 100%);
+    background: linear-gradient(135deg, #150800 0%, #2C1503 100%);
   }
   #content-iframe {
     width: 100%; height: 100%;
@@ -178,13 +178,13 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 40px; text-align: center;
-    background: linear-gradient(135deg, #2A0A00 0%, #4A1600 100%);
+    background: linear-gradient(135deg, #150800 0%, #2C1503 100%);
     color: rgba(212,196,160,.7);
   }
   .welcome-icon { font-size: 56px; margin-bottom: 20px; opacity: .6; }
   .welcome h2 { font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 10px; letter-spacing: .3px; }
   .welcome p { font-size: 14px; line-height: 1.7; max-width: 360px; opacity: .75; }
-  .welcome .hint { margin-top: 24px; font-size: 12px; padding: 10px 20px; border: 1px solid rgba(201,169,97,.3); border-radius: 20px; color: var(--gold); opacity: .7; }
+  .welcome .hint { margin-top: 24px; font-size: 12px; padding: 10px 20px; border: 1px solid rgba(184,134,11,.3); border-radius: 20px; color: var(--gold); opacity: .7; }
 </style>
 </head>
 <body>
