@@ -111,6 +111,23 @@
   .currency-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:10px}
   .usd-tag{background:#dbeafe;color:#1d4ed8}
   .gbp-tag{background:#ede9fe;color:#6d28d9}
+
+  /* ── Benchmark toggle bar ── */
+  .bm-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;background:#f8f5ef;border-radius:8px;margin-bottom:14px;border:1px solid var(--border)}
+  .bm-bar-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-right:4px;flex-shrink:0}
+  .bm-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;background:#fff;user-select:none}
+  .bm-btn .bm-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background .18s}
+  .bm-btn.off{background:#fff;color:#aaa;border-color:#ddd}
+  .bm-btn.off .bm-dot{background:#ddd}
+  .bm-btn.on{color:#fff}
+  /* per-benchmark colours set in JS */
+  .bm-fixed{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;background:var(--green);color:#fff;border:1.5px solid var(--green);cursor:default;user-select:none}
+  .bm-fixed .bm-dot{width:8px;height:8px;border-radius:50%;background:#fff;flex-shrink:0}
+  .bm-note{font-size:10px;color:var(--muted);margin-left:auto;font-style:italic}
+
+  /* perf table column hide */
+  .perf-table th.bm-col, .perf-table td.bm-col{transition:opacity .2s}
+  .perf-table th.bm-col.hidden, .perf-table td.bm-col.hidden{display:none}
 </style>
 </head>
 <body>
@@ -181,6 +198,17 @@
   <!-- Monthly performance chart -->
   <div class="card" style="margin-bottom:20px">
     <div class="card-title">各月績效走勢 Monthly Performance <span style="font-size:10px;color:var(--muted);font-weight:400">(2024–2026)</span></div>
+    <!-- Benchmark toggle bar -->
+    <div class="bm-bar" id="bm-bar-overview">
+      <span class="bm-bar-label">比較基準</span>
+      <span class="bm-fixed"><span class="bm-dot"></span>P&amp;J 組合</span>
+      <button class="bm-btn off" data-bm="sp"   onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
+      <button class="bm-btn off" data-bm="ml"   onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>美林 IG 債</button>
+      <button class="bm-btn off" data-bm="b720" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00720B</button>
+      <button class="bm-btn off" data-bm="b772" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00772B</button>
+      <button class="bm-btn off" data-bm="b785" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00785B</button>
+      <span class="bm-note">00720B/00772B/00785B 為台幣計價，其餘為美金計價，以報酬率%直接比較</span>
+    </div>
     <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
   </div>
 
@@ -237,40 +265,58 @@
     </div>
   </div>
 
+  <!-- Benchmark toggle bar for performance tab -->
+  <div class="bm-bar" id="bm-bar-perf">
+    <span class="bm-bar-label">顯示基準</span>
+    <span class="bm-fixed"><span class="bm-dot"></span>P&amp;J 組合</span>
+    <button class="bm-btn off" data-bm="sp"   onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
+    <button class="bm-btn off" data-bm="ml"   onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>美林 IG 債</button>
+    <button class="bm-btn off" data-bm="b720" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00720B</button>
+    <button class="bm-btn off" data-bm="b772" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00772B</button>
+    <button class="bm-btn off" data-bm="b785" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00785B</button>
+    <span class="bm-note">同步控制下方走勢圖與對照表</span>
+  </div>
+
+  <!-- Performance line chart -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">績效走勢對比 Performance Trend <span style="font-size:10px;font-weight:400;color:var(--muted)">(2023 Q4 — 2026 Apr)</span></div>
+    <div class="chart-wrap"><canvas id="chartPerfLine"></canvas></div>
+  </div>
+
   <div class="card">
     <div class="card-title">歷月績效對照表 Monthly Performance Comparison</div>
     <div class="perf-table-wrap">
-      <table class="perf-table">
+      <table class="perf-table" id="perf-table">
         <thead>
           <tr>
             <th>期間</th>
-            <th>P&J 組合</th>
-            <th>S&P 10Y公債</th>
-            <th>美林IG債</th>
-            <th>00720B</th>
-            <th>00772B</th>
-            <th>00785B</th>
+            <th>P&amp;J 組合</th>
+            <th class="bm-col hidden" data-bm="sp">S&amp;P 10Y公債</th>
+            <th class="bm-col hidden" data-bm="ml">美林IG債</th>
+            <th class="bm-col hidden" data-bm="b720">00720B</th>
+            <th class="bm-col hidden" data-bm="b772">00772B</th>
+            <th class="bm-col hidden" data-bm="b785">00785B</th>
           </tr>
         </thead>
         <tbody id="perf-tbody"></tbody>
-        <tfoot>
+        <tfoot id="perf-tfoot">
           <tr class="tfoot-row">
             <td>累計報酬率</td>
             <td class="up">17.47%</td>
-            <td>15.34%</td>
-            <td>16.54%</td>
-            <td>13.03%</td>
-            <td>10.26%</td>
-            <td>15.52%</td>
+            <td class="bm-col hidden" data-bm="sp">15.34%</td>
+            <td class="bm-col hidden" data-bm="ml">16.54%</td>
+            <td class="bm-col hidden" data-bm="b720">13.03%</td>
+            <td class="bm-col hidden" data-bm="b772">10.26%</td>
+            <td class="bm-col hidden" data-bm="b785">15.52%</td>
           </tr>
           <tr class="tfoot-row">
             <td>最大回撤 MDD</td>
             <td class="down">-2.25%</td>
-            <td class="down">-6.14%</td>
-            <td class="down">-3.22%</td>
-            <td class="down">-9.47%</td>
-            <td class="down">-8.99%</td>
-            <td class="down">-6.84%</td>
+            <td class="bm-col hidden" data-bm="sp" style="color:var(--neg)">-6.14%</td>
+            <td class="bm-col hidden" data-bm="ml" style="color:var(--neg)">-3.22%</td>
+            <td class="bm-col hidden" data-bm="b720" style="color:var(--neg)">-9.47%</td>
+            <td class="bm-col hidden" data-bm="b772" style="color:var(--neg)">-8.99%</td>
+            <td class="bm-col hidden" data-bm="b785" style="color:var(--neg)">-6.84%</td>
           </tr>
         </tfoot>
       </table>
@@ -507,6 +553,19 @@
 </main>
 
 <script>
+// ════════════════════════════ BENCHMARK CONFIG ════════════════════════════
+// Each benchmark: key, label, color, dash style, dataset index in charts
+const BM_CFG = {
+  sp:   { key:'sp',   label:'S&P 10Y公債',  color:'#6B7280', dash:[5,3],  dsIdx:1 },
+  ml:   { key:'ml',   label:'美林 IG 債',    color:'#C9A961', dash:[4,3],  dsIdx:2 },
+  b720: { key:'b720', label:'00720B',        color:'#2563EB', dash:[2,2],  dsIdx:3 },
+  b772: { key:'b772', label:'00772B',        color:'#7C3AED', dash:[6,2],  dsIdx:4 },
+  b785: { key:'b785', label:'00785B',        color:'#DC2626', dash:[3,3],  dsIdx:5 },
+};
+
+// State: which benchmarks are currently ON (shared across all charts)
+const bmState = { sp:false, ml:false, b720:false, b772:false, b785:false };
+
 // ════════════════════════════ DATA ════════════════════════════
 
 const PERF_DATA = [
@@ -597,6 +656,44 @@ document.querySelectorAll('.tab').forEach(btn => {
   });
 });
 
+// ════════════════════════════ BENCHMARK TOGGLE ════════════════════════════
+function toggleBm(btn, context) {
+  const bm = btn.dataset.bm;
+  const cfg = BM_CFG[bm];
+  bmState[bm] = !bmState[bm];
+  const isOn = bmState[bm];
+
+  // Style ALL toggle buttons with the same bm key (overview + perf bars)
+  document.querySelectorAll(`.bm-btn[data-bm="${bm}"]`).forEach(b => {
+    b.classList.toggle('on', isOn);
+    b.classList.toggle('off', !isOn);
+    if (isOn) {
+      b.style.background = cfg.color;
+      b.style.borderColor = cfg.color;
+      b.style.color = '#fff';
+      b.querySelector('.bm-dot').style.background = 'rgba(255,255,255,.8)';
+    } else {
+      b.style.background = '#fff';
+      b.style.borderColor = '#ddd';
+      b.style.color = '#aaa';
+      b.querySelector('.bm-dot').style.background = '#ddd';
+    }
+  });
+
+  // Toggle dataset in chartMonthly (overview)
+  const dsMonthly = chartMonthly.data.datasets[cfg.dsIdx];
+  if (dsMonthly) { dsMonthly.hidden = !isOn; chartMonthly.update(); }
+
+  // Toggle dataset in chartPerfLine (performance tab)
+  const dsPerfLine = chartPerfLine.data.datasets[cfg.dsIdx];
+  if (dsPerfLine) { dsPerfLine.hidden = !isOn; chartPerfLine.update(); }
+
+  // Toggle table columns (performance tab only)
+  document.querySelectorAll(`#perf-table .bm-col[data-bm="${bm}"]`).forEach(cell => {
+    cell.classList.toggle('hidden', !isOn);
+  });
+}
+
 // ════════════════════════════ PERF TABLE ════════════════════════════
 (function buildPerfTable() {
   const tbody = document.getElementById('perf-tbody');
@@ -606,11 +703,11 @@ document.querySelectorAll('.tab').forEach(btn => {
     tr.innerHTML = `
       <td>${d.period}${d.isThis ? ' <span class="chip gold">本期</span>' : ''}</td>
       <td class="${pctClass(d.pj)} ${d.isThis ? 'this' : ''}">${fmtPct(d.pj)}</td>
-      <td class="${pctClass(d.sp)}">${fmtPct(d.sp)}</td>
-      <td class="${pctClass(d.ml)}">${fmtPct(d.ml)}</td>
-      <td class="${pctClass(d.b720)}">${fmtPct(d.b720)}</td>
-      <td class="${pctClass(d.b772)}">${fmtPct(d.b772)}</td>
-      <td class="${pctClass(d.b785)}">${fmtPct(d.b785)}</td>`;
+      <td class="bm-col hidden ${pctClass(d.sp)}" data-bm="sp">${fmtPct(d.sp)}</td>
+      <td class="bm-col hidden ${pctClass(d.ml)}" data-bm="ml">${fmtPct(d.ml)}</td>
+      <td class="bm-col hidden ${pctClass(d.b720)}" data-bm="b720">${fmtPct(d.b720)}</td>
+      <td class="bm-col hidden ${pctClass(d.b772)}" data-bm="b772">${fmtPct(d.b772)}</td>
+      <td class="bm-col hidden ${pctClass(d.b785)}" data-bm="b785">${fmtPct(d.b785)}</td>`;
     tbody.appendChild(tr);
   });
 })();
@@ -665,30 +762,79 @@ document.querySelectorAll('.tab').forEach(btn => {
 })();
 
 // ════════════════════════════ CHARTS ════════════════════════════
-// Chart defaults
 Chart.defaults.font.family = "'Segoe UI','PingFang TC','Microsoft JhengHei',system-ui,sans-serif";
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#6B6560';
 
-// Monthly performance line chart
-new Chart(document.getElementById('chartMonthly'), {
+// Shared dataset builder for benchmark line charts
+function buildPerfDatasets(reversed) {
+  const src = reversed ? [...PERF_DATA].reverse() : PERF_DATA;
+  return [
+    // idx 0 — P&J (always visible)
+    { label:'P&J 組合', data:src.map(d=>d.pj),
+      borderColor:GREEN, backgroundColor:'rgba(26,58,42,.1)',
+      borderWidth:2.5, pointRadius:3, tension:.3, fill:true, hidden:false },
+    // idx 1 — S&P (hidden by default)
+    { label:'S&P 10Y公債', data:src.map(d=>d.sp),
+      borderColor:BM_CFG.sp.color, borderWidth:1.5, pointRadius:2,
+      tension:.3, borderDash:BM_CFG.sp.dash, hidden:true },
+    // idx 2 — ML IG (hidden by default)
+    { label:'美林 IG 債', data:src.map(d=>d.ml),
+      borderColor:BM_CFG.ml.color, borderWidth:1.5, pointRadius:2,
+      tension:.3, borderDash:BM_CFG.ml.dash, hidden:true },
+    // idx 3 — 00720B (hidden by default)
+    { label:'00720B', data:src.map(d=>d.b720),
+      borderColor:BM_CFG.b720.color, borderWidth:1.5, pointRadius:2,
+      tension:.3, borderDash:BM_CFG.b720.dash, hidden:true },
+    // idx 4 — 00772B (hidden by default)
+    { label:'00772B', data:src.map(d=>d.b772),
+      borderColor:BM_CFG.b772.color, borderWidth:1.5, pointRadius:2,
+      tension:.3, borderDash:BM_CFG.b772.dash, hidden:true },
+    // idx 5 — 00785B (hidden by default)
+    { label:'00785B', data:src.map(d=>d.b785),
+      borderColor:BM_CFG.b785.color, borderWidth:1.5, pointRadius:2,
+      tension:.3, borderDash:BM_CFG.b785.dash, hidden:true },
+  ];
+}
+
+const sharedPerfOptions = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{
+    legend:{ display:false },   // we use custom toggle bar — hide default legend
+    tooltip:{ mode:'index', intersect:false,
+      callbacks:{
+        label: ctx => {
+          if (ctx.dataset.hidden) return null;
+          const v = ctx.parsed.y;
+          return ` ${ctx.dataset.label}: ${v>=0?'+':''}${v.toFixed(2)}%`;
+        }
+      }
+    }
+  },
+  scales:{
+    y:{ grid:{ color:'rgba(0,0,0,.05)' }, ticks:{ callback:v=>v+'%' } },
+    x:{ grid:{ display:false }, ticks:{ maxRotation:45 } }
+  }
+};
+
+// Overview — Monthly performance line chart (dsIdx matches BM_CFG)
+const chartMonthly = new Chart(document.getElementById('chartMonthly'), {
   type:'line',
   data:{
     labels: PERF_DATA.map(d=>d.period).reverse(),
-    datasets:[
-      { label:'P&J 組合', data:PERF_DATA.map(d=>d.pj).reverse(), borderColor:GREEN, backgroundColor:'rgba(26,58,42,.1)', borderWidth:2.5, pointRadius:3, tension:.3, fill:true },
-      { label:'美林IG債', data:PERF_DATA.map(d=>d.ml).reverse(), borderColor:GOLD, borderWidth:1.5, pointRadius:2, tension:.3, borderDash:[4,3] },
-      { label:'S&P 10Y公債', data:PERF_DATA.map(d=>d.sp).reverse(), borderColor:'#aaa', borderWidth:1.5, pointRadius:2, tension:.3, borderDash:[2,4] },
-    ]
+    datasets: buildPerfDatasets(true)
   },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{ position:'top', labels:{ boxWidth:12, padding:14 } }, tooltip:{ mode:'index', intersect:false } },
-    scales:{
-      y:{ grid:{ color:'rgba(0,0,0,.05)' }, ticks:{ callback:v=>v+'%' } },
-      x:{ grid:{ display:false }, ticks:{ maxRotation:45 } }
-    }
-  }
+  options: sharedPerfOptions
+});
+
+// Performance tab — separate instance (same data, same hidden defaults)
+const chartPerfLine = new Chart(document.getElementById('chartPerfLine'), {
+  type:'line',
+  data:{
+    labels: PERF_DATA.map(d=>d.period).reverse(),
+    datasets: buildPerfDatasets(true)
+  },
+  options: sharedPerfOptions
 });
 
 // Annual return bar chart
