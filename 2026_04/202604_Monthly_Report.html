@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --green:#1A3A2A; --green-dark:#0F2419; --green-light:#2D5C41;
+    --green:#7C2D12; --green-dark:#5C1E08; --green-light:#9A3412;
     --gold:#C9A961; --gold-dark:#A88740;
     --cream:#FAF7F2; --ink:#1C1917; --muted:#6B6560; --border:#E8E2D8;
     --pos:#15803D; --pos-bg:#DCFCE7; --neg:#B91C1C; --neg-bg:#FEE2E2;
@@ -30,7 +30,7 @@
   .tabs{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.05)}
   .tabs-inner{max-width:1400px;margin:0 auto;display:flex;gap:2px;padding:0 24px;overflow-x:auto}
   .tab{padding:13px 18px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;font-family:inherit;margin-bottom:-2px}
-  .tab:hover{color:var(--green);background:rgba(26,58,42,.04)}
+  .tab:hover{color:var(--green);background:rgba(124,45,18,.04)}
   .tab.active{color:var(--green);border-bottom-color:var(--gold);font-weight:700}
   .tab .icon{margin-right:6px}
 
@@ -75,7 +75,7 @@
   th{background:#f8f5ef;font-weight:600;color:var(--ink);font-size:11px;letter-spacing:.3px;position:sticky;top:0}
   th:first-child,td:first-child{text-align:left}
   tr:last-child td{border-bottom:none}
-  tr:hover td{background:rgba(26,58,42,.025)}
+  tr:hover td{background:rgba(124,45,18,.025)}
   .tfoot-row td{background:#f0ece4;font-weight:700;border-top:2px solid var(--gold)}
   .table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
 
@@ -94,7 +94,7 @@
   .chart-wrap-sm{position:relative;height:200px}
 
   .perf-table-wrap{overflow-x:auto}
-  .perf-table td.this{background:rgba(26,58,42,.06);font-weight:700;color:var(--green)}
+  .perf-table td.this{background:rgba(124,45,18,.06);font-weight:700;color:var(--green)}
   .perf-table td.best{color:var(--pos);font-weight:600}
   .perf-table td.worst{color:var(--neg)}
   .highlight-row td{background:rgba(201,169,97,.08)}
@@ -701,7 +701,7 @@ const CF_GBP = [
   { yr:2035, int:11702,  prin:200000,  tot:211702 },
 ];
 
-const GREEN = '#1A3A2A', GOLD = '#C9A961', LIGHT_GREEN = '#2D5C41';
+const GREEN = '#7C2D12', GOLD = '#C9A961', LIGHT_GREEN = '#9A3412';
 const fmt = n => typeof n==='number' ? n.toLocaleString('en-US',{maximumFractionDigits:0}) : n;
 const fmtPct = n => (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
 const pctClass = n => n > 0 ? 'up' : (n < 0 ? 'down' : '');
@@ -832,7 +832,7 @@ function buildPerfDatasets(reversed) {
   return [
     // idx 0 — P&J (always visible)
     { label:'P&J 組合', data:src.map(d=>d.pj),
-      borderColor:GREEN, backgroundColor:'rgba(26,58,42,.1)',
+      borderColor:GREEN, backgroundColor:'rgba(124,45,18,.1)',
       borderWidth:2.5, pointRadius:3, tension:.3, fill:true, hidden:false },
     // idx 1 — S&P (hidden by default)
     { label:'S&P 10Y公債', data:src.map(d=>d.sp),
@@ -902,7 +902,7 @@ new Chart(document.getElementById('chartAnnual'), {
   type:'bar',
   data:{
     labels:['2023 Q4','2024','2025','2026 YTD'],
-    datasets:[{ label:'年度報酬', data:[6.23,8.41,9.08,1.33], backgroundColor:[GREEN,GREEN,'rgba(26,58,42,.7)',GOLD], borderRadius:4 }]
+    datasets:[{ label:'年度報酬', data:[6.23,8.41,9.08,1.33], backgroundColor:[GREEN,GREEN,'rgba(124,45,18,.7)',GOLD], borderRadius:4 }]
   },
   options:{
     responsive:true, maintainAspectRatio:false,
@@ -919,7 +919,7 @@ new Chart(document.getElementById('chartPnl'), {
     labels:['累計已實現損益','累計未實現損益','本年已實現','本年未實現'],
     datasets:[{
       data:[385379,172881,62278,-59835],
-      backgroundColor:v => v.raw >= 0 ? 'rgba(26,58,42,.75)' : 'rgba(185,28,28,.65)',
+      backgroundColor:v => v.raw >= 0 ? 'rgba(124,45,18,.75)' : 'rgba(185,28,28,.65)',
       borderRadius:4
     }]
   },
@@ -988,7 +988,7 @@ new Chart(document.getElementById('chartCashflow'), {
   data:{
     labels: cfLabels,
     datasets:[
-      { label:'USD 利息', data:CF_USD.map(d=>d.int), backgroundColor:'rgba(26,58,42,.75)', stack:'usd', borderRadius:2 },
+      { label:'USD 利息', data:CF_USD.map(d=>d.int), backgroundColor:'rgba(124,45,18,.75)', stack:'usd', borderRadius:2 },
       { label:'USD 本金', data:CF_USD.map(d=>d.prin), backgroundColor:'rgba(201,169,97,.85)', stack:'usd', borderRadius:2 },
       { label:'GBP 利息', data:CF_GBP.map(d=>d.int), backgroundColor:'rgba(45,92,65,.65)', stack:'gbp', borderRadius:2 },
       { label:'GBP 本金', data:CF_GBP.map(d=>d.prin), backgroundColor:'rgba(185,28,28,.55)', stack:'gbp', borderRadius:2 },
