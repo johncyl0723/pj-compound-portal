@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>投資月報 | P&amp;J Compound Company Limited | 2026/4</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --green:#1A3A2A; --green-dark:#0F2419; --green-light:#2D5C41;
+    --gold:#C9A961; --gold-dark:#A88740;
+    --cream:#FAF7F2; --ink:#1C1917; --muted:#6B6560; --border:#E8E2D8;
+    --pos:#15803D; --pos-bg:#DCFCE7; --neg:#B91C1C; --neg-bg:#FEE2E2;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;line-height:1.5;font-size:14px}
+
+  .topbar{background:linear-gradient(135deg,var(--green-dark) 0%,var(--green) 55%,var(--green-light) 100%);color:#fff;padding:16px 32px;box-shadow:0 2px 8px rgba(0,0,0,.15);border-bottom:1px solid rgba(201,169,97,.2)}
+  .topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:44px;height:44px;border:2px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gold);letter-spacing:0;background:rgba(0,0,0,.15)}
+  .brand h1{font-size:17px;font-weight:700;letter-spacing:.3px}
+  .brand .sub{font-size:10px;opacity:.65;letter-spacing:2px;text-transform:uppercase;margin-top:2px;color:var(--gold)}
+  .report-meta{display:flex;gap:24px;font-size:12px}
+  .report-meta .label{opacity:.65;margin-bottom:2px}
+  .report-meta .val{font-weight:600;color:var(--gold)}
+  .disclaim{font-size:10px;opacity:.5;font-style:italic;margin-top:4px;text-align:right}
+
+  .tabs{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .tabs-inner{max-width:1400px;margin:0 auto;display:flex;gap:2px;padding:0 24px;overflow-x:auto}
+  .tab{padding:13px 18px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;font-family:inherit;margin-bottom:-2px}
+  .tab:hover{color:var(--green);background:rgba(26,58,42,.04)}
+  .tab.active{color:var(--green);border-bottom-color:var(--gold);font-weight:700}
+  .tab .icon{margin-right:6px}
+
+  main{max-width:1400px;margin:0 auto;padding:24px}
+  .panel{display:none;animation:fadeIn .2s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+  .section-title{font-size:15px;font-weight:700;color:var(--green);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:10px}
+  .section-title .en{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.5px}
+  .section-gap{margin-top:28px}
+
+  .grid{display:grid;gap:16px}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  .grid-5{grid-template-columns:repeat(5,1fr)}
+  @media(max-width:960px){.grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){.grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr}}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+  .card-title{font-size:11px;color:var(--muted);letter-spacing:.6px;margin-bottom:10px;font-weight:600;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+  .kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 20px;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+  .kpi .label{font-size:11px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+  .kpi .value{font-size:24px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .kpi .sub{font-size:12px;color:var(--muted);margin-top:5px}
+  .kpi.primary::before{background:var(--green);height:4px}
+  .kpi.primary .value{color:var(--green);font-size:28px}
+  .kpi.gold::before{background:var(--gold);height:4px}
+  .kpi.gold .value{color:var(--gold-dark)}
+  .up{color:var(--pos);font-weight:600}
+  .down{color:var(--neg);font-weight:600}
+  .chip{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+  .chip.up{background:var(--pos-bg);color:var(--pos)}
+  .chip.down{background:var(--neg-bg);color:var(--neg)}
+  .chip.gold{background:rgba(201,169,97,.15);color:var(--gold-dark)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border)}
+  th{background:#f8f5ef;font-weight:600;color:var(--ink);font-size:11px;letter-spacing:.3px;position:sticky;top:0}
+  th:first-child,td:first-child{text-align:left}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(26,58,42,.025)}
+  .tfoot-row td{background:#f0ece4;font-weight:700;border-top:2px solid var(--gold)}
+  .table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+
+  .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
+  .badge-pledge{background:#e0f0e8;color:#15652e}
+  .badge-mature{background:#fdefd0;color:#7a5200}
+  .badge-na{background:#f0f0f0;color:#666}
+  .badge-at1{background:#fce8e8;color:#8b1c1c}
+  .badge-sub{background:#e8eef8;color:#1c3a8b}
+
+  .rating-a{color:#15652e;font-weight:700}
+  .rating-bbb{color:#7a5200;font-weight:700}
+  .rating-bb{color:#8b1c1c;font-weight:700}
+
+  .chart-wrap{position:relative;height:280px}
+  .chart-wrap-sm{position:relative;height:200px}
+
+  .perf-table-wrap{overflow-x:auto}
+  .perf-table td.this{background:rgba(26,58,42,.06);font-weight:700;color:var(--green)}
+  .perf-table td.best{color:var(--pos);font-weight:600}
+  .perf-table td.worst{color:var(--neg)}
+  .highlight-row td{background:rgba(201,169,97,.08)}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  @media(max-width:900px){.three-col{grid-template-columns:1fr}}
+
+  .dist-chart-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:20px}
+  @media(max-width:900px){.dist-chart-row{grid-template-columns:1fr}}
+
+  .cf-table-section{margin-bottom:28px}
+  .currency-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;margin-bottom:10px}
+  .usd-tag{background:#dbeafe;color:#1d4ed8}
+  .gbp-tag{background:#ede9fe;color:#6d28d9}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo">P&amp;J</div>
+      <div>
+        <h1>P&amp;J Compound Company Limited</h1>
+        <div class="sub">Investment Monthly Report</div>
+      </div>
+    </div>
+    <div class="report-meta">
+      <div><div class="label">報告期間</div><div class="val">2026 年 4 月</div></div>
+      <div><div class="label">計價幣別</div><div class="val">USD</div></div>
+      <div><div class="label">成立日</div><div class="val">Nov-2023</div></div>
+    </div>
+  </div>
+  <div style="max-width:1400px;margin:6px auto 0;font-size:10px;opacity:.45;font-style:italic">
+    For Information Purpose Only — 本報告僅供參考，不構成投資建議
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tabs-inner" id="tab-nav">
+    <button class="tab active" data-tab="overview"><span class="icon">📊</span>總覽</button>
+    <button class="tab" data-tab="performance"><span class="icon">📈</span>績效比較</button>
+    <button class="tab" data-tab="allocation"><span class="icon">🏦</span>資產配置</button>
+    <button class="tab" data-tab="income"><span class="icon">💰</span>損益表</button>
+    <button class="tab" data-tab="bonds"><span class="icon">📋</span>債券持有</button>
+    <button class="tab" data-tab="cashflow"><span class="icon">💵</span>現金流量</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════ TAB 1: OVERVIEW ═══════════════════════════════════ -->
+<div class="panel active" id="panel-overview">
+  <div class="section-title">投資組合總覽 <span class="en">Portfolio Overview — Apr 2026</span></div>
+
+  <!-- KPI row -->
+  <div class="grid grid-4" style="margin-bottom:20px">
+    <div class="kpi primary">
+      <div class="label">投資組合淨值</div>
+      <div class="value">3,702,148</div>
+      <div class="sub">USD 計價</div>
+    </div>
+    <div class="kpi gold">
+      <div class="label">年初至今報酬率</div>
+      <div class="value">+1.33%</div>
+      <div class="sub"><span class="chip up">+43,278 USD</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">累計已實現損益</div>
+      <div class="value up">385,379</div>
+      <div class="sub">本年度 +62,278</div>
+    </div>
+    <div class="kpi">
+      <div class="label">累計未實現損益</div>
+      <div class="value up">172,881</div>
+      <div class="sub">本年度 (59,835)</div>
+    </div>
+  </div>
+
+  <!-- Monthly performance chart -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">各月績效走勢 Monthly Performance <span style="font-size:10px;color:var(--muted);font-weight:400">(2024–2026)</span></div>
+    <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+  </div>
+
+  <!-- Annual yield -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">各年度績效 Annual Return</div>
+      <div class="chart-wrap-sm"><canvas id="chartAnnual"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">本月績效 vs 同期基準</div>
+      <div style="padding-top:8px">
+        <table>
+          <thead><tr><th>指數/基金</th><th>本月報酬</th></tr></thead>
+          <tbody>
+            <tr class="highlight-row"><td><strong>P&J 投資組合</strong></td><td class="up">+1.33%</td></tr>
+            <tr><td>S&P 10年公債總報酬</td><td class="down">-0.22%</td></tr>
+            <tr><td>美林 IG 債券總報酬</td><td class="up">+0.56%</td></tr>
+            <tr><td>00720B 元大IG債ETF</td><td class="down">-0.82%</td></tr>
+            <tr><td>00772B 中信高評級公司債</td><td class="down">-0.81%</td></tr>
+            <tr><td>00785B 富邦金融IG債</td><td class="down">-0.69%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TAB 2: PERFORMANCE ═══════════════════════════════════ -->
+<div class="panel" id="panel-performance">
+  <div class="section-title">績效比較報告 <span class="en">Portfolio Comparison Summary</span></div>
+
+  <!-- Summary KPIs -->
+  <div class="grid grid-4" style="margin-bottom:20px">
+    <div class="kpi primary">
+      <div class="label">累計總報酬率</div>
+      <div class="value up">+17.47%</div>
+      <div class="sub">成立至今 (Nov-2023)</div>
+    </div>
+    <div class="kpi">
+      <div class="label">最大回撤 MDD</div>
+      <div class="value down">-2.25%</div>
+      <div class="sub">vs 美林IG -3.22%</div>
+    </div>
+    <div class="kpi gold">
+      <div class="label">vs 美林IG累計</div>
+      <div class="value">+0.93%</div>
+      <div class="sub">17.47% vs 16.54%</div>
+    </div>
+    <div class="kpi">
+      <div class="label">vs 元大00720B累計</div>
+      <div class="value up">+4.44%</div>
+      <div class="sub">17.47% vs 13.03%</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">歷月績效對照表 Monthly Performance Comparison</div>
+    <div class="perf-table-wrap">
+      <table class="perf-table">
+        <thead>
+          <tr>
+            <th>期間</th>
+            <th>P&J 組合</th>
+            <th>S&P 10Y公債</th>
+            <th>美林IG債</th>
+            <th>00720B</th>
+            <th>00772B</th>
+            <th>00785B</th>
+          </tr>
+        </thead>
+        <tbody id="perf-tbody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td>累計報酬率</td>
+            <td class="up">17.47%</td>
+            <td>15.34%</td>
+            <td>16.54%</td>
+            <td>13.03%</td>
+            <td>10.26%</td>
+            <td>15.52%</td>
+          </tr>
+          <tr class="tfoot-row">
+            <td>最大回撤 MDD</td>
+            <td class="down">-2.25%</td>
+            <td class="down">-6.14%</td>
+            <td class="down">-3.22%</td>
+            <td class="down">-9.47%</td>
+            <td class="down">-8.99%</td>
+            <td class="down">-6.84%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TAB 3: ALLOCATION ═══════════════════════════════════ -->
+<div class="panel" id="panel-allocation">
+  <div class="section-title">資產配置明細 <span class="en">Asset Allocation Detail</span></div>
+
+  <div class="two-col" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title">資產配置概覽</div>
+      <div class="chart-wrap"><canvas id="chartAlloc"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">各類資產明細</div>
+      <table>
+        <thead><tr><th>資產類別</th><th>金額</th><th>利率/報酬</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>銀行存款 (USD)</td><td>5,669</td><td>1.35%</td><td>D7/M1</td></tr>
+          <tr><td>銀行存款 (GBP)</td><td>1,341</td><td>1.22%</td><td>活期</td></tr>
+          <tr><td>銀行存款 (TWD)</td><td>492,235</td><td>1.20~1.35%</td><td>M1/M2/M3</td></tr>
+          <tr><td>特別股 (TWD)</td><td>4,703,900</td><td>4.50%</td><td>2026/9/27到期</td></tr>
+          <tr><td>債券 (USD)</td><td>2,703,330</td><td>5.06~9.56%</td><td>1.12Y~9.27Y</td></tr>
+          <tr><td>債券 (GBP)</td><td>1,935,478</td><td>5.65~5.81%</td><td>9.72Y~10.07Y</td></tr>
+          <tr class="tfoot-row"><td>總資產</td><td>4,767,723</td><td>—</td><td>USD 計價</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">負債與淨值結構</div>
+    <div class="grid grid-3">
+      <div class="kpi">
+        <div class="label">總資產</div>
+        <div class="value">4,767,723</div>
+        <div class="sub">USD</div>
+      </div>
+      <div class="kpi">
+        <div class="label">抵押借款</div>
+        <div class="value down">1,056,001</div>
+        <div class="sub">LTV 22.15%，尚可動用 3,386萬 TWD</div>
+      </div>
+      <div class="kpi primary">
+        <div class="label">股東淨值</div>
+        <div class="value">3,702,148</div>
+        <div class="sub">股東投入 3,260,178 + 累計盈餘 441,971</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TAB 4: INCOME ═══════════════════════════════════ -->
+<div class="panel" id="panel-income">
+  <div class="section-title">損益表 <span class="en">P&amp;L Summary</span></div>
+
+  <div class="grid grid-4" style="margin-bottom:20px">
+    <div class="kpi primary">
+      <div class="label">本期淨值</div>
+      <div class="value">3,702,148</div>
+      <div class="sub">USD</div>
+    </div>
+    <div class="kpi">
+      <div class="label">本年至今已實現損益</div>
+      <div class="value up">+62,278</div>
+      <div class="sub">累計：385,379</div>
+    </div>
+    <div class="kpi">
+      <div class="label">本年至今未實現損益</div>
+      <div class="value down">(59,835)</div>
+      <div class="sub">累計：+172,881</div>
+    </div>
+    <div class="kpi gold">
+      <div class="label">本年至今淨值增減</div>
+      <div class="value up">+43,278</div>
+      <div class="sub">增減率 +1.33%</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">資產負債表摘要 Balance Sheet</div>
+      <table>
+        <thead><tr><th>項目</th><th>金額 (USD)</th></tr></thead>
+        <tbody>
+          <tr><td colspan="2" style="background:#f8f5ef;font-weight:700;color:var(--green);font-size:11px;letter-spacing:.5px">資產</td></tr>
+          <tr><td>存款類</td><td>7,010</td></tr>
+          <tr><td>貨幣基金類</td><td>—</td></tr>
+          <tr><td>固定收益證券類</td><td>4,638,808</td></tr>
+          <tr><td>應收利息</td><td>113,896</td></tr>
+          <tr><td>投資台灣分公司</td><td>8,009</td></tr>
+          <tr class="tfoot-row"><td>總資產</td><td>4,767,723</td></tr>
+          <tr><td colspan="2" style="background:#f8f5ef;font-weight:700;color:var(--green);font-size:11px;letter-spacing:.5px">負債</td></tr>
+          <tr><td>抵押借款</td><td>1,056,001</td></tr>
+          <tr><td>應付費用</td><td>9,574</td></tr>
+          <tr><td colspan="2" style="background:#f8f5ef;font-weight:700;color:var(--green);font-size:11px;letter-spacing:.5px">股東權益</td></tr>
+          <tr><td>股東投入</td><td>3,260,178</td></tr>
+          <tr><td>累計未分配盈餘</td><td>441,971</td></tr>
+          <tr class="tfoot-row"><td>淨值 (NAV)</td><td>3,702,148</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">累計損益走勢</div>
+      <div class="chart-wrap"><canvas id="chartPnl"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TAB 5: BONDS ═══════════════════════════════════ -->
+<div class="panel" id="panel-bonds">
+  <div class="section-title">債券資產明細表 <span class="en">Bond Portfolio Detail</span></div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--muted)">資料日期：2026-03-31 &nbsp;|&nbsp; 英鎊/美元匯率：1.3236 &nbsp;|&nbsp; 合計折算美元本金：4,366,361</div>
+    </div>
+    <div class="table-scroll">
+      <table id="bond-table">
+        <thead>
+          <tr>
+            <th>幣別</th>
+            <th>名目本金</th>
+            <th>折算美元</th>
+            <th>債券名稱</th>
+            <th>票面利率</th>
+            <th>市值 (USD)</th>
+            <th>性質</th>
+            <th>信評</th>
+            <th>到期年限</th>
+            <th>贖回年限</th>
+            <th>質押狀態</th>
+            <th>保管行</th>
+          </tr>
+        </thead>
+        <tbody id="bond-tbody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td colspan="2">Total</td>
+            <td>4,366,361</td>
+            <td colspan="2"></td>
+            <td>4,317,240</td>
+            <td colspan="6"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Distribution charts -->
+  <div class="section-title section-gap">債券分佈統計 <span class="en">Bond Distribution Analysis</span></div>
+  <div class="dist-chart-row">
+    <div class="card">
+      <div class="card-title">依到期日分佈 By Maturity</div>
+      <div class="chart-wrap-sm"><canvas id="chartMaturity"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">依下次贖回日分佈 By Next Call</div>
+      <div class="chart-wrap-sm"><canvas id="chartCall"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">依信用評等分佈 By Rating</div>
+      <div class="chart-wrap-sm"><canvas id="chartRating"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ TAB 6: CASHFLOW ═══════════════════════════════════ -->
+<div class="panel" id="panel-cashflow">
+  <div class="section-title">債券現金流量分析 <span class="en">Bond Cash Flow Analysis</span></div>
+
+  <!-- USD cashflow -->
+  <div class="cf-table-section">
+    <div class="currency-tag usd-tag">USD 計價債券</div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>年度</th>
+            <th>USD 現金利息收入</th>
+            <th>USD 本金到期收入</th>
+            <th>現金流入合計</th>
+          </tr>
+        </thead>
+        <tbody id="cf-usd-tbody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td>合計</td>
+            <td>1,261,179</td>
+            <td>3,265,000</td>
+            <td>4,526,179</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- GBP cashflow -->
+  <div class="cf-table-section">
+    <div class="currency-tag gbp-tag">GBP 計價債券</div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>年度</th>
+            <th>GBP 現金利息收入</th>
+            <th>GBP 本金到期收入</th>
+            <th>現金流入合計</th>
+          </tr>
+        </thead>
+        <tbody id="cf-gbp-tbody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td>合計</td>
+            <td>737,627</td>
+            <td>1,107,000</td>
+            <td>1,856,329</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Combined chart -->
+  <div class="card">
+    <div class="card-title">年度現金流量總覽 Annual Cash Flow Overview</div>
+    <div class="chart-wrap"><canvas id="chartCashflow"></canvas></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ════════════════════════════ DATA ════════════════════════════
+
+const PERF_DATA = [
+  { period:"2026年4月",  pj:1.33, sp:-0.22, ml:0.56,  b720:-0.82, b772:-0.81, b785:-0.69, isThis:true },
+  { period:"2026年3月",  pj:-2.80,sp:-2.49, ml:-2.02, b720:-2.27, b772:-2.30, b785:-2.84 },
+  { period:"2026年2月",  pj:0.47, sp:2.77,  ml:1.27,  b720:0.21,  b772:0.25,  b785:-0.06 },
+  { period:"2026年1月",  pj:1.07, sp:-0.41, ml:0.36,  b720:0.26,  b772:0.03,  b785:-0.19 },
+  { period:"2025年12月", pj:1.19, sp:-0.81, ml:-0.29, b720:-0.85, b772:-0.74, b785:-0.50 },
+  { period:"2025年11月", pj:1.28, sp:1.05,  ml:0.61,  b720:2.28,  b772:2.52,  b785:2.99 },
+  { period:"2025年10月", pj:0.71, sp:0.77,  ml:0.45,  b720:1.41,  b772:1.75,  b785:1.90 },
+  { period:"2025年9月",  pj:0.67, sp:0.55,  ml:0.61,  b720:3.65,  b772:3.13,  b785:2.55 },
+  { period:"2025年8月",  pj:2.59, sp:1.14,  ml:1.06,  b720:3.23,  b772:3.29,  b785:3.07 },
+  { period:"2025年7月",  pj:0.73, sp:-0.67, ml:0.15,  b720:1.95,  b772:2.13,  b785:2.78 },
+  { period:"2025年6月",  pj:1.27, sp:1.25,  ml:1.30,  b720:-0.10, b772:-0.58, b785:-0.58 },
+  { period:"2025年5月",  pj:-1.82,sp:-1.36, ml:0.00,  b720:-4.66, b772:-5.10, b785:-4.26 },
+  { period:"2025年4月",  pj:0.35, sp:0.78,  ml:-0.02, b720:-5.00, b772:-4.39, b785:-4.05 },
+  { period:"2025年Q1",   pj:2.03, sp:1.05,  ml:1.98,  b720:3.15,  b772:2.78,  b785:3.57 },
+  { period:"2024年全年", pj:8.41, sp:-1.67, ml:2.76,  b720:4.91,  b772:2.72,  b785:7.20 },
+  { period:"2023年Q4*",  pj:6.23, sp:6.09,  ml:7.91,  b720:7.88,  b772:6.07,  b785:5.73 },
+];
+
+const BOND_DATA = [
+  { ccy:"USD", nom:207000,  usd:207000,   name:"BACR 7.385 11/02/28",               coupon:7.385, mktval:218012,   type:"Sen. Unsec.", rating:"Baa-",  mat:1.59,  call:2.59,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:250000,  usd:250000,   name:"STANLN 7.767 11/16/28",             coupon:7.767, mktval:265200,   type:"Sen. Unsec.", rating:"A",    mat:1.63,  call:2.63,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:250000,  usd:250000,   name:"HSBC 8.113 11/03/33",               coupon:8.113, mktval:294625,   type:"Sub_T2",      rating:"Baa1", mat:6.60,  call:7.60,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:250000,  usd:250000,   name:"LLOYDS 7.953 11/15/33",             coupon:7.953, mktval:293200,   type:"Sub_T2",      rating:"BBB-", mat:6.63,  call:7.63,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 6.301 09/22/34",                coupon:6.301, mktval:219320,   type:"Sen. Unsec.", rating:"A-",   mat:7.48,  call:8.48,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"STANLN 6.296 07/06/34",             coupon:6.296, mktval:217440,   type:"Sen. Unsec.", rating:"A",    mat:7.27,  call:8.27,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"WFC 5.389 04/24/34",                coupon:5.389, mktval:208260,   type:"Sen. Unsec.", rating:"A+",   mat:7.07,  call:8.07,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"JPMorgan Chase & Co. 4.565% 22/30", coupon:4.565, mktval:202900,   type:"Sen. Unsec.", rating:"A-",   mat:3.21,  call:4.21,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:208000,  usd:0,        name:"NatWest Group PLC 8%",              coupon:8.000, mktval:0,        type:"AT1",         rating:"BBB-", mat:"永續", call:-0.64, pledge:"到期贖回", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:0,        name:"Skandinaviska Enskilda Banken 5.125%",coupon:5.125,mktval:0,       type:"AT1",         rating:"BBB-", mat:"永續", call:0.00,  pledge:"到期贖回", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"BAC 5.819 09/15/29",                coupon:5.819, mktval:208560,   type:"Sen. Unsec.", rating:"A-",   mat:2.46,  call:3.46,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"BNP 5.335 06/12/29",                coupon:5.335, mktval:205340,   type:"Sen. Unsec.", rating:"A+",   mat:2.20,  call:3.20,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:0,        name:"NatWest Group PLC 8% (2)",          coupon:8.000, mktval:0,        type:"AT1",         rating:"BBB-", mat:"永續", call:-0.64, pledge:"到期贖回", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 5.617 09/13/30",                coupon:5.617, mktval:209260,   type:"Sen. Unsec.", rating:"A+",   mat:3.46,  call:4.46,  pledge:"質押", custody:"國泰" },
+  { ccy:"USD", nom:300000,  usd:0,        name:"SOCGEN 4.5 030427",                 coupon:4.500, mktval:0,        type:"Sen. Unsec.", rating:"A-",   mat:-0.57, call:0.93,  pledge:"到期贖回", custody:"國泰" },
+  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 6.301 09/22/34 (玉山)",         coupon:6.301, mktval:212640,   type:"Sen. Unsec.", rating:"A-",   mat:7.48,  call:8.48,  pledge:"NA",  custody:"玉山" },
+  { ccy:"GBP", nom:200000,  usd:264720,   name:"Barcap 5.851 03/25/35",             coupon:5.851, mktval:276729,   type:"Sen. Unsec.", rating:"BBB",  mat:7.98,  call:8.98,  pledge:"NA",  custody:"國泰" },
+  { ccy:"GBP", nom:227000,  usd:300457,   name:"HSBC 8.201 11/16/34",               coupon:8.201, mktval:336929,   type:"Sub_T2",      rating:"BBB",  mat:3.38,  call:8.64,  pledge:"NA",  custody:"國泰" },
+  { ccy:"GBP", nom:480000,  usd:635328,   name:"HSBC 5.813 05/22/33",               coupon:5.813, mktval:672070,   type:"Sen. Unsec.", rating:"BBB",  mat:6.07,  call:7.15,  pledge:"NA",  custody:"國泰" },
+  { ccy:"GBP", nom:200000,  usd:264720,   name:"ACAFP 5.5 07/31/32",                coupon:5.500, mktval:276756,   type:"Sen. Unsec.", rating:"A-",   mat:5.34,  call:6.34,  pledge:"NA",  custody:"玉山" },
+  { ccy:"GBP", nom:260000,  usd:344136,   name:"UBS 7.375 09/07/33",                coupon:7.375, mktval:0,        type:"Sen. Unsec.", rating:"A-",   mat:6.28,  call:7.44,  pledge:"NA",  custody:"玉山" },
+];
+
+// from Excel 債券現金流量統計
+const CF_USD = [
+  { yr:2024, int:183557, prin:0,       tot:183557 },
+  { yr:2025, int:192118, prin:908000,  tot:1100118 },
+  { yr:2026, int:153513, prin:0,       tot:153513 },
+  { yr:2027, int:153513, prin:0,       tot:153513 },
+  { yr:2028, int:142279, prin:857000,  tot:999279 },
+  { yr:2029, int:96501,  prin:200000,  tot:296501 },
+  { yr:2030, int:80702,  prin:200000,  tot:280702 },
+  { yr:2031, int:76137,  prin:0,       tot:76137 },
+  { yr:2032, int:76137,  prin:0,       tot:76137 },
+  { yr:2033, int:76137,  prin:500000,  tot:576137 },
+  { yr:2034, int:30583,  prin:600000,  tot:630583 },
+  { yr:2035, int:0,      prin:0,       tot:0 },
+];
+const CF_GBP = [
+  { yr:2024, int:0,      prin:0,       tot:0 },
+  { yr:2025, int:30318,  prin:0,       tot:30318 },
+  { yr:2026, int:88396,  prin:0,       tot:88396 },
+  { yr:2027, int:88396,  prin:0,       tot:88396 },
+  { yr:2028, int:88396,  prin:0,       tot:88396 },
+  { yr:2029, int:88396,  prin:0,       tot:88396 },
+  { yr:2030, int:88396,  prin:0,       tot:88396 },
+  { yr:2031, int:88396,  prin:0,       tot:88396 },
+  { yr:2032, int:88396,  prin:200000,  tot:288396 },
+  { yr:2033, int:58221,  prin:480000,  tot:538221 },
+  { yr:2034, int:30318,  prin:227000,  tot:257318 },
+  { yr:2035, int:11702,  prin:200000,  tot:211702 },
+];
+
+const GREEN = '#1A3A2A', GOLD = '#C9A961', LIGHT_GREEN = '#2D5C41';
+const fmt = n => typeof n==='number' ? n.toLocaleString('en-US',{maximumFractionDigits:0}) : n;
+const fmtPct = n => (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+const pctClass = n => n > 0 ? 'up' : (n < 0 ? 'down' : '');
+
+// ════════════════════════════ TAB SWITCH ════════════════════════════
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ════════════════════════════ PERF TABLE ════════════════════════════
+(function buildPerfTable() {
+  const tbody = document.getElementById('perf-tbody');
+  PERF_DATA.forEach(d => {
+    const tr = document.createElement('tr');
+    if (d.isThis) tr.className = 'highlight-row';
+    tr.innerHTML = `
+      <td>${d.period}${d.isThis ? ' <span class="chip gold">本期</span>' : ''}</td>
+      <td class="${pctClass(d.pj)} ${d.isThis ? 'this' : ''}">${fmtPct(d.pj)}</td>
+      <td class="${pctClass(d.sp)}">${fmtPct(d.sp)}</td>
+      <td class="${pctClass(d.ml)}">${fmtPct(d.ml)}</td>
+      <td class="${pctClass(d.b720)}">${fmtPct(d.b720)}</td>
+      <td class="${pctClass(d.b772)}">${fmtPct(d.b772)}</td>
+      <td class="${pctClass(d.b785)}">${fmtPct(d.b785)}</td>`;
+    tbody.appendChild(tr);
+  });
+})();
+
+// ════════════════════════════ BOND TABLE ════════════════════════════
+(function buildBondTable() {
+  const tbody = document.getElementById('bond-tbody');
+  BOND_DATA.forEach(d => {
+    const ratingClass = d.rating.startsWith('A') ? 'rating-a' : d.rating.startsWith('BBB') ? 'rating-bbb' : 'rating-bb';
+    const pledgeBadge = d.pledge === '質押' ? '<span class="badge badge-pledge">質押</span>'
+                      : d.pledge === 'NA'   ? '<span class="badge badge-na">NA</span>'
+                      : '<span class="badge badge-mature">到期贖回</span>';
+    const typeBadge = d.type === 'AT1'    ? '<span class="badge badge-at1">AT1</span>'
+                    : d.type === 'Sub_T2' ? '<span class="badge badge-sub">Sub T2</span>'
+                    : d.type;
+    const matStr = typeof d.mat === 'number' ? (d.mat < 0 ? '<span class="down">到期</span>' : d.mat.toFixed(2)+'Y') : d.mat;
+    const callStr = typeof d.call === 'number' ? (d.call < 0 ? '<span class="down">已過</span>' : d.call.toFixed(2)+'Y') : d.call;
+    const mktStr = d.mktval > 0 ? fmt(d.mktval) : '<span style="color:var(--muted)">—</span>';
+    const usdStr = d.usd > 0 ? fmt(d.usd) : '<span style="color:var(--muted)">—</span>';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${d.ccy === 'GBP' ? '<span style="color:#6d28d9;font-weight:700">GBP</span>' : '<span style="color:#1d4ed8;font-weight:700">USD</span>'}</td>
+      <td>${fmt(d.nom)}</td>
+      <td>${usdStr}</td>
+      <td style="text-align:left;font-size:12px">${d.name}</td>
+      <td>${d.coupon.toFixed(3)}%</td>
+      <td>${mktStr}</td>
+      <td style="text-align:left">${typeBadge}</td>
+      <td class="${ratingClass}">${d.rating}</td>
+      <td>${matStr}</td>
+      <td>${callStr}</td>
+      <td style="text-align:left">${pledgeBadge}</td>
+      <td>${d.custody}</td>`;
+    tbody.appendChild(tr);
+  });
+})();
+
+// ════════════════════════════ CASHFLOW TABLES ════════════════════════════
+(function buildCfTables() {
+  const usdTbody = document.getElementById('cf-usd-tbody');
+  CF_USD.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.yr}</td><td>${fmt(d.int)}</td><td>${d.prin > 0 ? '<strong>'+fmt(d.prin)+'</strong>' : '—'}</td><td><strong>${fmt(d.tot)}</strong></td>`;
+    usdTbody.appendChild(tr);
+  });
+  const gbpTbody = document.getElementById('cf-gbp-tbody');
+  CF_GBP.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.yr}</td><td>${fmt(d.int)}</td><td>${d.prin > 0 ? '<strong>'+fmt(d.prin)+'</strong>' : '—'}</td><td><strong>${fmt(d.tot)}</strong></td>`;
+    gbpTbody.appendChild(tr);
+  });
+})();
+
+// ════════════════════════════ CHARTS ════════════════════════════
+// Chart defaults
+Chart.defaults.font.family = "'Segoe UI','PingFang TC','Microsoft JhengHei',system-ui,sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#6B6560';
+
+// Monthly performance line chart
+new Chart(document.getElementById('chartMonthly'), {
+  type:'line',
+  data:{
+    labels: PERF_DATA.map(d=>d.period).reverse(),
+    datasets:[
+      { label:'P&J 組合', data:PERF_DATA.map(d=>d.pj).reverse(), borderColor:GREEN, backgroundColor:'rgba(26,58,42,.1)', borderWidth:2.5, pointRadius:3, tension:.3, fill:true },
+      { label:'美林IG債', data:PERF_DATA.map(d=>d.ml).reverse(), borderColor:GOLD, borderWidth:1.5, pointRadius:2, tension:.3, borderDash:[4,3] },
+      { label:'S&P 10Y公債', data:PERF_DATA.map(d=>d.sp).reverse(), borderColor:'#aaa', borderWidth:1.5, pointRadius:2, tension:.3, borderDash:[2,4] },
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'top', labels:{ boxWidth:12, padding:14 } }, tooltip:{ mode:'index', intersect:false } },
+    scales:{
+      y:{ grid:{ color:'rgba(0,0,0,.05)' }, ticks:{ callback:v=>v+'%' } },
+      x:{ grid:{ display:false }, ticks:{ maxRotation:45 } }
+    }
+  }
+});
+
+// Annual return bar chart
+new Chart(document.getElementById('chartAnnual'), {
+  type:'bar',
+  data:{
+    labels:['2023 Q4','2024','2025','2026 YTD'],
+    datasets:[{ label:'年度報酬', data:[6.23,8.41,9.08,1.33], backgroundColor:[GREEN,GREEN,'rgba(26,58,42,.7)',GOLD], borderRadius:4 }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{ y:{ ticks:{ callback:v=>v+'%' }, grid:{ color:'rgba(0,0,0,.05)' } }, x:{ grid:{display:false} } }
+  }
+});
+
+// Asset allocation donut
+new Chart(document.getElementById('chartAlloc'), {
+  type:'doughnut',
+  data:{
+    labels:['債券(USD)','債券(GBP)','特別股(TWD)','銀行存款','應收利息','其他'],
+    datasets:[{ data:[2703330,1935478,4703900,499245,113896,8009],
+      backgroundColor:['#1A3A2A','#2D5C41','#C9A961','#8aab98','#d4c4a0','#aaa'],
+      borderWidth:1, borderColor:'#fff' }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, padding:10 } } },
+    cutout:'58%'
+  }
+});
+
+// P&L trend
+new Chart(document.getElementById('chartPnl'), {
+  type:'bar',
+  data:{
+    labels:['累計已實現損益','累計未實現損益','本年已實現','本年未實現'],
+    datasets:[{
+      data:[385379,172881,62278,-59835],
+      backgroundColor:v => v.raw >= 0 ? 'rgba(26,58,42,.75)' : 'rgba(185,28,28,.65)',
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{ y:{ ticks:{ callback:v=>v.toLocaleString() }, grid:{ color:'rgba(0,0,0,.05)' } }, x:{ grid:{display:false} } }
+  }
+});
+
+// Bond maturity distribution - from Excel 債券分佈統計
+new Chart(document.getElementById('chartMaturity'), {
+  type:'bar',
+  data:{
+    labels:['<1Y','1-3Y','3-5Y','5-7Y','7-10Y','>10Y'],
+    datasets:[{ label:'比例', data:[0,11,26,0,63,0], backgroundColor:GREEN, borderRadius:4 }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{ ticks:{ callback:v=>v+'%' }, grid:{ color:'rgba(0,0,0,.05)' }, max:70 },
+      y:{ grid:{display:false} }
+    }
+  }
+});
+
+// Bond next call distribution - from Excel 債券分佈統計
+new Chart(document.getElementById('chartCall'), {
+  type:'bar',
+  data:{
+    labels:['<1Y','1-3Y','3-5Y','5-7Y','7-10Y'],
+    datasets:[{ label:'比例', data:[0,12,27,22,40], backgroundColor:GOLD, borderRadius:4 }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{ ticks:{ callback:v=>v+'%' }, grid:{ color:'rgba(0,0,0,.05)' }, max:50 },
+      y:{ grid:{display:false} }
+    }
+  }
+});
+
+// Bond rating distribution - from Excel 債券分佈統計
+new Chart(document.getElementById('chartRating'), {
+  type:'bar',
+  data:{
+    labels:['B','BB','BBB','≥A'],
+    datasets:[{ label:'比例', data:[0,0,48,52], backgroundColor:[GOLD,'rgba(201,169,97,.6)',LIGHT_GREEN,GREEN], borderRadius:4 }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{ ticks:{ callback:v=>v+'%' }, grid:{ color:'rgba(0,0,0,.05)' }, max:60 },
+      y:{ grid:{display:false} }
+    }
+  }
+});
+
+// Combined cashflow stacked bar
+const cfLabels = CF_USD.map(d=>d.yr);
+new Chart(document.getElementById('chartCashflow'), {
+  type:'bar',
+  data:{
+    labels: cfLabels,
+    datasets:[
+      { label:'USD 利息', data:CF_USD.map(d=>d.int), backgroundColor:'rgba(26,58,42,.75)', stack:'usd', borderRadius:2 },
+      { label:'USD 本金', data:CF_USD.map(d=>d.prin), backgroundColor:'rgba(201,169,97,.85)', stack:'usd', borderRadius:2 },
+      { label:'GBP 利息', data:CF_GBP.map(d=>d.int), backgroundColor:'rgba(45,92,65,.65)', stack:'gbp', borderRadius:2 },
+      { label:'GBP 本金', data:CF_GBP.map(d=>d.prin), backgroundColor:'rgba(185,28,28,.55)', stack:'gbp', borderRadius:2 },
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{ position:'top', labels:{ boxWidth:12, padding:12 } },
+      tooltip:{ mode:'index', intersect:false }
+    },
+    scales:{
+      y:{ stacked:false, ticks:{ callback:v=>v>=1000?Math.round(v/1000)+'K':v }, grid:{ color:'rgba(0,0,0,.05)' } },
+      x:{ grid:{display:false} }
+    }
+  }
+});
+</script>
+</body>
+</html>

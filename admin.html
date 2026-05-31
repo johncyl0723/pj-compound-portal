@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin — P&J Compound Portal</title>
+<style>
+  :root{--green:#1A3A2A;--green-dark:#0F2419;--gold:#C9A961;--cream:#FAF7F2;--ink:#1C1917;--muted:#6B6560;--border:#E8E2D8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Helvetica Neue','PingFang TC',system-ui,sans-serif;background:var(--cream);color:var(--ink);font-size:14px;min-height:100vh}
+  header{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;padding:14px 28px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(201,169,97,.2)}
+  header h1{font-size:16px;font-weight:700}
+  header .sub{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+  .container{max-width:960px;margin:0 auto;padding:28px 20px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .card h2{font-size:14px;font-weight:700;color:var(--green);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:8px}
+  label{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;margin-top:12px}
+  label:first-of-type{margin-top:0}
+  input,select,textarea{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;color:var(--ink);background:#fff;outline:none;transition:border-color .15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--green)}
+  textarea{resize:vertical;min-height:80px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+  .btn-primary{background:var(--green);color:#fff}.btn-primary:hover{background:#0F2419}
+  .btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#A88740}
+  .btn-danger{background:#dc2626;color:#fff}.btn-danger:hover{background:#b91c1c}
+  .btn-sm{padding:5px 11px;font-size:12px}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-outline:hover{border-color:var(--green);color:var(--green)}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .list-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fafaf8;font-size:13px}
+  .list-item .info{flex:1;min-width:0}
+  .list-item .key{font-size:10px;color:var(--muted);letter-spacing:.3px}
+  .list-item .actions{display:flex;gap:6px;margin-left:12px;flex-shrink:0}
+  .empty{color:var(--muted);font-size:12px;font-style:italic;padding:8px 0}
+  .success-msg{background:#dcfce7;color:#15803d;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:600;display:none;margin-top:10px}
+  .export-box{background:#f8f5ef;border:1px dashed var(--border);border-radius:6px;padding:14px;margin-top:12px}
+  .export-box pre{font-size:11px;white-space:pre-wrap;word-break:break-all;max-height:160px;overflow-y:auto;color:#444;font-family:monospace}
+  hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:640px){.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>P&J Compound — Portal Admin</h1>
+    <div class="sub">Content Management Console</div>
+  </div>
+</header>
+<div class="container">
+
+  <!-- ── Monthly Reports ── -->
+  <div class="card">
+    <h2>📊 月報表管理 Monthly Reports</h2>
+    <div id="report-list"></div>
+    <hr>
+    <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:12px">+ 新增月報</div>
+    <div class="two-col">
+      <div>
+        <label>月份代碼 (e.g. 202605)</label>
+        <input type="text" id="r-key" placeholder="202605" maxlength="6"/>
+      </div>
+      <div>
+        <label>顯示標籤 (e.g. 2026 年 05 月)</label>
+        <input type="text" id="r-label" placeholder="2026 年 05 月"/>
+      </div>
+    </div>
+    <label>HTML 檔案路徑 (相對於 index.html)</label>
+    <input type="text" id="r-src" placeholder="./2026_05/202605_Monthly_Report.html"/>
+    <div class="row" style="margin-top:14px">
+      <button class="btn btn-primary" onclick="addReport()">＋ 新增月報</button>
+    </div>
+  </div>
+
+  <!-- ── Topics ── -->
+  <div class="card">
+    <h2>📚 財經專題管理 Research Topics</h2>
+    <div id="topic-list"></div>
+    <hr>
+    <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:12px">+ 新增專題</div>
+    <label>標題</label>
+    <input type="text" id="t-title" placeholder="專題標題"/>
+    <div class="two-col">
+      <div>
+        <label>類別</label>
+        <select id="t-cat"><option value="">— 未分類 —</option></select>
+      </div>
+      <div>
+        <label>排序 (數字越小越前)</label>
+        <input type="number" id="t-order" value="1" min="1"/>
+      </div>
+    </div>
+    <label>PDF 路徑 (e.g. ./topics/report.pdf)</label>
+    <input type="text" id="t-src" placeholder="./topics/xxx.pdf"/>
+    <div class="row" style="margin-top:14px">
+      <button class="btn btn-primary" onclick="addTopic()">＋ 新增專題</button>
+    </div>
+  </div>
+
+  <!-- ── Categories ── -->
+  <div class="card">
+    <h2>🏷 類別管理 Categories</h2>
+    <div id="cat-list"></div>
+    <hr>
+    <label>新類別名稱</label>
+    <input type="text" id="c-name" placeholder="例：總體經濟分析"/>
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-primary btn-sm" onclick="addCat()">＋ 新增類別</button>
+    </div>
+  </div>
+
+  <!-- ── Save & Export ── -->
+  <div class="card">
+    <h2>💾 儲存與匯出</h2>
+    <div class="row">
+      <button class="btn btn-primary" onclick="saveConfig()">💾 儲存並套用</button>
+      <button class="btn btn-gold" onclick="exportConfig()">📋 匯出 portal-config.js</button>
+    </div>
+    <div id="save-msg" class="success-msg">✓ 設定已儲存至 localStorage</div>
+    <div class="export-box" id="export-box" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:700;color:var(--muted)">portal-config.js — 複製後替換 repo 中的同名檔案</span>
+        <button class="btn btn-sm btn-outline" onclick="copyExport()">複製</button>
+      </div>
+      <pre id="export-pre"></pre>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STORE_KEY = 'pj_compound_config';
+const PUB_KEY   = 'pj_compound_config_published';
+
+function loadCfg() {
+  const raw = localStorage.getItem(STORE_KEY) || localStorage.getItem(PUB_KEY);
+  if (raw) { try { return JSON.parse(raw); } catch(e){} }
+  return { monthlyReports:[], topics:[], categories:[
+    {key:'cat-macro',name:'總體經濟分析'},
+    {key:'cat-market',name:'市場動態解讀'}
+  ]};
+}
+
+let cfg = loadCfg();
+
+function saveCfg() { localStorage.setItem(STORE_KEY, JSON.stringify(cfg)); }
+
+function uid() { return 'k-' + Date.now() + '-' + Math.random().toString(36).slice(2,6); }
+
+// ── Render lists ──
+function render() {
+  renderReports();
+  renderTopics();
+  renderCats();
+}
+
+function renderReports() {
+  const el = document.getElementById('report-list');
+  const sorted = [...(cfg.monthlyReports||[])].sort((a,b)=>b.key.localeCompare(a.key));
+  if (!sorted.length) { el.innerHTML = '<div class="empty">尚無月報</div>'; return; }
+  el.innerHTML = sorted.map(r => `
+    <div class="list-item">
+      <div class="info">
+        <div>${r.label}</div>
+        <div class="key">${r.src}</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-danger btn-sm" onclick="delReport('${r.key}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderTopics() {
+  const el = document.getElementById('topic-list');
+  const catMap = {};
+  (cfg.categories||[]).forEach(c=>catMap[c.key]=c.name);
+  if (!(cfg.topics||[]).length) { el.innerHTML = '<div class="empty">尚無專題</div>'; return; }
+  el.innerHTML = (cfg.topics||[]).map(t => `
+    <div class="list-item">
+      <div class="info">
+        <div>${t.title}</div>
+        <div class="key">${catMap[t.categoryKey]||'未分類'} &nbsp;|&nbsp; ${t.src}</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-danger btn-sm" onclick="delTopic('${t.key}')">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderCats() {
+  const el = document.getElementById('cat-list');
+  if (!(cfg.categories||[]).length) { el.innerHTML = '<div class="empty">尚無類別</div>'; return; }
+  el.innerHTML = (cfg.categories||[]).map(c => `
+    <div class="list-item">
+      <div class="info">${c.name} <span class="key" style="margin-left:6px">${c.key}</span></div>
+      <div class="actions">
+        <button class="btn btn-danger btn-sm" onclick="delCat('${c.key}')">刪除</button>
+      </div>
+    </div>`).join('');
+  const sel = document.getElementById('t-cat');
+  sel.innerHTML = '<option value="">— 未分類 —</option>' +
+    (cfg.categories||[]).map(c=>`<option value="${c.key}">${c.name}</option>`).join('');
+}
+
+// ── CRUD ──
+function addReport() {
+  const key = document.getElementById('r-key').value.trim();
+  const label = document.getElementById('r-label').value.trim();
+  const src = document.getElementById('r-src').value.trim();
+  if (!key||!label||!src) { alert('請填寫月份代碼、標籤及路徑'); return; }
+  if ((cfg.monthlyReports||[]).find(r=>r.key===key)) { alert('月份代碼已存在'); return; }
+  cfg.monthlyReports.push({key,label,src});
+  ['r-key','r-label','r-src'].forEach(id=>document.getElementById(id).value='');
+  saveCfg(); render();
+}
+
+function delReport(key) {
+  if (!confirm('確定刪除此月報？')) return;
+  cfg.monthlyReports = cfg.monthlyReports.filter(r=>r.key!==key);
+  saveCfg(); render();
+}
+
+function addTopic() {
+  const title = document.getElementById('t-title').value.trim();
+  const src = document.getElementById('t-src').value.trim();
+  const categoryKey = document.getElementById('t-cat').value;
+  const order = parseInt(document.getElementById('t-order').value)||1;
+  if (!title||!src) { alert('請填寫標題及路徑'); return; }
+  cfg.topics = cfg.topics || [];
+  cfg.topics.push({key:uid(),title,src,categoryKey,order});
+  ['t-title','t-src'].forEach(id=>document.getElementById(id).value='');
+  saveCfg(); render();
+}
+
+function delTopic(key) {
+  if (!confirm('確定刪除此專題？')) return;
+  cfg.topics = cfg.topics.filter(t=>t.key!==key);
+  saveCfg(); render();
+}
+
+function addCat() {
+  const name = document.getElementById('c-name').value.trim();
+  if (!name) return;
+  cfg.categories = cfg.categories || [];
+  cfg.categories.push({key:'cat-'+Date.now(),name});
+  document.getElementById('c-name').value='';
+  saveCfg(); render();
+}
+
+function delCat(key) {
+  if (!confirm('刪除類別後，該類別的專題將變為未分類')) return;
+  cfg.categories = cfg.categories.filter(c=>c.key!==key);
+  saveCfg(); render();
+}
+
+// ── Save & Export ──
+function saveConfig() {
+  cfg._savedAt = new Date().toISOString();
+  localStorage.setItem(STORE_KEY, JSON.stringify(cfg));
+  localStorage.setItem(PUB_KEY, JSON.stringify(cfg));
+  const msg = document.getElementById('save-msg');
+  msg.style.display = 'block';
+  setTimeout(()=>msg.style.display='none', 2500);
+}
+
+function exportConfig() {
+  cfg._savedAt = new Date().toISOString();
+  const js = `// P&J Compound Company Limited — Portal Content Configuration\n// Generated: ${cfg._savedAt}\n// Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push\nlocalStorage.setItem('${PUB_KEY}', JSON.stringify(${JSON.stringify(cfg, null, 2)}));\n`;
+  document.getElementById('export-pre').textContent = js;
+  document.getElementById('export-box').style.display = 'block';
+}
+
+function copyExport() {
+  const text = document.getElementById('export-pre').textContent;
+  navigator.clipboard.writeText(text).then(()=>alert('已複製到剪貼板'));
+}
+
+render();
+</script>
+</body>
+</html>
