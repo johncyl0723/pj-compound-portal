@@ -1,24 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 105">
-  <!--
-    P&J Compound Company Limited — brand mark
-    Transparent background; orange heads + white body → optimised for dark surfaces.
-  -->
-
-  <!-- Left figure head: orange filled circle -->
-  <circle cx="33" cy="24" r="12" fill="#ef7e1b"/>
-
-  <!-- Right figure head: orange horseshoe arch (opening faces down) -->
-  <path d="M 55 38 L 55 25 A 11 11 0 0 0 77 25 L 77 38"
-        fill="none" stroke="#ef7e1b" stroke-width="8"
-        stroke-linecap="square" stroke-linejoin="miter"/>
-
-  <!-- Left figure body (white for dark-surface use) -->
-  <path d="M 20 46 Q 22 40 27 38 Q 30 54 50 62 Q 46 82 33 98"
-        fill="none" stroke="white" stroke-width="7.5"
-        stroke-linecap="round" stroke-linejoin="round"/>
-
-  <!-- Right figure body (white for dark-surface use) -->
-  <path d="M 76 46 Q 73 40 68 38 Q 65 54 50 62 Q 54 82 63 98"
-        fill="none" stroke="white" stroke-width="7.5"
-        stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="5"/>
+  <circle cx="34" cy="27" r="10.5" fill="#ef7e1b"/>
+  <path d="M 58 40 L 58 28 A 10.5 10.5 0 0 1 79 28 L 79 40" fill="none" stroke="#ef7e1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 22 47 Q 24 57 36 63 Q 46 68 50 74 Q 45 82 37 90" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 78 44 Q 76 55 65 61 Q 55 67 50 74 Q 55 82 63 90" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
