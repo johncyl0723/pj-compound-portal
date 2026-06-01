@@ -13,5 +13,15 @@ localStorage.setItem('pj_compound_config_published', JSON.stringify({
   "categories": [
     { "key": "cat-macro", "name": "總體經濟分析" },
     { "key": "cat-market", "name": "市場動態解讀" }
+  ],
+  "clients": [
+    {
+      "key": "client-philip",
+      "name": "PHILIP",
+      "passwordHash": "",
+      "active": true,
+      "order": 1,
+      "note": ""
+    }
   ]
 }));
