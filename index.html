@@ -15,7 +15,11 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif; font-size: 14px; background: #150800; color: #fff; }
-  .banner { position: fixed; inset: 0 0 auto 0; height: var(--banner-height); display: flex; align-items: center; gap: 14px; padding: 0 28px; z-index: 100; background: linear-gradient(135deg,var(--brown-dark),var(--brown) 60%,var(--brown-light)); box-shadow: 0 2px 12px rgba(0,0,0,.3); border-bottom: 1px solid rgba(184,134,11,.25); }
+  .banner { position: fixed; inset: 0 0 auto 0; height: var(--banner-height); display: flex; align-items: center; padding: 0 28px; z-index: 100; background: linear-gradient(135deg,var(--brown-dark),var(--brown) 60%,var(--brown-light)); box-shadow: 0 2px 12px rgba(0,0,0,.3); border-bottom: 1px solid rgba(184,134,11,.25); }
+  .brand-home { display: flex; align-items: center; gap: 14px; padding: 4px 8px 4px 4px; border: 0; border-radius: 10px; background: transparent; color: #fff; cursor: pointer; text-align: left; transition: background .2s,transform .2s; }
+  .brand-home:hover { background: rgba(255,255,255,.1); }
+  .brand-home:active { transform: translateY(1px); }
+  .brand-home:focus-visible { outline: 2px solid #E3B54B; outline-offset: 3px; }
   .banner-logo { width: 44px; height: 44px; flex-shrink: 0; overflow: hidden; filter: drop-shadow(0 2px 8px rgba(239,126,27,.3)); }
   .banner-logo img { width: 187px; height: 187px; margin-top: -59px; margin-left: -70px; display: block; }
   .banner-text { display: flex; flex-direction: column; gap: 1px; }
@@ -65,27 +69,50 @@
   .input-wrap { position: relative; }
   .input-wrap .welcome-input { padding-right: 46px; }
   .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; padding: 0; border: 0; background: transparent; color: rgba(255,255,255,.55); cursor: pointer; }
-  .eye-btn:hover { color: #fff; }
+  .eye-btn:hover,.eye-btn.is-visible { color: #E3B54B; }
   .eye-btn svg { width: 20px; height: 20px; pointer-events: none; }
+  .eye-slash { opacity: 0; transition: opacity .16s; }
+  .eye-btn.is-visible .eye-slash { opacity: 1; }
   .login-btn { width: 100%; margin-top: 6px; padding: 12px; border: 0; border-radius: 8px; background: linear-gradient(135deg,var(--gold),var(--gold-dark)); color: #fff; cursor: pointer; font: inherit; font-weight: 700; letter-spacing: .8px; }
   .login-btn:hover { filter: brightness(1.08); }
   .welcome-error { min-height: 18px; color: #ff9b9b; font-size: 12px; text-align: center; }
-  .idle { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; padding: 32px; text-align: center; background: linear-gradient(135deg,#150800,#2C1503); }
+  .idle { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; overflow: hidden; padding: 32px; text-align: center; background: radial-gradient(circle at 56% 42%,rgba(30,87,142,.22),transparent 26%),linear-gradient(135deg,#120700,#2C1503); }
   .idle.visible { display: flex; }
-  .idle-card { display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .idle-mark { width: 176px; height: 176px; }
-  .idle-mark img { width: 748px; height: 748px; margin-top: -236px; margin-left: -280px; }
-  .idle-brand .brand-name-main { font-size: 24px; letter-spacing: 3px; }
-  .idle-brand .brand-name-sub { font-size: 14px; letter-spacing: 5px; }
-  .idle p { color: rgba(232,213,160,.8); font-size: 18px; line-height: 1.8; }
-  .idle-hint { padding: 12px 24px; border: 1px solid rgba(184,134,11,.45); border-radius: 24px; color: var(--gold); font-size: 16px; }
+  .home-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(rgba(227,181,75,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(227,181,75,.08) 1px,transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom,transparent,black 18%,black 82%,transparent); }
+  .idle-card { position: relative; z-index: 1; width: min(880px,92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .home-kicker { color: #E3B54B; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+  .home-title { color: #FFF7E8; font-size: clamp(24px,3vw,38px); letter-spacing: 1px; }
+  .home-title span { color: #E3B54B; }
+  .home-stage { position: relative; width: min(760px,88vw); height: 330px; margin: 4px 0; overflow: hidden; border: 1px solid rgba(227,181,75,.22); border-radius: 28px; background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(6,27,47,.18)); box-shadow: 0 22px 60px rgba(0,0,0,.28),inset 0 0 40px rgba(15,75,124,.12); }
+  .finance-chart { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .chart-line { fill: none; stroke: url(#chart-gradient); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
+  .chart-glow { fill: none; stroke: rgba(34,122,196,.26); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
+  .chart-area { fill: url(#area-gradient); opacity: 0; animation: area-rise 10s ease-in-out infinite; }
+  .data-node { fill: #E3B54B; stroke: rgba(255,255,255,.9); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: node-pulse 10s ease-in-out infinite; }
+  .data-node:nth-of-type(2){animation-delay:.5s}.data-node:nth-of-type(3){animation-delay:1s}.data-node:nth-of-type(4){animation-delay:1.5s}.data-node:nth-of-type(5){animation-delay:2s}
+  .orbit { position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; margin: -88px; border: 1px solid rgba(227,181,75,.34); border-radius: 50%; animation: orbit-spin 10s linear infinite; }
+  .orbit::before,.orbit::after { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #E3B54B; box-shadow: 0 0 16px #E3B54B; }
+  .orbit::before { left: 18px; top: 18px; }.orbit::after { right: 9px; bottom: 29px; background: #2877B7; box-shadow: 0 0 16px #2877B7; }
+  .home-logo { position: absolute; left: 50%; top: 50%; width: 124px; height: 124px; margin: -62px; overflow: hidden; border-radius: 50%; filter: drop-shadow(0 0 14px rgba(40,119,183,.38)); animation: logo-breathe 10s ease-in-out infinite; }
+  .home-logo img { display: block; width: 527px; height: 527px; margin-top: -166px; margin-left: -197px; }
+  .home-slogan { color: #FFF7E8; font-size: 21px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 16px rgba(227,181,75,.4); animation: slogan-reveal 10s ease-in-out infinite; }
+  .home-hint { color: rgba(232,213,160,.72); font-size: 13px; letter-spacing: 1px; }
+  @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
+  @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
+  @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
+  @keyframes orbit-spin { to{transform:rotate(360deg)} }
+  @keyframes logo-breathe { 0%,100%{transform:scale(.94);opacity:.84}50%{transform:scale(1.04);opacity:1} }
+  @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
+  @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit,.home-logo,.home-slogan { animation: none; stroke-dashoffset: 0; opacity: 1; } }
 </style>
 </head>
 <body>
 <header class="banner">
-  <div class="banner-logo"><img src="assets/pj-compound-logo.svg" alt="P&amp;J Compound Company Limited Logo"></div>
-  <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
-  <div class="banner-client" id="banner-client"><span>客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
+  <button class="brand-home" type="button" onclick="goHome()" aria-label="回到首頁">
+    <div class="banner-logo"><img src="assets/pj-compound-logo.svg" alt="P&amp;J Compound Company Limited Logo"></div>
+    <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
+  </button>
+  <div class="banner-client" id="banner-client"><span>股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
 </header>
 <div class="body-wrap">
   <nav class="sidebar">
@@ -100,14 +127,36 @@
         <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
         <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
         <div class="welcome-form">
-          <div class="field-label">客戶 / Client</div><select class="welcome-select" id="client-selector"></select>
+          <div class="field-label">股東 / 客戶 / Client</div><select class="welcome-select" id="client-selector"></select>
           <div class="field-label">進入密碼 / Password</div>
-          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password')" aria-label="顯示或隱藏密碼"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
           <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
         </div>
       </div>
     </section>
-    <section class="idle" id="idle-screen"><div class="idle-card"><div class="brand-mark idle-mark"><img src="assets/pj-compound-logo.svg" alt="P&amp;J Compound Logo"></div><div class="brand-name idle-brand"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div><div class="welcome-divider"></div><p>請從左側選單選擇月報表或財經專題以開始瀏覽。</p><div class="idle-hint">← 請從左側選擇內容</div></div></section>
+    <section class="idle" id="idle-screen">
+      <div class="home-grid"></div>
+      <div class="idle-card">
+        <div class="home-kicker">P&amp;J Compound Company Limited</div>
+        <h1 class="home-title"><span id="home-client-name"></span>，歡迎回來</h1>
+        <div class="home-stage">
+          <svg class="finance-chart" viewBox="0 0 760 330" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="chart-gradient" x1="0" x2="1"><stop stop-color="#2877B7"/><stop offset=".6" stop-color="#E3B54B"/><stop offset="1" stop-color="#F68A1E"/></linearGradient>
+              <linearGradient id="area-gradient" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2877B7" stop-opacity=".32"/><stop offset="1" stop-color="#2877B7" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path class="chart-area" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62V330H0Z"/>
+            <path class="chart-glow" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
+            <path class="chart-line" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
+            <g><circle class="data-node" cx="150" cy="258" r="5"/><circle class="data-node" cx="310" cy="216" r="5"/><circle class="data-node" cx="478" cy="174" r="5"/><circle class="data-node" cx="638" cy="126" r="5"/><circle class="data-node" cx="760" cy="62" r="5"/></g>
+          </svg>
+          <div class="orbit"></div>
+          <div class="home-logo"><img src="assets/pj-compound-logo.svg" alt="P&amp;J Compound Logo"></div>
+        </div>
+        <div class="home-slogan">穩健複利・長期共贏</div>
+        <div class="home-hint">請從左側選單選擇月報表或財經專題</div>
+      </div>
+    </section>
     <iframe id="content-iframe" title="投資組合內容"></iframe>
   </main>
 </div>
@@ -116,10 +165,12 @@ const AUTH_KEY='pj_compound_client_auth';
 function loadConfig(){const raw=localStorage.getItem('pj_compound_config')||localStorage.getItem('pj_compound_config_published');if(raw){try{return JSON.parse(raw)}catch(e){}}return{monthlyReports:[],topics:[],categories:[],clients:[]}}
 let cfg=loadConfig(),isAuthenticated=false;
 async function sha256(str){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
-function togglePassword(id){const input=document.getElementById(id);input.type=input.type==='password'?'text':'password'}
+function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
 function buildClientSelector(){const sel=document.getElementById('client-selector');const clients=(cfg.clients||[]).filter(c=>c.active!==false).sort((a,b)=>(a.order||999)-(b.order||999));sel.innerHTML=clients.length?clients.map(c=>`<option value="${c.key}">${c.name}</option>`).join(''):'<option value="">尚無可登入客戶</option>'}
 async function attemptLogin(){const key=document.getElementById('client-selector').value,password=document.getElementById('client-password').value,err=document.getElementById('welcome-error'),client=(cfg.clients||[]).find(c=>c.key===key&&c.active!==false);if(!client){err.textContent='目前尚無可登入客戶，請聯絡管理員。';return}if(!client.passwordHash){err.textContent='此客戶尚未設定密碼，請聯絡管理員。';return}if(await sha256(password)!==client.passwordHash){err.textContent='密碼錯誤，請再試一次。';document.getElementById('client-password').value='';return}sessionStorage.setItem(AUTH_KEY,JSON.stringify({key:client.key,name:client.name}));showAuthenticated(client)}
-function showAuthenticated(client){isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('idle-screen').classList.add('visible');document.getElementById('banner-client-name').textContent=client.name;document.getElementById('banner-client').classList.add('visible')}
+function showAuthenticated(client){isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=client.name;document.getElementById('banner-client-name').textContent=client.name;document.getElementById('banner-client').classList.add('visible');showHome()}
+function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');document.getElementById('idle-screen').classList.add('visible')}
+function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-password').focus()}}
 function logout(){sessionStorage.removeItem(AUTH_KEY);location.reload()}
 function restoreSession(){try{const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY)||'null'),client=(cfg.clients||[]).find(c=>c.key===saved?.key&&c.active!==false);if(client)showAuthenticated(client)}catch(e){}}
 function buildSidebar(){buildReports();buildTopics();const ts=cfg._savedAt?new Date(cfg._savedAt).toLocaleDateString('zh-TW'):'';if(ts)document.getElementById('footer-updated').textContent='更新日期：'+ts}
