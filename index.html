@@ -118,7 +118,8 @@
   <nav class="sidebar">
     <div class="sidebar-section"><div class="nav-group-header open" id="hdr-reports" onclick="toggleSection('reports')"><span class="icon">📊</span>月報表 Monthly Reports<span class="chevron">▶</span></div><div class="nav-sub" id="sub-reports"></div></div>
     <div class="sidebar-section"><div class="nav-group-header open" id="hdr-topics" onclick="toggleSection('topics')"><span class="icon">📚</span>財經專題 Research<span class="chevron">▶</span></div><div class="nav-sub" id="sub-topics"></div></div>
-    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./admin.html">⚙ 後臺管理 Admin</a></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">📄</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
+    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./firebase-admin.html">⚙ 後臺管理 Admin</a></div>
   </nav>
   <main class="main-frame">
     <section class="welcome" id="welcome-screen">
@@ -127,7 +128,7 @@
         <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
         <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
         <div class="welcome-form">
-          <div class="field-label">股東 / 客戶 / Client</div><select class="welcome-select" id="client-selector"></select>
+          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" autocomplete="username" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
           <div class="field-label">進入密碼 / Password</div>
           <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
           <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
@@ -154,31 +155,36 @@
           <div class="home-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
         </div>
         <div class="home-slogan">穩健複利・長期共贏</div>
-        <div class="home-hint">請從左側選單選擇月報表或財經專題</div>
+        <div class="home-hint">請從左側選單選擇月報表、財經專題或個人對帳單</div>
       </div>
     </section>
     <iframe id="content-iframe" title="投資組合內容"></iframe>
   </main>
 </div>
-<script>
-const AUTH_KEY='pj_compound_client_auth';
+<script type="module">
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
+
 function loadConfig(){const raw=localStorage.getItem('pj_compound_config')||localStorage.getItem('pj_compound_config_published');if(raw){try{return JSON.parse(raw)}catch(e){}}return{monthlyReports:[],topics:[],categories:[],clients:[]}}
-let cfg=loadConfig(),isAuthenticated=false;
-async function sha256(str){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+let cfg=loadConfig(),isAuthenticated=false,currentClient=null,currentBlobUrl='';
 function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
-function buildClientSelector(){const sel=document.getElementById('client-selector');const clients=(cfg.clients||[]).filter(c=>c.active!==false).sort((a,b)=>(a.order||999)-(b.order||999));sel.innerHTML=clients.length?clients.map(c=>`<option value="${c.key}">${c.name}</option>`).join(''):'<option value="">尚無可登入客戶</option>'}
-async function attemptLogin(){const key=document.getElementById('client-selector').value,password=document.getElementById('client-password').value,err=document.getElementById('welcome-error'),client=(cfg.clients||[]).find(c=>c.key===key&&c.active!==false);if(!client){err.textContent='目前尚無可登入客戶，請聯絡管理員。';return}if(!client.passwordHash){err.textContent='此客戶尚未設定密碼，請聯絡管理員。';return}if(await sha256(password)!==client.passwordHash){err.textContent='密碼錯誤，請再試一次。';document.getElementById('client-password').value='';return}sessionStorage.setItem(AUTH_KEY,JSON.stringify({key:client.key,name:client.name}));showAuthenticated(client)}
-function showAuthenticated(client){isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=client.name;document.getElementById('banner-client-name').textContent=client.name;document.getElementById('banner-client').classList.add('visible');showHome()}
+async function attemptLogin(){const code=document.getElementById('client-code').value.trim().toUpperCase(),password=document.getElementById('client-password').value,err=document.getElementById('welcome-error');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';return}try{await signInWithEmailAndPassword(auth,shareholderEmail(code),password)}catch(e){err.textContent='股東編號或密碼錯誤，請再試一次。';document.getElementById('client-password').value=''}}
+async function showAuthenticated(user){const snap=await getDoc(doc(db,'shareholders',user.uid));if(!snap.exists()||snap.data().active===false){await signOut(auth);throw new Error('此股東帳號尚未啟用。')}currentClient={uid:user.uid,...snap.data()};isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=currentClient.displayName;document.getElementById('banner-client-name').textContent=`${currentClient.displayName} (${currentClient.shareholderCode})`;document.getElementById('banner-client').classList.add('visible');await buildStatements();showHome()}
 function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');document.getElementById('idle-screen').classList.add('visible')}
-function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-password').focus()}}
-function logout(){sessionStorage.removeItem(AUTH_KEY);location.reload()}
-function restoreSession(){try{const saved=JSON.parse(sessionStorage.getItem(AUTH_KEY)||'null'),client=(cfg.clients||[]).find(c=>c.key===saved?.key&&c.active!==false);if(client)showAuthenticated(client)}catch(e){}}
+function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-code').focus()}}
+async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);await signOut(auth);location.reload()}
 function buildSidebar(){buildReports();buildTopics();const ts=cfg._savedAt?new Date(cfg._savedAt).toLocaleDateString('zh-TW'):'';if(ts)document.getElementById('footer-updated').textContent='更新日期：'+ts}
 function buildReports(){const el=document.getElementById('sub-reports'),reports=(cfg.monthlyReports||[]).slice().sort((a,b)=>b.key.localeCompare(a.key));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.key;item.innerHTML=`<span class="dot"></span>${r.label}`;item.onclick=()=>navigate(item,r.src);el.appendChild(item)})}
 function buildTopics(){const el=document.getElementById('sub-topics'),topics=cfg.topics||[],cats=cfg.categories||[];el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>navigate(item,t.src);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.sort((a,b)=>(a.order||0)-(b.order||0)).forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
+async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||`${s.year} 年 ${s.month} 月`}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
+async function openStatement(el,statement){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{const blob=await getBlob(ref(storage,statement.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。')}}
 function navigate(el,src){if(!isAuthenticated){document.getElementById('welcome-error').textContent='請先登入後再開啟內容。';document.getElementById('client-password').focus();return}document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.src=src}
 function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
-buildClientSelector();buildSidebar();restoreSession();
+Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection});
+buildSidebar();
+onAuthStateChanged(auth,async user=>{if(!user)return;try{await showAuthenticated(user)}catch(e){document.getElementById('welcome-error').textContent=e.message}});
 </script>
 </body>
 </html>
