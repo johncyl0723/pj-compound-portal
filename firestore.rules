@@ -20,6 +20,10 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /shareholderDrafts/{shareholderCode} {
+      allow read, write: if isAdmin();
+    }
+
     match /statements/{userId}/months/{monthId} {
       allow read: if isOwner(userId) || isAdmin();
       allow write: if isAdmin();
