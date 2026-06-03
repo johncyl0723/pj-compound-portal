@@ -6,7 +6,10 @@ const {FieldValue, getFirestore} = require("firebase-admin/firestore");
 initializeApp();
 
 const REGION = "asia-east1";
-const callableOptions = {region: REGION};
+const callableOptions = {
+  region: REGION,
+  invoker: "public",
+};
 
 function assertAdmin(request) {
   if (!request.auth || request.auth.token.admin !== true) {

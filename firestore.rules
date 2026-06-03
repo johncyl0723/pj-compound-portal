@@ -29,6 +29,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /portalCategories/{categoryId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /portalTopics/{topicId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
