@@ -26,6 +26,13 @@ service firebase.storage {
         && request.resource.contentType == 'application/pdf';
     }
 
+    match /monthlyReports/{allPaths=**} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin()
+        && request.resource.size < 30 * 1024 * 1024
+        && request.resource.contentType == 'text/html';
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }
