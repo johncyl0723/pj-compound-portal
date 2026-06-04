@@ -64,6 +64,7 @@ exports.approveShareholder = onCall(callableOptions, async (request) => {
       displayName,
       active: true,
       createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
     });
     await draftRef.delete();
     return {uid: user.uid, shareholderCode: code};
@@ -82,6 +83,9 @@ exports.setShareholderPassword = onCall(callableOptions, async (request) => {
   const password = validatePassword(request.data.password);
   if (!uid) throw new HttpsError("invalid-argument", "缺少股東 UID。");
   await getAuth().updateUser(uid, {password});
+  await getFirestore().collection("shareholders").doc(uid).update({
+    updatedAt: FieldValue.serverTimestamp(),
+  });
   return {uid};
 });
 
