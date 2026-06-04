@@ -100,14 +100,14 @@
   .ai-partners-label { margin-bottom: 14px; color: rgba(255,245,232,.82); font-size: 12px; font-weight: 700; letter-spacing: 2.8px; text-transform: uppercase; }
   .ai-partners-label span { color: #E3B54B; }
   .ai-partners-row { display: grid; width: 100%; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
-  .ai-partner-card { min-height: 118px; display: flex; align-items: center; justify-content: center; padding: 16px 18px; border: 1px solid rgba(227,181,75,.12); border-radius: 22px; background: linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,241,233,.94)); box-shadow: 0 12px 26px rgba(0,0,0,.12); }
-  .ai-partner-card.codex { background: linear-gradient(135deg,#1537D0,#365DFF 55%,#6B77FF); overflow: hidden; }
-  .ai-partner-card.antigravity { background: linear-gradient(180deg,#F5F6F7,#EDEFF3); }
+  .ai-partner-card { min-height: 118px; display: flex; align-items: center; justify-content: center; padding: 16px 18px; border: 1px solid rgba(227,181,75,.12); border-radius: 22px; background: linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,241,233,.94)); box-shadow: 0 12px 26px rgba(0,0,0,.12); overflow: hidden; }
+  .ai-partner-card.codex { padding: 0; background: linear-gradient(135deg,#1537D0,#365DFF 55%,#6B77FF); }
+  .ai-partner-card.antigravity { background: linear-gradient(180deg,#FFFFFF,#F4F5F7); }
   .ai-partner-logo { max-width: 100%; max-height: 62px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 6px 18px rgba(0,0,0,.08)); }
-  .ai-partner-card.codex .ai-partner-logo { max-height: 86px; width: 100%; border-radius: 16px; filter: drop-shadow(0 10px 22px rgba(0,0,0,.18)); }
+  .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
   .ai-partner-card.antigravity .ai-partner-logo { max-height: 66px; }
   @media(max-width:900px){ .ai-partners { margin-top: 22px; padding: 16px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: 1fr; } .ai-partner-card { min-height: 98px; } }
-  @media(max-width:600px){ .ai-partners-label { font-size: 11px; letter-spacing: 2px; } .ai-partners-row { gap: 10px; } .ai-partner-card { padding: 12px 14px; border-radius: 18px; } .ai-partner-logo { max-height: 56px; } .ai-partner-card.codex .ai-partner-logo { max-height: 74px; } }
+  @media(max-width:600px){ .ai-partners-label { font-size: 11px; letter-spacing: 2px; } .ai-partners-row { gap: 10px; } .ai-partner-card { padding: 12px 14px; border-radius: 18px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 56px; } .ai-partner-card.codex .ai-partner-logo { max-height: none; } }
   @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
   @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
   @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
@@ -177,7 +177,7 @@
               <img class="ai-partner-logo" src="assets/codex-logo-crop.jpg" alt="Codex logo">
             </div>
             <div class="ai-partner-card antigravity">
-              <img class="ai-partner-logo" src="assets/antigravity-logo-clean.png" alt="Antigravity logo">
+              <img class="ai-partner-logo" src="assets/antigravity-logo-flat.png" alt="Antigravity logo">
             </div>
           </div>
         </div>
