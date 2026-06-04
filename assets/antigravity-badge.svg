@@ -1,0 +1,15 @@
+<svg width="220" height="64" viewBox="0 0 220 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.75" y="0.75" width="218.5" height="62.5" rx="18" fill="url(#bg)" stroke="rgba(255,255,255,0.18)"/>
+  <rect x="16" y="16" width="34" height="34" rx="12" fill="#6E59FF"/>
+  <path d="M33 22L38.6 33.4L33 42L27.4 33.4L33 22Z" fill="#FFF5E8"/>
+  <path d="M24 33.5H42" stroke="#D5CCFF" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="33" cy="33.5" r="12.5" stroke="#D5CCFF" stroke-opacity="0.45"/>
+  <text x="64" y="29" fill="#D5CCFF" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="2.2">AI WORKFLOW</text>
+  <text x="64" y="45" fill="#FFF5E8" font-family="Segoe UI, Arial, sans-serif" font-size="17" font-weight="800">Antigravity</text>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="8" x2="212" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#231A52"/>
+      <stop offset="1" stop-color="#3A2A84"/>
+    </linearGradient>
+  </defs>
+</svg>
