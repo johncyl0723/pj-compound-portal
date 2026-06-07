@@ -1,216 +1,1063 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>P&amp;J Compound Company Limited — 投資組合入口</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P&J Compound Company Limited — About</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,600&family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@300;400&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --brown: #6D3A0F; --brown-dark: #2C1503; --brown-light: #A05C1A;
-    --gold: #B8860B; --gold-dark: #9A6E08; --cream: #FAF7F2;
-    --sidebar-bg: #1E0D02; --sidebar-hover: rgba(184,134,11,.14);
-    --sidebar-active: rgba(184,134,11,.25); --sidebar-text: #E8D5A0;
-    --sidebar-muted: rgba(232,213,160,.5); --sidebar-width: 268px; --banner-height: 64px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif; font-size: 14px; background: #150800; color: #fff; }
-  .banner { position: fixed; inset: 0 0 auto 0; height: var(--banner-height); display: flex; align-items: center; padding: 0 28px; z-index: 100; background: linear-gradient(135deg,var(--brown-dark),var(--brown) 60%,var(--brown-light)); box-shadow: 0 2px 12px rgba(0,0,0,.3); border-bottom: 1px solid rgba(184,134,11,.25); }
-  .brand-home { display: flex; align-items: center; gap: 14px; padding: 4px 8px 4px 4px; border: 0; border-radius: 10px; background: transparent; color: #fff; cursor: pointer; text-align: left; transition: background .2s,transform .2s; }
-  .brand-home:hover { background: rgba(255,255,255,.1); }
-  .brand-home:active { transform: translateY(1px); }
-  .brand-home:focus-visible { outline: 2px solid #E3B54B; outline-offset: 3px; }
-  .banner-logo { width: 44px; height: 44px; flex-shrink: 0; overflow: hidden; filter: drop-shadow(0 2px 8px rgba(239,126,27,.3)); }
-  .banner-logo img { width: 100%; height: 100%; display: block; }
-  .banner-text { display: flex; flex-direction: column; gap: 1px; }
-  .banner-title { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
-  .banner-sub { font-size: 10px; opacity: .65; letter-spacing: 1.5px; text-transform: uppercase; color: #E3B54B; }
-  .banner-client { display: none; align-items: center; gap: 8px; margin-left: auto; padding: 5px 12px; border: 1px solid rgba(255,220,120,.55); border-radius: 16px; background: rgba(255,255,255,.12); color: #FFE08A; font-size: 12px; font-weight: 700; }
-  .banner-client.visible { display: flex; }
-  .logout-btn { border: none; background: transparent; color: rgba(255,255,255,.7); cursor: pointer; font: inherit; font-size: 11px; }
-  .logout-btn:hover { color: #fff; }
-  .body-wrap { position: fixed; inset: var(--banner-height) 0 0 0; display: flex; }
-  .sidebar { width: var(--sidebar-width); flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid rgba(184,134,11,.18); }
-  .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
-  .nav-group-header { display: flex; align-items: center; padding: 11px 18px; margin: 0 4px; border-radius: 4px; color: var(--gold); cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; user-select: none; }
-  .nav-group-header:hover { background: var(--sidebar-hover); }
-  .nav-group-header .icon { margin-right: 8px; font-size: 13px; }
-  .nav-group-header .chevron { margin-left: auto; opacity: .6; font-size: 10px; transition: transform .2s; }
-  .nav-group-header.open .chevron { transform: rotate(90deg); }
-  .nav-sub { padding: 2px 0 6px; }
-  .nav-item { display: flex; align-items: center; padding: 9px 18px 9px 38px; margin: 1px 4px; border-radius: 4px; color: var(--sidebar-text); cursor: pointer; font-size: 13px; user-select: none; transition: background .15s,color .15s; }
-  .nav-item:hover { background: var(--sidebar-hover); color: #fff; }
-  .nav-item.active { padding-left: 35px; border-left: 3px solid var(--gold); background: var(--sidebar-active); color: var(--gold); font-weight: 600; }
-  .dot { width: 5px; height: 5px; margin-right: 10px; flex-shrink: 0; border-radius: 50%; background: currentColor; opacity: .6; }
-  .nav-cat-header { display: flex; align-items: center; padding: 6px 18px 6px 26px; margin: 2px 4px; border-radius: 4px; color: rgba(212,196,160,.6); cursor: pointer; font-size: 10px; font-weight: 700; }
-  .nav-cat-header .cat-chevron { margin-left: auto; opacity: .5; }
-  .nav-cat-items { display: none; } .nav-cat-items.open { display: block; } .nav-cat-items .nav-item { padding-left: 50px; }
-  .sidebar-footer { margin-top: auto; padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.06); color: var(--sidebar-muted); font-size: 10px; line-height: 1.7; }
-  .sidebar-footer a { color: var(--gold); text-decoration: none; opacity: .8; }
-  .main-frame { position: relative; flex: 1; overflow: hidden; background: linear-gradient(135deg,#150800,#2C1503); }
-  #content-iframe { display: none; width: 100%; height: 100%; border: 0; background: #fff; }
-  .welcome { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 32px; background: linear-gradient(135deg,#150800,#2C1503); text-align: center; }
-  .welcome.hidden { display: none; }
-  .welcome-card { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 42px 58px 46px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: rgba(255,255,255,.065); box-shadow: 0 20px 44px rgba(0,0,0,.2); }
-  .brand-mark { overflow: hidden; flex-shrink: 0; }
-  .brand-mark img { display: block; }
-  .welcome-mark { width: 132px; height: 132px; }
-  .welcome-mark img { width: 100%; height: 100%; }
-  .brand-name { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #FFF7E8; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.28); }
-  .brand-name-main { font-size: 18px; font-weight: 800; letter-spacing: 2.4px; }
-  .brand-name-sub { color: rgba(255,247,232,.82); font-size: 12px; font-weight: 700; letter-spacing: 3.5px; }
-  .welcome-divider { width: 48px; height: 2px; border-radius: 2px; background: linear-gradient(90deg,#B8860B,#E3B54B); }
-  .welcome h1 { font-size: 26px; line-height: 1.3; }
-  .welcome-form { width: 100%; display: flex; flex-direction: column; gap: 11px; text-align: left; }
-  .field-label { margin-bottom: -5px; color: rgba(255,255,255,.55); font-size: 11px; letter-spacing: .5px; text-transform: uppercase; }
-  .welcome-select,.welcome-input { width: 100%; padding: 11px 15px; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; background: rgba(255,255,255,.1); color: #fff; font: inherit; font-size: 14px; }
-  .welcome-select { padding-right: 36px; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23E3B54B'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
-  .welcome-select option { background: #2C1503; color: #fff; }
-  .input-wrap { position: relative; }
-  .input-wrap .welcome-input { padding-right: 46px; }
-  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; padding: 0; border: 0; background: transparent; color: rgba(255,255,255,.55); cursor: pointer; }
-  .eye-btn:hover,.eye-btn.is-visible { color: #E3B54B; }
-  .eye-btn svg { width: 20px; height: 20px; pointer-events: none; }
-  .eye-slash { opacity: 0; transition: opacity .16s; }
-  .eye-btn.is-visible .eye-slash { opacity: 1; }
-  .login-btn { width: 100%; margin-top: 6px; padding: 12px; border: 0; border-radius: 8px; background: linear-gradient(135deg,var(--gold),var(--gold-dark)); color: #fff; cursor: pointer; font: inherit; font-weight: 700; letter-spacing: .8px; }
-  .login-btn:hover { filter: brightness(1.08); }
-  .welcome-error { min-height: 18px; color: #ff9b9b; font-size: 12px; text-align: center; }
-  .idle { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; overflow: hidden; padding: 32px; text-align: center; background: radial-gradient(circle at 56% 42%,rgba(30,87,142,.22),transparent 26%),linear-gradient(135deg,#120700,#2C1503); }
-  .idle.visible { display: flex; }
-  .home-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(rgba(227,181,75,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(227,181,75,.08) 1px,transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom,transparent,black 18%,black 82%,transparent); }
-  .idle-card { position: relative; z-index: 1; width: min(880px,92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; }
-  .home-kicker { color: #E3B54B; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
-  .home-title { color: #FFF7E8; font-size: clamp(24px,3vw,38px); letter-spacing: 1px; }
-  .home-title span { color: #E3B54B; }
-  .home-stage { position: relative; width: min(760px,88vw); height: 330px; margin: 4px 0; overflow: hidden; border: 1px solid rgba(227,181,75,.22); border-radius: 28px; background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(6,27,47,.18)); box-shadow: 0 22px 60px rgba(0,0,0,.28),inset 0 0 40px rgba(15,75,124,.12); }
-  .finance-chart { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .chart-line { fill: none; stroke: url(#chart-gradient); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
-  .chart-glow { fill: none; stroke: rgba(34,122,196,.26); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
-  .chart-area { fill: url(#area-gradient); opacity: 0; animation: area-rise 10s ease-in-out infinite; }
-  .data-node { fill: #E3B54B; stroke: rgba(255,255,255,.9); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: node-pulse 10s ease-in-out infinite; }
-  .data-node:nth-of-type(2){animation-delay:.5s}.data-node:nth-of-type(3){animation-delay:1s}.data-node:nth-of-type(4){animation-delay:1.5s}.data-node:nth-of-type(5){animation-delay:2s}
-  .orbit { position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; margin: -88px; border: 1px solid rgba(227,181,75,.34); border-radius: 50%; animation: orbit-spin 10s linear infinite; }
-  .orbit::before,.orbit::after { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #E3B54B; box-shadow: 0 0 16px #E3B54B; }
-  .orbit::before { left: 18px; top: 18px; }.orbit::after { right: 9px; bottom: 29px; background: #2877B7; box-shadow: 0 0 16px #2877B7; }
-  .home-logo { position: absolute; left: 50%; top: 50%; width: 124px; height: 124px; margin: -62px; overflow: hidden; border-radius: 50%; filter: drop-shadow(0 0 14px rgba(40,119,183,.38)); animation: logo-breathe 10s ease-in-out infinite; }
-  .home-logo img { display: block; width: 100%; height: 100%; }
-  .home-slogan { color: #FFF7E8; font-size: 21px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 16px rgba(227,181,75,.4); animation: slogan-reveal 10s ease-in-out infinite; }
-  .home-hint { color: #E8D5A0; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 14px rgba(227,181,75,.28); }
-  .ai-partners { width: min(620px,84vw); margin-top: 22px; padding: 14px 14px 16px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
-  .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
-  .ai-partners-label span { color: #E3B54B; }
-  .ai-partners-row { display: grid; width: 100%; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
-  .ai-partner-card { min-height: 86px; display: flex; align-items: center; justify-content: center; padding: 12px 14px; border: 1px solid rgba(227,181,75,.12); border-radius: 18px; background: linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,241,233,.94)); box-shadow: 0 10px 20px rgba(0,0,0,.1); overflow: hidden; }
-  .ai-partner-card.codex { padding: 0; background: linear-gradient(135deg,#1537D0,#365DFF 55%,#6B77FF); }
-  .ai-partner-card.antigravity { background: #FFFFFF; padding: 0; }
-  .ai-partner-logo { max-width: 100%; max-height: 46px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.08)); }
-  .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
-  .ai-partner-card.antigravity .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: contain; filter: none; }
-  @media(max-width:900px){ .ai-partners { width: min(560px,86vw); margin-top: 20px; padding: 14px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: 1fr; } .ai-partner-card { min-height: 78px; } }
-  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .ai-partners-row { gap: 8px; } .ai-partner-card { padding: 10px 12px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 42px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; } }
-  @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
-  @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
-  @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
-  @keyframes orbit-spin { to{transform:rotate(360deg)} }
-  @keyframes logo-breathe { 0%,100%{transform:scale(.94);opacity:.84}50%{transform:scale(1.04);opacity:1} }
-  @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
-  @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit,.home-logo,.home-slogan { animation: none; stroke-dashoffset: 0; opacity: 1; } }
+:root {
+  --bg:        #0A0A0A;
+  --bg2:       #060606;
+  --text:      #F0EDE6;
+  --gold:      #D4A843;
+  --gold-dim:  rgba(212,168,67,0.35);
+  --muted:     rgba(240,237,230,0.42);
+  --data:      #9E8B6B;
+  --border:    rgba(255,255,255,0.05);
+  --card:      rgba(255,255,255,0.03);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+/* ── Top Nav ── */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9998;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  background: rgba(10,10,10,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(212,168,67,0.12);
+}
+.top-nav-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: rgba(240,237,230,0.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  user-select: none;
+}
+.top-nav-brand strong { color: var(--gold); font-weight: 400; }
+.top-nav-login {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border: 1px solid rgba(212,168,67,0.5);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.24s ease, border-color 0.24s ease;
+}
+.top-nav-login:hover { background: rgba(212,168,67,0.12); border-color: var(--gold); }
+.top-nav-login-zh { font-family: 'Source Serif 4', serif; font-size: 13px; letter-spacing: 1px; }
+@media (max-width: 600px) {
+  .top-nav { padding: 0 18px; }
+  .top-nav-brand { display: none; }
+}
+/* ── Section scaffold ── */
+.section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 60px;
+}
+@media (max-width: 900px) { .section { padding: 60px 32px; } }
+@media (max-width: 600px) { .section { padding: 48px 20px; } }
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+/* ── Shared text ── */
+.sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+}
+.sec-zh {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(30px, 4.5vw, 50px);
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.sec-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(18px, 2.8vw, 26px);
+  color: var(--gold);
+  margin-bottom: 30px;
+}
+.sec-divider {
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  margin-bottom: 30px;
+  transition: width 1s ease 0.2s;
+}
+.sec-divider.expanded { width: 56px; }
+.body-zh {
+  font-size: 17px;
+  line-height: 2;
+  color: var(--muted);
+  max-width: 440px;
+}
+.body-en {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(240,237,230,0.28);
+  font-style: italic;
+  max-width: 440px;
+  margin-top: 16px;
+}
+.mono-tag {
+  margin-top: 34px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--data);
+  letter-spacing: 1.5px;
+}
+/* ── Hero ── */
+#hero {
+  flex-direction: column;
+  text-align: center;
+  min-height: 100vh;
+  padding: 56px 32px 0;
+}
+.hero-e-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: 44px;
+}
+.hero-e-sym {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(80px, 13vw, 140px);
+  color: var(--gold);
+  line-height: 1;
+}
+.hero-eq {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(22px, 4vw, 46px);
+  color: var(--muted);
+  margin: 0 14px;
+  line-height: 1;
+}
+.hero-digits {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(22px, 4vw, 46px);
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: 1.5px;
+}
+.hero-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.8em;
+  background: var(--gold);
+  margin-left: 3px;
+  vertical-align: middle;
+  animation: blink 0.9s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-ellipsis {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(22px, 4vw, 46px);
+  color: var(--gold-dim);
+  line-height: 1;
+  display: none;
+}
+.hero-line {
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 40px;
+  transition: width 1.2s ease;
+}
+.hero-line.expanded { width: 100px; }
+.hero-brand {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(17px, 2.6vw, 24px);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.hero-brand.in { opacity: 1; }
+.hero-brand-sub {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: rgba(212,168,67,0.65);
+  letter-spacing: 2.5px;
+  margin-top: 10px;
+}
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(16px, 2.8vw, 26px);
+  color: var(--muted);
+  margin-top: 14px;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.hero-tagline.in { opacity: 1; }
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(212,168,67,0.4);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 1s ease;
+  white-space: nowrap;
+  animation: float 3s ease-in-out infinite;
+}
+.hero-scroll-hint.in { opacity: 1; }
+@keyframes float {
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(5px)}
+}
+/* ── Interlude ── */
+#interlude { background: #050505; padding: 0; }
+#canvas-e-circle { position: absolute; inset: 0; width: 100%; height: 100%; }
+.interlude-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 40px;
+  max-width: 640px;
+}
+.interlude-zh {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(26px, 4.5vw, 42px);
+  color: var(--text);
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+.interlude-zh.in { opacity: 1; transform: none; }
+.interlude-en {
+  display: block;
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: clamp(15px, 2.2vw, 20px);
+  color: var(--muted);
+  margin-top: 14px;
+  opacity: 0;
+  transition: opacity 1.1s ease 0.3s;
+}
+.interlude-en.in { opacity: 1; }
+/* ── Precision ── */
+#precision { flex-direction: row; gap: 80px; align-items: center; }
+@media (max-width: 900px) { #precision { flex-direction: column; gap: 48px; } }
+.precision-visual {
+  flex: 1;
+  max-width: 400px;
+  height: 540px;
+  position: relative;
+  overflow: hidden;
+}
+.flow-track {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 10%, black 22%, black 72%, rgba(0,0,0,0.3) 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 10%, black 22%, black 72%, rgba(0,0,0,0.3) 88%, transparent 100%);
+}
+.flow-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: flow-up 18s linear infinite;
+}
+.flow-row {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  letter-spacing: 4px;
+  line-height: 2.2;
+  user-select: none;
+  white-space: nowrap;
+}
+@keyframes flow-up { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+.precision-text { flex: 1; max-width: 460px; }
+@media (max-width: 900px) {
+  .precision-visual { max-width: 100%; width: 100%; height: 240px; }
+  .precision-text { max-width: 100%; }
+  .body-zh, .body-en { max-width: 100%; }
+}
+/* ── Invariance ── */
+#invariance { flex-direction: column; gap: 56px; }
+#canvas-curves { display: block; width: min(760px, 90vw); height: 280px; }
+.invariance-text { text-align: center; max-width: 580px; }
+.invariance-text .body-zh, .invariance-text .body-en { max-width: 540px; }
+/* ── Growth ── */
+#growth { flex-direction: row; gap: 80px; flex-wrap: wrap; }
+.growth-text { flex: 1; min-width: 260px; max-width: 420px; }
+.growth-visual { flex: 1.2; min-width: 280px; max-width: 580px; }
+#canvas-exp { display: block; width: 100%; height: 300px; }
+@media (max-width: 900px) {
+  #growth { flex-direction: column; gap: 48px; }
+  .growth-text, .growth-visual { max-width: 100%; }
+}
+/* ── Promise ── */
+#promise { flex-direction: column; text-align: center; }
+.promise-bg {
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: min(420px, 55vw);
+  color: rgba(212,168,67,0.035);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.promise-wrap { position: relative; z-index: 1; max-width: 640px; }
+.p-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 52px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.p-label.in { opacity: 1; }
+.p-line {
+  display: block;
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(20px, 3.2vw, 30px);
+  line-height: 1.6;
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.p-line.gold { color: var(--gold); }
+.p-sub {
+  display: block;
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: clamp(13px, 1.8vw, 17px);
+  color: rgba(240,237,230,0.3);
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.p-gap { height: 24px; }
+.p-line.in, .p-sub.in { opacity: 1; transform: none; }
+/* ── Footer ── */
+#footer {
+  min-height: auto;
+  flex-direction: column;
+  gap: 48px;
+  padding: 60px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 600px) { #footer { padding: 48px 24px; } }
+.footer-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 48px;
+  width: 100%;
+  max-width: 860px;
+  flex-wrap: wrap;
+}
+.footer-logo-medallion {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(212,168,67,0.5), 0 0 0 6px rgba(212,168,67,0.12), 0 12px 40px rgba(0,0,0,0.5);
+  position: relative;
+  flex-shrink: 0;
+}
+.footer-logo-medallion img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.footer-brand { display: flex; flex-direction: row; align-items: center; gap: 28px; }
+.footer-pj {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 44px;
+  color: #ffffff;
+  letter-spacing: 4px;
+  line-height: 1;
+  user-select: none;
+}
+.footer-contact { display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--muted); }
+.footer-contact-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.footer-cta {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 11px 26px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.28s ease, color 0.28s ease;
+}
+.footer-cta:hover { background: var(--gold); color: var(--bg); }
+/* ── Float Login ── */
+@keyframes login-pulse {
+  0%, 100% { box-shadow: -3px 0 18px rgba(212,168,67,0.18), 0 0 0 0 rgba(212,168,67,0.22); }
+  50%       { box-shadow: -3px 0 28px rgba(212,168,67,0.38), 0 0 0 6px rgba(212,168,67,0.0); }
+}
+.float-login {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  padding: 28px 16px;
+  background: rgba(212,168,67,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212,168,67,0.75);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.28s ease, border-color 0.28s ease, padding 0.2s ease;
+  user-select: none;
+  animation: login-pulse 3s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.float-login:hover {
+  background: rgba(212,168,67,0.26);
+  border-color: var(--gold);
+  padding: 28px 20px;
+  animation: none;
+  box-shadow: -4px 0 32px rgba(212,168,67,0.35);
+}
+.float-login-zh {
+  font-family: 'Source Serif 4', serif;
+  font-style: normal;
+  writing-mode: vertical-lr;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  font-weight: 400;
+}
+.float-login-en {
+  font-family: 'JetBrains Mono', monospace;
+  writing-mode: vertical-lr;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: rgba(212,168,67,0.55);
+  text-transform: uppercase;
+}
+.float-login-arrow {
+  font-size: 14px;
+  color: rgba(212,168,67,0.7);
+  writing-mode: horizontal-tb;
+  transform: rotate(90deg);
+  margin-top: 4px;
+}
+/* ── Footer CTA ── */
+.footer-login-cta {
+  width: 100%;
+  max-width: 860px;
+  margin-top: 40px;
+  padding: 40px 48px;
+  background: rgba(212,168,67,0.05);
+  border: 1px solid rgba(212,168,67,0.22);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.footer-login-cta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.footer-login-cta-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(20px, 2.8vw, 26px);
+  color: var(--text);
+  line-height: 1.4;
+}
+.footer-login-cta-sub {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.footer-login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, rgba(212,168,67,0.18), rgba(212,168,67,0.08));
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.28s ease, color 0.28s ease, transform 0.2s ease;
+}
+.footer-login-btn:hover { background: var(--gold); color: var(--bg); transform: translateY(-2px); }
+.footer-login-btn-zh { font-family: 'Source Serif 4', serif; font-size: 15px; letter-spacing: 2px; font-style: normal; }
+@media (max-width: 600px) {
+  .footer-login-cta { padding: 32px 24px; }
+  .float-login { padding: 18px 11px; gap: 6px; border-radius: 6px 0 0 6px; }
+  .float-login:hover { padding: 18px 14px; }
+  .float-login-zh { font-size: 11px; letter-spacing: 2px; }
+  .float-login-en { display: none; }
+  .float-login-arrow { font-size: 12px; }
+}
+.footer-legal {
+  width: 100%;
+  max-width: 860px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(240,237,230,0.18);
+  letter-spacing: 0.8px;
+  line-height: 1.8;
+}
 </style>
 </head>
 <body>
-<header class="banner">
-  <button class="brand-home" type="button" onclick="goHome()" aria-label="回到首頁">
-    <div class="banner-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Company Limited Logo"></div>
-    <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
-  </button>
-  <div class="banner-client" id="banner-client"><span>股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
-</header>
-<div class="body-wrap">
-  <nav class="sidebar">
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-reports" onclick="toggleSection('reports')"><span class="icon">📊</span>月報表 Monthly Reports<span class="chevron">▶</span></div><div class="nav-sub" id="sub-reports"></div></div>
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-topics" onclick="toggleSection('topics')"><span class="icon">📚</span>財經專題 Research<span class="chevron">▶</span></div><div class="nav-sub" id="sub-topics"></div></div>
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">📄</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
-    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./firebase-admin.html">⚙ 後臺管理 Admin</a></div>
-  </nav>
-  <main class="main-frame">
-    <section class="welcome" id="welcome-screen">
-      <div class="welcome-card">
-        <div class="brand-mark welcome-mark"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
-        <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
-        <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
-        <div class="welcome-form">
-          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" autocomplete="username" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
-          <div class="field-label">進入密碼 / Password</div>
-          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
-          <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
-        </div>
-      </div>
-    </section>
-    <section class="idle" id="idle-screen">
-      <div class="home-grid"></div>
-      <div class="idle-card">
-        <div class="home-kicker">P&amp;J Compound Company Limited</div>
-        <h1 class="home-title"><span id="home-client-name"></span>，歡迎回來</h1>
-        <div class="home-stage">
-          <svg class="finance-chart" viewBox="0 0 760 330" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="chart-gradient" x1="0" x2="1"><stop stop-color="#2877B7"/><stop offset=".6" stop-color="#E3B54B"/><stop offset="1" stop-color="#F68A1E"/></linearGradient>
-              <linearGradient id="area-gradient" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2877B7" stop-opacity=".32"/><stop offset="1" stop-color="#2877B7" stop-opacity="0"/></linearGradient>
-            </defs>
-            <path class="chart-area" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62V330H0Z"/>
-            <path class="chart-glow" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
-            <path class="chart-line" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
-            <g><circle class="data-node" cx="150" cy="258" r="5"/><circle class="data-node" cx="310" cy="216" r="5"/><circle class="data-node" cx="478" cy="174" r="5"/><circle class="data-node" cx="638" cy="126" r="5"/><circle class="data-node" cx="760" cy="62" r="5"/></g>
-          </svg>
-          <div class="orbit"></div>
-          <div class="home-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
-        </div>
-        <div class="home-slogan">穩健複利・長期共贏</div>
-        <div class="home-hint">請從左側選單選擇月報表、財經專題或個人對帳單</div>
-        <div class="ai-partners" aria-label="AI 協作夥伴">
-          <div class="ai-partners-label">Powered by <span>Claude Code / Codex / Antigravity</span></div>
-          <div class="ai-partners-row">
-            <div class="ai-partner-card">
-              <img class="ai-partner-logo" src="assets/claude-logo-clean.png" alt="Claude logo">
-            </div>
-            <div class="ai-partner-card codex">
-              <img class="ai-partner-logo" src="assets/codex-logo-crop.jpg" alt="Codex logo">
-            </div>
-            <div class="ai-partner-card antigravity">
-              <img class="ai-partner-logo" src="assets/antigravity-logo-cropped.png" alt="Google Antigravity logo">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <iframe id="content-iframe" title="投資組合內容"></iframe>
-  </main>
-</div>
-<script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js';
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
-import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
-import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-let isAuthenticated=false,currentClient=null,currentBlobUrl='';
-function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
-function loginErrorMessage(error){switch(error?.code){case'auth/invalid-credential':case'auth/wrong-password':case'auth/user-not-found':return'Firebase 登入資料不相符。請到後臺重新設定此股東密碼後再試一次。';case'auth/user-disabled':return'此股東帳號已停用，請到後臺重新啟用。';case'auth/too-many-requests':return'嘗試次數過多，請稍候再試或到後臺重設密碼。';case'permission-denied':return'登入成功，但股東資料權限不足，請檢查 Firestore 權限設定。';default:return error?.message||'登入失敗，請稍後再試。'}}
-async function attemptLogin(){const code=document.getElementById('client-code').value.trim().toUpperCase(),password=document.getElementById('client-password').value,err=document.getElementById('welcome-error'),btn=document.querySelector('.login-btn');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';return}btn.disabled=true;btn.textContent='登入中...';try{const cred=await signInWithEmailAndPassword(auth,shareholderEmail(code),password);await showAuthenticated(cred.user)}catch(e){err.textContent=loginErrorMessage(e);document.getElementById('client-password').value='';await signOut(auth).catch(()=>{})}finally{btn.disabled=false;btn.textContent='進入 →'}}
-async function showAuthenticated(user){const snap=await getDoc(doc(db,'shareholders',user.uid));if(!snap.exists()||snap.data().active===false){await signOut(auth);throw new Error('此股東帳號尚未啟用。')}currentClient={uid:user.uid,...snap.data()};isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=currentClient.displayName;document.getElementById('banner-client-name').textContent=`${currentClient.displayName} (${currentClient.shareholderCode})`;document.getElementById('banner-client').classList.add('visible');await Promise.all([buildReports(),buildTopics(),buildStatements()]);showHome()}
-function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');document.getElementById('idle-screen').classList.add('visible')}
-function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-code').focus()}}
-async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);await signOut(auth);location.reload()}
-function buildSidebar(){document.getElementById('sub-reports').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('sub-topics').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('footer-updated').textContent='Firebase 動態同步'}
-async function buildReports(){const el=document.getElementById('sub-reports');el.innerHTML='<div class="nav-item">載入中...</div>';const snap=await getDocs(collection(db,'portalMonthlyReports')),reports=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.active!==false).sort((a,b)=>String(b.id||'').localeCompare(String(a.id||'')));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.id;item.innerHTML=`<span class="dot"></span>${r.label||`${r.year} 年 ${r.month} 月`}`;item.onclick=()=>openReport(item,r);el.appendChild(item)})}
-async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.title||'').localeCompare(String(b.title||''))),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
-async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||`${s.year} 年 ${s.month} 月`}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
-async function openStatement(el,statement){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{const blob=await getBlob(ref(storage,statement.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。')}}
-async function openReport(el,report){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{const blob=await getBlob(ref(storage,report.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
-async function openTopic(el,topic){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{if(topic.downloadUrl){frame.src=topic.downloadUrl}else if(topic.storagePath){const blob=await getBlob(ref(storage,topic.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}else if(topic.src){frame.src=topic.src}else throw new Error('missing-topic-file')}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。')}}
-function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
-Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection});
-buildSidebar();
-onAuthStateChanged(auth,async user=>{if(!user||isAuthenticated)return;try{await showAuthenticated(user)}catch(e){document.getElementById('welcome-error').textContent=loginErrorMessage(e)}});
+<!-- Top Nav -->
+<nav class="top-nav">
+  <span class="top-nav-brand"><strong>P&amp;J</strong> Compound Company Limited</span>
+  <a class="top-nav-login" href="./portal.html">
+    <span class="top-nav-login-zh">客戶登入</span>
+    <span>/ Login &rarr;</span>
+  </a>
+</nav>
+
+<!-- Floating Login Button -->
+<a class="float-login" href="./portal.html" aria-label="Client Login">
+  <span class="float-login-zh">客戶登入</span>
+  <span class="float-login-en">Login</span>
+  <span class="float-login-arrow">&rarr;</span>
+</a>
+
+<!-- S0: Hero -->
+<section class="section" id="hero">
+  <div>
+    <div class="hero-e-row">
+      <span class="hero-e-sym">e</span>
+      <span class="hero-eq">&thinsp;=&thinsp;</span>
+      <span class="hero-digits" id="hd">2.</span><span class="hero-cursor" id="hcursor"></span><span class="hero-ellipsis" id="hellipsis">...</span>
+    </div>
+    <div class="hero-line" id="hero-line"></div>
+    <div class="hero-brand" id="hero-brand">
+      P&amp;J Compound Company Limited
+      <span class="hero-brand-sub">穩健複利 &middot; Long-term Capital Growth</span>
+    </div>
+    <div class="hero-tagline" id="hero-tagline">
+      Compounding, through every cycle.
+    </div>
+  </div>
+  <div class="hero-scroll-hint" id="hero-scroll">Scroll to explore &darr;</div>
+</section>
+
+<!-- S1: Interlude -->
+<section class="section" id="interlude">
+  <canvas id="canvas-e-circle"></canvas>
+  <div class="interlude-text">
+    <div class="interlude-zh" id="iq-zh">自然界最優雅的成長方程式，從不停止，從不重複。</div>
+    <span class="interlude-en" id="iq-en">Nature&rsquo;s most elegant growth equation &mdash; never stopping, never repeating.</span>
+  </div>
+</section>
+
+<!-- S2: Brand Philosophy -->
+<section class="section" id="precision">
+  <div class="precision-visual reveal">
+    <div class="flow-track">
+      <div class="flow-inner" id="flow-inner"></div>
+    </div>
+  </div>
+  <div class="precision-text">
+    <div class="sec-label reveal">01 &mdash; Brand Philosophy &middot; 品牌哲學</div>
+    <div class="sec-zh reveal">無限趨近複利</div>
+    <div class="sec-en reveal">Infinite Approximation to Compounding</div>
+    <div class="sec-divider reveal" id="div-1"></div>
+    <div class="body-zh reveal">
+      e 始於 2.71828，延伸向無窮，不循環、不重複、不終結。這個常數，是自然界對「成長」最簡潔的表達——無論是細胞的分裂、族群的增長，還是資本的複利，最終都收斂於同一個方程式之上。<br><br>這，是我們對投資的理解。
+    </div>
+    <div class="body-en reveal">
+      e begins at 2.71828 and extends into infinity &mdash; never repeating, never ending. This constant is nature&rsquo;s most concise expression of growth. Capital compounds toward the same mathematical truth, cycle after cycle.
+    </div>
+    <div class="mono-tag reveal">e = 2.71828182845904523536...</div>
+  </div>
+</section>
+
+<!-- S3: Scale Invariance -->
+<section class="section" id="invariance">
+  <canvas id="canvas-curves"></canvas>
+  <div class="invariance-text">
+    <div class="sec-label reveal">02 &mdash; Investment Principle &middot; 投資原則</div>
+    <div class="sec-zh reveal">尺度不變性</div>
+    <div class="sec-en reveal">Scale Invariance</div>
+    <div class="sec-divider reveal" id="div-2"></div>
+    <div class="body-zh reveal" style="max-width:520px;margin:0 auto;">
+      不論初始本金多少，以相同的利率運行相同的時間，複利成長的倍數永遠相同。資本的規模不改變法則的本質，每一個投資組合——無論大小——都接受同一套原則的檢驗。
+    </div>
+    <div class="body-en reveal" style="max-width:520px;margin:14px auto 0;">
+      Regardless of initial principal, equal rates over equal time yield the same growth multiple. The scale of capital does not alter the principle. Every portfolio &mdash; small or large &mdash; compounds by the same mathematical law.
+    </div>
+  </div>
+</section>
+
+<!-- S4: Compound -->
+<section class="section" id="growth">
+  <div class="growth-text">
+    <div class="sec-label reveal">03 &mdash; Compound &middot; 複利</div>
+    <div class="sec-zh reveal">時間，是最可靠的錨點</div>
+    <div class="sec-en reveal">Time: The Most Reliable Anchor</div>
+    <div class="sec-divider reveal" id="div-3"></div>
+    <div class="body-zh reveal">
+      在波動的金融世界裡，複利提供的不是最快的回報，而是最可計算的成長軌跡。<br><br>對長期投資者而言，財富累積的核心命題從來不是「今年賺了多少」，而是「紀律是否足夠——是否讓時間發揮了它應有的複利效應」。
+    </div>
+    <div class="body-en reveal">
+      In volatile markets, compounding delivers not the fastest returns, but the most calculable growth trajectory. Wealth accumulation is not about how much you earned this year. It is about whether discipline was sufficient &mdash; whether time was allowed to do what only time can do.
+    </div>
+  </div>
+  <div class="growth-visual reveal">
+    <canvas id="canvas-exp"></canvas>
+  </div>
+</section>
+
+<!-- S5: Promise -->
+<section class="section" id="promise">
+  <div class="promise-bg">e</div>
+  <div class="promise-wrap">
+    <div class="p-label" id="p-label">Our Commitment &middot; 我們的承諾</div>
+    <span class="p-line" id="pl0">我們不承諾市場的方向，</span>
+    <span class="p-sub"  id="ps0">We do not promise the direction of markets.</span>
+    <div class="p-gap"></div>
+    <span class="p-line" id="pl1">但我們承諾，</span>
+    <span class="p-sub"  id="ps1">But we promise &mdash;</span>
+    <span class="p-line" id="pl2">在每一個複利週期裡，</span>
+    <span class="p-sub"  id="ps2">in every compounding cycle,</span>
+    <span class="p-line" id="pl3">提供當下所能給出的、最嚴謹的判斷。</span>
+    <span class="p-sub"  id="ps3">to deliver the most rigorous judgment available at that moment.</span>
+    <div class="p-gap"></div>
+    <span class="p-line gold" id="pl4">然後，在下一個週期，給出更好的答案。</span>
+    <span class="p-sub"  id="ps4">And at the next cycle &mdash; a better one.</span>
+  </div>
+</section>
+
+<!-- S6: Footer -->
+<section class="section" id="footer">
+  <div class="footer-body">
+    <div class="footer-brand">
+      <div class="footer-logo-medallion">
+        <img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo">
+      </div>
+      <div class="footer-pj">P&amp;J</div>
+    </div>
+    <div class="footer-contact">
+      <div class="footer-contact-label">Contact &middot; 聯絡</div>
+      <div>phptan@gmail.com</div>
+      <div>john.cyl@gmail.com</div>
+      <button class="footer-cta">安排會談 / Schedule a Meeting</button>
+    </div>
+  </div>
+  <div class="footer-login-cta reveal">
+    <div class="footer-login-cta-label">Client Portal &middot; 客戶專區</div>
+    <div class="footer-login-cta-title">準備好了？進入您的投資組合</div>
+    <div class="footer-login-cta-sub">Ready to view your portfolio? Access your personalised reports and insights.</div>
+    <a class="footer-login-btn" href="./portal.html">
+      <span class="footer-login-btn-zh">客戶登入</span>
+      <span>/ Login &rarr;</span>
+    </a>
+  </div>
+  <div class="footer-legal">
+    &copy; 2026 P&amp;J Compound Company Limited &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp;
+    本頁面僅供參閱，不構成任何投資建議 &nbsp;&middot;&nbsp;
+    This material is for reference only and does not constitute investment advice.
+  </div>
+</section>
+
+<script>
+'use strict';
+
+var E_DIGITS = '71828182845904523536028747135266249775724709369995' +
+               '95749669676277240766303535475945713821785251664274' +
+               '27466391932003059921817413596629043572900334295261' +
+               '36210894610773888428208022498716058473898967174093';
+
+// Hero typing animation
+(function heroTyping() {
+  var hdEl = document.getElementById('hd');
+  var cursor = document.getElementById('hcursor');
+  var ellipsis = document.getElementById('hellipsis');
+  var target = '2.71828182845904';
+  var i = 2;
+  function next() {
+    if (i > target.length) {
+      cursor.style.display = 'none';
+      ellipsis.style.display = 'inline';
+      setTimeout(function(){ document.getElementById('hero-line').classList.add('expanded'); }, 400);
+      setTimeout(function(){ document.getElementById('hero-brand').classList.add('in'); }, 900);
+      setTimeout(function(){ document.getElementById('hero-tagline').classList.add('in'); }, 1400);
+      setTimeout(function(){ document.getElementById('hero-scroll').classList.add('in'); }, 2200);
+      return;
+    }
+    hdEl.textContent = target.slice(0, i);
+    i++;
+    var delay = i < 4 ? 120 : i < 8 ? 80 : i < 12 ? 55 : 40;
+    setTimeout(next, delay);
+  }
+  setTimeout(next, 500);
+})();
+
+// Flowing e-digits
+(function buildFlow() {
+  var inner = document.getElementById('flow-inner');
+  var digits = E_DIGITS.slice(0, 96);
+  function buildBlock() {
+    var html = '';
+    for (var row = 0; row < 12; row++) {
+      var chunk = digits.slice(row * 8, row * 8 + 8);
+      var isGold = row < 3;
+      var op = Math.max(0.28, 0.72 - row * 0.04);
+      html += '<div class="flow-row" style="color:' + (isGold ? 'var(--gold)' : 'var(--text)') + ';opacity:' + op + '">' + chunk + '</div>';
+    }
+    return html;
+  }
+  inner.innerHTML = buildBlock() + buildBlock();
+})();
+
+function setupCanvas(canvas) {
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  * dpr;
+  canvas.height = rect.height * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx: ctx, w: rect.width, h: rect.height };
+}
+
+// e circle (Interlude)
+var eCircleCanvas = document.getElementById('canvas-e-circle');
+var eCtx, eW, eH, eAngle = 0, eRafId = null;
+function initECircle() {
+  eCircleCanvas.width  = eCircleCanvas.offsetWidth;
+  eCircleCanvas.height = eCircleCanvas.offsetHeight;
+  eCtx = eCircleCanvas.getContext('2d');
+  eW = eCircleCanvas.offsetWidth;
+  eH = eCircleCanvas.offsetHeight;
+}
+function drawECircle() {
+  if (!eCtx) return;
+  eCtx.clearRect(0, 0, eW, eH);
+  var cx = eW / 2, cy = eH / 2;
+  var r = Math.min(eW, eH) * 0.36;
+  eCtx.font = '8px JetBrains Mono, monospace';
+  eCtx.textAlign = 'center';
+  eCtx.textBaseline = 'middle';
+  for (var i = 0; i < 200; i++) {
+    var angle = (i / 200) * Math.PI * 2 + eAngle;
+    var x = cx + r * Math.cos(angle);
+    var y = cy + r * Math.sin(angle);
+    var alpha = 0.1 + 0.55 * (0.5 + 0.5 * Math.cos(angle - eAngle - Math.PI * 0.5));
+    eCtx.fillStyle = i < 8 ? 'rgba(212,168,67,' + alpha + ')' : 'rgba(240,237,230,' + (alpha * 0.55) + ')';
+    eCtx.save();
+    eCtx.translate(x, y);
+    eCtx.rotate(angle + Math.PI * 0.5);
+    eCtx.fillText(E_DIGITS[i % E_DIGITS.length] || '0', 0, 0);
+    eCtx.restore();
+  }
+  var g = eCtx.createRadialGradient(cx, cy, r * 0.55, cx, cy, r * 1.2);
+  g.addColorStop(0, 'rgba(212,168,67,0.06)');
+  g.addColorStop(1, 'transparent');
+  eCtx.fillStyle = g;
+  eCtx.fillRect(0, 0, eW, eH);
+  eAngle += 0.0025;
+  eRafId = requestAnimationFrame(drawECircle);
+}
+function stopECircle() { if (eRafId) { cancelAnimationFrame(eRafId); eRafId = null; } }
+
+// Compound curves (Invariance)
+var curvesCanvas = document.getElementById('canvas-curves');
+var cCtx, cW, cH, cPhase = 0, cRafId = null;
+function initCurves() { var s = setupCanvas(curvesCanvas); cCtx = s.ctx; cW = s.w; cH = s.h; }
+function drawCurves() {
+  cCtx.clearRect(0, 0, cW, cH);
+  var items = [
+    { scale: 0.20, color: 'rgba(158,139,107,0.65)' },
+    { scale: 0.38, color: 'rgba(158,139,107,0.82)' },
+    { scale: 0.60, color: 'rgba(212,168,67,0.90)'  }
+  ];
+  var baseY = cH * 0.80;
+  var drawProgress = Math.min(1, cPhase / 160);
+  var labelProgress = Math.max(0, Math.min(1, (cPhase - 140) / 80));
+  var xStart = cW * 0.06;
+  var xRange = cW * 0.86;
+  items.forEach(function(item, idx) {
+    var ox = xStart + idx * cW * 0.01;
+    cCtx.beginPath();
+    var steps = Math.floor(xRange * drawProgress);
+    for (var px = 0; px <= steps; px++) {
+      var t = px / xRange;
+      var growth = Math.exp(0.9 * t);
+      var y = baseY - item.scale * cH * (growth - 1) / (Math.E - 1) * 0.76;
+      if (px === 0) cCtx.moveTo(ox + px, y); else cCtx.lineTo(ox + px, y);
+    }
+    cCtx.strokeStyle = item.color;
+    cCtx.lineWidth = 1.5;
+    cCtx.stroke();
+    if (labelProgress > 0) {
+      cCtx.font = '10px JetBrains Mono, monospace';
+      cCtx.textAlign = 'center';
+      cCtx.fillStyle = 'rgba(158,139,107,' + (labelProgress * 0.65) + ')';
+      cCtx.fillText(['S','M','L'][idx], ox + 6, baseY + 18);
+    }
+  });
+  if (labelProgress > 0) {
+    cCtx.font = '12px JetBrains Mono, monospace';
+    cCtx.textAlign = 'center';
+    cCtx.fillStyle = 'rgba(212,168,67,' + labelProgress + ')';
+    cCtx.fillText('A / P = e', cW * 0.50, cH * 0.19);
+    cCtx.font = '9px JetBrains Mono, monospace';
+    cCtx.fillStyle = 'rgba(212,168,67,' + (labelProgress * 0.72) + ')';
+    cCtx.fillText('rt', cW * 0.568, cH * 0.12);
+  }
+  cPhase = Math.min(cPhase + 1.2, 280);
+  cRafId = requestAnimationFrame(drawCurves);
+}
+function stopCurves() { if (cRafId) { cancelAnimationFrame(cRafId); cRafId = null; } }
+
+// Exponential growth canvas
+var expCanvas = document.getElementById('canvas-exp');
+var sCtx, sW, sH, sDrawP = 0, sRafId = null;
+function initExp() { var s = setupCanvas(expCanvas); sCtx = s.ctx; sW = s.w; sH = s.h; }
+function drawExp() {
+  sCtx.clearRect(0, 0, sW, sH);
+  var mb = sH * 0.14, mt = sH * 0.14;
+  var plotH = sH - mb - mt;
+  var baseY = sH - mb;
+  if (sDrawP > 10) {
+    var ga = Math.min(1, (sDrawP - 10) / 20) * 0.055;
+    sCtx.strokeStyle = 'rgba(212,168,67,' + ga + ')';
+    sCtx.lineWidth = 0.5;
+    for (var gi = 1; gi <= 4; gi++) {
+      sCtx.beginPath();
+      sCtx.moveTo(0, baseY - plotH * gi / 4);
+      sCtx.lineTo(sW, baseY - plotH * gi / 4);
+      sCtx.stroke();
+    }
+  }
+  var lineW = sW * Math.min(1, sDrawP / 40);
+  sCtx.beginPath();
+  sCtx.moveTo(0, baseY);
+  sCtx.lineTo(lineW, baseY);
+  sCtx.strokeStyle = 'rgba(212,168,67,0.28)';
+  sCtx.lineWidth = 1;
+  sCtx.stroke();
+  if (sDrawP > 20) {
+    var wp2 = Math.min(1, (sDrawP - 20) / 80);
+    sCtx.beginPath();
+    for (var px2 = 0; px2 <= sW * wp2; px2 += 2) {
+      var t2 = px2 / sW;
+      var y2 = baseY - plotH * 0.32 * t2 - plotH * 0.15 * Math.sin(t2 * 28 + 1.2) * Math.cos(t2 * 17) - plotH * 0.06;
+      if (px2 === 0) sCtx.moveTo(px2, y2); else sCtx.lineTo(px2, y2);
+    }
+    sCtx.strokeStyle = 'rgba(122,158,159,0.30)';
+    sCtx.lineWidth = 1.2;
+    sCtx.stroke();
+  }
+  if (sDrawP > 5) {
+    var wp3 = Math.min(1, (sDrawP - 5) / 100);
+    sCtx.beginPath();
+    for (var px3 = 0; px3 <= sW * wp3; px3 += 2) {
+      var t3 = px3 / sW;
+      var y3 = baseY - plotH * (Math.exp(1.4 * t3) - 1) / (Math.exp(1.4) - 1) * 0.80;
+      if (px3 === 0) sCtx.moveTo(px3, y3); else sCtx.lineTo(px3, y3);
+    }
+    sCtx.strokeStyle = 'rgba(212,168,67,0.88)';
+    sCtx.lineWidth = 2;
+    sCtx.stroke();
+  }
+  if (sDrawP > 60) {
+    var la = Math.min(1, (sDrawP - 60) / 40);
+    sCtx.font = '10px JetBrains Mono, monospace';
+    sCtx.textAlign = 'left';
+    sCtx.fillStyle = 'rgba(212,168,67,' + (la * 0.72) + ')';
+    sCtx.fillText('A = P · eʳᵗ', 10, mt + 14);
+    sCtx.fillStyle = 'rgba(122,158,159,' + (la * 0.48) + ')';
+    sCtx.fillText('Market Volatility', 10, mt + 30);
+  }
+  if (sDrawP > 80) {
+    var ta = Math.min(1, (sDrawP - 80) / 40);
+    ['T₁','T₂','T₃','T₄'].forEach(function(lbl, i) {
+      var x4 = sW * (i + 1) / 5;
+      sCtx.beginPath();
+      sCtx.moveTo(x4, baseY - 4);
+      sCtx.lineTo(x4, baseY + 4);
+      sCtx.strokeStyle = 'rgba(212,168,67,' + (ta * 0.28) + ')';
+      sCtx.lineWidth = 1;
+      sCtx.stroke();
+      sCtx.font = '9px JetBrains Mono, monospace';
+      sCtx.fillStyle = 'rgba(212,168,67,' + (ta * 0.38) + ')';
+      sCtx.textAlign = 'center';
+      sCtx.fillText(lbl, x4, baseY + 14);
+    });
+  }
+  if (sDrawP < 200) sDrawP += 1;
+  sRafId = requestAnimationFrame(drawExp);
+}
+function stopExp() { if (sRafId) { cancelAnimationFrame(sRafId); sRafId = null; } }
+
+// Promise reveal
+var promiseFired = false;
+function firePromise() {
+  if (promiseFired) return;
+  promiseFired = true;
+  var seq = [
+    {id:'p-label',delay:0},{id:'pl0',delay:200},{id:'ps0',delay:450},
+    {id:'pl1',delay:900},{id:'ps1',delay:1100},{id:'pl2',delay:1400},
+    {id:'ps2',delay:1600},{id:'pl3',delay:1900},{id:'ps3',delay:2150},
+    {id:'pl4',delay:2700},{id:'ps4',delay:2950}
+  ];
+  seq.forEach(function(item) {
+    setTimeout(function() {
+      var el = document.getElementById(item.id);
+      if (el) el.classList.add('in');
+    }, item.delay);
+  });
+}
+
+// Scroll reveal
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    var id = e.target.id;
+    if (id === 'div-1' || id === 'div-2' || id === 'div-3') {
+      setTimeout(function(){ e.target.classList.add('expanded'); }, 100);
+    }
+    revealObs.unobserve(e.target);
+  });
+}, { threshold: 0.18 });
+document.querySelectorAll('.reveal').forEach(function(el){ revealObs.observe(el); });
+
+// Section activation
+var secObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    var id = e.target.id;
+    if (id === 'interlude') {
+      if (e.isIntersecting) {
+        if (!eRafId) { initECircle(); drawECircle(); }
+        setTimeout(function(){
+          document.getElementById('iq-zh').classList.add('in');
+          document.getElementById('iq-en').classList.add('in');
+        }, 900);
+      } else { stopECircle(); }
+    }
+    if (id === 'invariance') {
+      if (e.isIntersecting) { if (!cRafId) { cPhase = 0; initCurves(); drawCurves(); } }
+      else { stopCurves(); }
+    }
+    if (id === 'growth') {
+      if (e.isIntersecting) { if (!sRafId) { sDrawP = 0; initExp(); drawExp(); } }
+      else { stopExp(); }
+    }
+    if (id === 'promise' && e.isIntersecting) { firePromise(); }
+  });
+}, { threshold: 0.25 });
+['interlude','invariance','growth','promise'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) secObs.observe(el);
+});
+
+window.addEventListener('resize', function() {
+  if (eRafId) { stopECircle(); initECircle(); drawECircle(); }
+  if (cRafId) { stopCurves();  initCurves();  drawCurves();  }
+  if (sRafId) { stopExp();     initExp();     drawExp();     }
+});
 </script>
 </body>
 </html>
