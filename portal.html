@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>P&amp;J Compound Company Limited — 投資組合入口</title>
+<style>
+  :root {
+    --brown: #6D3A0F; --brown-dark: #2C1503; --brown-light: #A05C1A;
+    --gold: #B8860B; --gold-dark: #9A6E08; --cream: #FAF7F2;
+    --sidebar-bg: #1E0D02; --sidebar-hover: rgba(184,134,11,.14);
+    --sidebar-active: rgba(184,134,11,.25); --sidebar-text: #E8D5A0;
+    --sidebar-muted: rgba(232,213,160,.5); --sidebar-width: 268px; --banner-height: 64px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif; font-size: 14px; background: #150800; color: #fff; }
+  .banner { position: fixed; inset: 0 0 auto 0; height: var(--banner-height); display: flex; align-items: center; padding: 0 28px; z-index: 100; background: linear-gradient(135deg,var(--brown-dark),var(--brown) 60%,var(--brown-light)); box-shadow: 0 2px 12px rgba(0,0,0,.3); border-bottom: 1px solid rgba(184,134,11,.25); }
+  .brand-home { display: flex; align-items: center; gap: 14px; padding: 4px 8px 4px 4px; border: 0; border-radius: 10px; background: transparent; color: #fff; cursor: pointer; text-align: left; transition: background .2s,transform .2s; }
+  .brand-home:hover { background: rgba(255,255,255,.1); }
+  .brand-home:active { transform: translateY(1px); }
+  .brand-home:focus-visible { outline: 2px solid #E3B54B; outline-offset: 3px; }
+  .banner-logo { width: 44px; height: 44px; flex-shrink: 0; overflow: hidden; filter: drop-shadow(0 2px 8px rgba(239,126,27,.3)); }
+  .banner-logo img { width: 100%; height: 100%; display: block; }
+  .banner-text { display: flex; flex-direction: column; gap: 1px; }
+  .banner-title { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
+  .banner-sub { font-size: 10px; opacity: .65; letter-spacing: 1.5px; text-transform: uppercase; color: #E3B54B; }
+  .banner-client { display: none; align-items: center; gap: 8px; margin-left: auto; padding: 5px 12px; border: 1px solid rgba(255,220,120,.55); border-radius: 16px; background: rgba(255,255,255,.12); color: #FFE08A; font-size: 12px; font-weight: 700; }
+  .banner-client.visible { display: flex; }
+  .logout-btn { border: none; background: transparent; color: rgba(255,255,255,.7); cursor: pointer; font: inherit; font-size: 11px; }
+  .logout-btn:hover { color: #fff; }
+  .body-wrap { position: fixed; inset: var(--banner-height) 0 0 0; display: flex; }
+  .sidebar { width: var(--sidebar-width); flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid rgba(184,134,11,.18); }
+  .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .nav-group-header { display: flex; align-items: center; padding: 11px 18px; margin: 0 4px; border-radius: 4px; color: var(--gold); cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; user-select: none; }
+  .nav-group-header:hover { background: var(--sidebar-hover); }
+  .nav-group-header .icon { margin-right: 8px; font-size: 13px; }
+  .nav-group-header .chevron { margin-left: auto; opacity: .6; font-size: 10px; transition: transform .2s; }
+  .nav-group-header.open .chevron { transform: rotate(90deg); }
+  .nav-sub { padding: 2px 0 6px; }
+  .nav-item { display: flex; align-items: center; padding: 9px 18px 9px 38px; margin: 1px 4px; border-radius: 4px; color: var(--sidebar-text); cursor: pointer; font-size: 13px; user-select: none; transition: background .15s,color .15s; }
+  .nav-item:hover { background: var(--sidebar-hover); color: #fff; }
+  .nav-item.active { padding-left: 35px; border-left: 3px solid var(--gold); background: var(--sidebar-active); color: var(--gold); font-weight: 600; }
+  .dot { width: 5px; height: 5px; margin-right: 10px; flex-shrink: 0; border-radius: 50%; background: currentColor; opacity: .6; }
+  .nav-cat-header { display: flex; align-items: center; padding: 6px 18px 6px 26px; margin: 2px 4px; border-radius: 4px; color: rgba(212,196,160,.6); cursor: pointer; font-size: 10px; font-weight: 700; }
+  .nav-cat-header .cat-chevron { margin-left: auto; opacity: .5; }
+  .nav-cat-items { display: none; } .nav-cat-items.open { display: block; } .nav-cat-items .nav-item { padding-left: 50px; }
+  .sidebar-footer { margin-top: auto; padding: 14px 16px; border-top: 1px solid rgba(255,255,255,.06); color: var(--sidebar-muted); font-size: 10px; line-height: 1.7; }
+  .sidebar-footer a { color: var(--gold); text-decoration: none; opacity: .8; }
+  .main-frame { position: relative; flex: 1; overflow: hidden; background: linear-gradient(135deg,#150800,#2C1503); }
+  #content-iframe { display: none; width: 100%; height: 100%; border: 0; background: #fff; }
+  .welcome { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 32px; background: linear-gradient(135deg,#150800,#2C1503); text-align: center; }
+  .welcome.hidden { display: none; }
+  .welcome-card { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 42px 58px 46px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: rgba(255,255,255,.065); box-shadow: 0 20px 44px rgba(0,0,0,.2); }
+  .brand-mark { overflow: hidden; flex-shrink: 0; }
+  .brand-mark img { display: block; }
+  .welcome-mark { width: 132px; height: 132px; }
+  .welcome-mark img { width: 100%; height: 100%; }
+  .brand-name { display: flex; flex-direction: column; align-items: center; gap: 2px; color: #FFF7E8; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.28); }
+  .brand-name-main { font-size: 18px; font-weight: 800; letter-spacing: 2.4px; }
+  .brand-name-sub { color: rgba(255,247,232,.82); font-size: 12px; font-weight: 700; letter-spacing: 3.5px; }
+  .welcome-divider { width: 48px; height: 2px; border-radius: 2px; background: linear-gradient(90deg,#B8860B,#E3B54B); }
+  .welcome h1 { font-size: 26px; line-height: 1.3; }
+  .welcome-form { width: 100%; display: flex; flex-direction: column; gap: 11px; text-align: left; }
+  .field-label { margin-bottom: -5px; color: rgba(255,255,255,.55); font-size: 11px; letter-spacing: .5px; text-transform: uppercase; }
+  .welcome-select,.welcome-input { width: 100%; padding: 11px 15px; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; background: rgba(255,255,255,.1); color: #fff; font: inherit; font-size: 14px; }
+  .welcome-select { padding-right: 36px; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23E3B54B'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .welcome-select option { background: #2C1503; color: #fff; }
+  .input-wrap { position: relative; }
+  .input-wrap .welcome-input { padding-right: 46px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; padding: 0; border: 0; background: transparent; color: rgba(255,255,255,.55); cursor: pointer; }
+  .eye-btn:hover,.eye-btn.is-visible { color: #E3B54B; }
+  .eye-btn svg { width: 20px; height: 20px; pointer-events: none; }
+  .eye-slash { opacity: 0; transition: opacity .16s; }
+  .eye-btn.is-visible .eye-slash { opacity: 1; }
+  .login-btn { width: 100%; margin-top: 6px; padding: 12px; border: 0; border-radius: 8px; background: linear-gradient(135deg,var(--gold),var(--gold-dark)); color: #fff; cursor: pointer; font: inherit; font-weight: 700; letter-spacing: .8px; }
+  .login-btn:hover { filter: brightness(1.08); }
+  .welcome-error { min-height: 18px; color: #ff9b9b; font-size: 12px; text-align: center; }
+  .idle { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; overflow: hidden; padding: 32px; text-align: center; background: radial-gradient(circle at 56% 42%,rgba(30,87,142,.22),transparent 26%),linear-gradient(135deg,#120700,#2C1503); }
+  .idle.visible { display: flex; }
+  .home-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(rgba(227,181,75,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(227,181,75,.08) 1px,transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom,transparent,black 18%,black 82%,transparent); }
+  .idle-card { position: relative; z-index: 1; width: min(880px,92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .home-kicker { color: #E3B54B; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+  .home-title { color: #FFF7E8; font-size: clamp(24px,3vw,38px); letter-spacing: 1px; }
+  .home-title span { color: #E3B54B; }
+  .home-stage { position: relative; width: min(760px,88vw); height: 330px; margin: 4px 0; overflow: hidden; border: 1px solid rgba(227,181,75,.22); border-radius: 28px; background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(6,27,47,.18)); box-shadow: 0 22px 60px rgba(0,0,0,.28),inset 0 0 40px rgba(15,75,124,.12); }
+  .finance-chart { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .chart-line { fill: none; stroke: url(#chart-gradient); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
+  .chart-glow { fill: none; stroke: rgba(34,122,196,.26); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
+  .chart-area { fill: url(#area-gradient); opacity: 0; animation: area-rise 10s ease-in-out infinite; }
+  .data-node { fill: #E3B54B; stroke: rgba(255,255,255,.9); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: node-pulse 10s ease-in-out infinite; }
+  .data-node:nth-of-type(2){animation-delay:.5s}.data-node:nth-of-type(3){animation-delay:1s}.data-node:nth-of-type(4){animation-delay:1.5s}.data-node:nth-of-type(5){animation-delay:2s}
+  .orbit { position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; margin: -88px; border: 1px solid rgba(227,181,75,.34); border-radius: 50%; animation: orbit-spin 10s linear infinite; }
+  .orbit::before,.orbit::after { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #E3B54B; box-shadow: 0 0 16px #E3B54B; }
+  .orbit::before { left: 18px; top: 18px; }.orbit::after { right: 9px; bottom: 29px; background: #2877B7; box-shadow: 0 0 16px #2877B7; }
+  .home-logo { position: absolute; left: 50%; top: 50%; width: 124px; height: 124px; margin: -62px; overflow: hidden; border-radius: 50%; filter: drop-shadow(0 0 14px rgba(40,119,183,.38)); animation: logo-breathe 10s ease-in-out infinite; }
+  .home-logo img { display: block; width: 100%; height: 100%; }
+  .home-slogan { color: #FFF7E8; font-size: 21px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 16px rgba(227,181,75,.4); animation: slogan-reveal 10s ease-in-out infinite; }
+  .home-hint { color: #E8D5A0; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 14px rgba(227,181,75,.28); }
+  .ai-partners { width: min(620px,84vw); margin-top: 22px; padding: 14px 14px 16px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
+  .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
+  .ai-partners-label span { color: #E3B54B; }
+  .ai-partners-row { display: grid; width: 100%; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+  .ai-partner-card { min-height: 86px; display: flex; align-items: center; justify-content: center; padding: 12px 14px; border: 1px solid rgba(227,181,75,.12); border-radius: 18px; background: linear-gradient(180deg,rgba(255,255,255,.97),rgba(246,241,233,.94)); box-shadow: 0 10px 20px rgba(0,0,0,.1); overflow: hidden; }
+  .ai-partner-card.codex { padding: 0; background: linear-gradient(135deg,#1537D0,#365DFF 55%,#6B77FF); }
+  .ai-partner-card.antigravity { background: #FFFFFF; padding: 0; }
+  .ai-partner-logo { max-width: 100%; max-height: 46px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.08)); }
+  .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
+  .ai-partner-card.antigravity .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: contain; filter: none; }
+  @media(max-width:900px){ .ai-partners { width: min(560px,86vw); margin-top: 20px; padding: 14px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: 1fr; } .ai-partner-card { min-height: 78px; } }
+  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .ai-partners-row { gap: 8px; } .ai-partner-card { padding: 10px 12px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 42px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; } }
+  @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
+  @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
+  @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
+  @keyframes orbit-spin { to{transform:rotate(360deg)} }
+  @keyframes logo-breathe { 0%,100%{transform:scale(.94);opacity:.84}50%{transform:scale(1.04);opacity:1} }
+  @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
+  @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit,.home-logo,.home-slogan { animation: none; stroke-dashoffset: 0; opacity: 1; } }
+</style>
+</head>
+<body>
+<header class="banner">
+  <button class="brand-home" type="button" onclick="goHome()" aria-label="回到首頁">
+    <div class="banner-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Company Limited Logo"></div>
+    <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
+  </button>
+  <div class="banner-client" id="banner-client"><span>股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
+</header>
+<div class="body-wrap">
+  <nav class="sidebar">
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-reports" onclick="toggleSection('reports')"><span class="icon">📊</span>月報表 Monthly Reports<span class="chevron">▶</span></div><div class="nav-sub" id="sub-reports"></div></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-topics" onclick="toggleSection('topics')"><span class="icon">📚</span>財經專題 Research<span class="chevron">▶</span></div><div class="nav-sub" id="sub-topics"></div></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">📄</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
+    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./firebase-admin.html">⚙ 後臺管理 Admin</a></div>
+  </nav>
+  <main class="main-frame">
+    <section class="welcome" id="welcome-screen">
+      <div class="welcome-card">
+        <div class="brand-mark welcome-mark"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
+        <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
+        <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
+        <div class="welcome-form">
+          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" autocomplete="username" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
+          <div class="field-label">進入密碼 / Password</div>
+          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
+          <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
+        </div>
+      </div>
+    </section>
+    <section class="idle" id="idle-screen">
+      <div class="home-grid"></div>
+      <div class="idle-card">
+        <div class="home-kicker">P&amp;J Compound Company Limited</div>
+        <h1 class="home-title"><span id="home-client-name"></span>，歡迎回來</h1>
+        <div class="home-stage">
+          <svg class="finance-chart" viewBox="0 0 760 330" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="chart-gradient" x1="0" x2="1"><stop stop-color="#2877B7"/><stop offset=".6" stop-color="#E3B54B"/><stop offset="1" stop-color="#F68A1E"/></linearGradient>
+              <linearGradient id="area-gradient" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2877B7" stop-opacity=".32"/><stop offset="1" stop-color="#2877B7" stop-opacity="0"/></linearGradient>
+            </defs>
+            <path class="chart-area" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62V330H0Z"/>
+            <path class="chart-glow" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
+            <path class="chart-line" d="M0 270L80 245L150 258L235 202L310 216L392 158L478 174L562 112L638 126L760 62"/>
+            <g><circle class="data-node" cx="150" cy="258" r="5"/><circle class="data-node" cx="310" cy="216" r="5"/><circle class="data-node" cx="478" cy="174" r="5"/><circle class="data-node" cx="638" cy="126" r="5"/><circle class="data-node" cx="760" cy="62" r="5"/></g>
+          </svg>
+          <div class="orbit"></div>
+          <div class="home-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
+        </div>
+        <div class="home-slogan">穩健複利・長期共贏</div>
+        <div class="home-hint">請從左側選單選擇月報表、財經專題或個人對帳單</div>
+        <div class="ai-partners" aria-label="AI 協作夥伴">
+          <div class="ai-partners-label">Powered by <span>Claude Code / Codex / Antigravity</span></div>
+          <div class="ai-partners-row">
+            <div class="ai-partner-card">
+              <img class="ai-partner-logo" src="assets/claude-logo-clean.png" alt="Claude logo">
+            </div>
+            <div class="ai-partner-card codex">
+              <img class="ai-partner-logo" src="assets/codex-logo-crop.jpg" alt="Codex logo">
+            </div>
+            <div class="ai-partner-card antigravity">
+              <img class="ai-partner-logo" src="assets/antigravity-logo-cropped.png" alt="Google Antigravity logo">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <iframe id="content-iframe" title="投資組合內容"></iframe>
+  </main>
+</div>
+<script type="module">
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
+
+let isAuthenticated=false,currentClient=null,currentBlobUrl='';
+function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
+function loginErrorMessage(error){switch(error?.code){case'auth/invalid-credential':case'auth/wrong-password':case'auth/user-not-found':return'Firebase 登入資料不相符。請到後臺重新設定此股東密碼後再試一次。';case'auth/user-disabled':return'此股東帳號已停用，請到後臺重新啟用。';case'auth/too-many-requests':return'嘗試次數過多，請稍候再試或到後臺重設密碼。';case'permission-denied':return'登入成功，但股東資料權限不足，請檢查 Firestore 權限設定。';default:return error?.message||'登入失敗，請稍後再試。'}}
+async function attemptLogin(){const code=document.getElementById('client-code').value.trim().toUpperCase(),password=document.getElementById('client-password').value,err=document.getElementById('welcome-error'),btn=document.querySelector('.login-btn');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';return}btn.disabled=true;btn.textContent='登入中...';try{const cred=await signInWithEmailAndPassword(auth,shareholderEmail(code),password);await showAuthenticated(cred.user)}catch(e){err.textContent=loginErrorMessage(e);document.getElementById('client-password').value='';await signOut(auth).catch(()=>{})}finally{btn.disabled=false;btn.textContent='進入 →'}}
+async function showAuthenticated(user){const snap=await getDoc(doc(db,'shareholders',user.uid));if(!snap.exists()||snap.data().active===false){await signOut(auth);throw new Error('此股東帳號尚未啟用。')}currentClient={uid:user.uid,...snap.data()};isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=currentClient.displayName;document.getElementById('banner-client-name').textContent=`${currentClient.displayName} (${currentClient.shareholderCode})`;document.getElementById('banner-client').classList.add('visible');await Promise.all([buildReports(),buildTopics(),buildStatements()]);showHome()}
+function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');document.getElementById('idle-screen').classList.add('visible')}
+function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-code').focus()}}
+async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);await signOut(auth);location.reload()}
+function buildSidebar(){document.getElementById('sub-reports').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('sub-topics').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('footer-updated').textContent='Firebase 動態同步'}
+async function buildReports(){const el=document.getElementById('sub-reports');el.innerHTML='<div class="nav-item">載入中...</div>';const snap=await getDocs(collection(db,'portalMonthlyReports')),reports=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.active!==false).sort((a,b)=>String(b.id||'').localeCompare(String(a.id||'')));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.id;item.innerHTML=`<span class="dot"></span>${r.label||`${r.year} 年 ${r.month} 月`}`;item.onclick=()=>openReport(item,r);el.appendChild(item)})}
+async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.title||'').localeCompare(String(b.title||''))),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
+async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||`${s.year} 年 ${s.month} 月`}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
+async function openStatement(el,statement){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{const blob=await getBlob(ref(storage,statement.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。')}}
+async function openReport(el,report){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{const blob=await getBlob(ref(storage,report.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
+async function openTopic(el,topic){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');const frame=document.getElementById('content-iframe');frame.style.display='block';frame.removeAttribute('src');try{if(topic.downloadUrl){frame.src=topic.downloadUrl}else if(topic.storagePath){const blob=await getBlob(ref(storage,topic.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);frame.src=currentBlobUrl}else if(topic.src){frame.src=topic.src}else throw new Error('missing-topic-file')}catch(e){frame.style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。')}}
+function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
+Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection});
+buildSidebar();
+onAuthStateChanged(auth,async user=>{if(!user||isAuthenticated)return;try{await showAuthenticated(user)}catch(e){document.getElementById('welcome-error').textContent=loginErrorMessage(e)}});
+</script>
+</body>
+</html>
