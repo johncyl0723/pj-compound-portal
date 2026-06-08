@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260608-reportfix3';
+    var version = '20260608-reportfix4';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -94,18 +94,18 @@
   .home-kicker { color: #E3B54B; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
   .home-title { color: #FFF7E8; font-size: clamp(24px,3vw,38px); letter-spacing: 1px; }
   .home-title span { color: #E3B54B; }
-  .home-stage { position: relative; width: min(760px,88vw); height: 330px; margin: 4px 0; overflow: hidden; border: 1px solid rgba(227,181,75,.22); border-radius: 28px; background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(6,27,47,.18)); box-shadow: 0 22px 60px rgba(0,0,0,.28),inset 0 0 40px rgba(15,75,124,.12); }
+  .home-stage { position: relative; width: min(760px,88vw); height: 330px; aspect-ratio: 760 / 330; margin: 4px 0; overflow: hidden; border: 1px solid rgba(227,181,75,.22); border-radius: 28px; background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(6,27,47,.18)); box-shadow: 0 22px 60px rgba(0,0,0,.28),inset 0 0 40px rgba(15,75,124,.12); }
   .finance-chart { position: absolute; inset: 0; width: 100%; height: 100%; }
   .chart-line { fill: none; stroke: url(#chart-gradient); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
   .chart-glow { fill: none; stroke: rgba(34,122,196,.26); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 850; stroke-dashoffset: 850; animation: chart-draw 10s ease-in-out infinite; }
   .chart-area { fill: url(#area-gradient); opacity: 0; animation: area-rise 10s ease-in-out infinite; }
   .data-node { fill: #E3B54B; stroke: rgba(255,255,255,.9); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; animation: node-pulse 10s ease-in-out infinite; }
   .data-node:nth-of-type(2){animation-delay:.5s}.data-node:nth-of-type(3){animation-delay:1s}.data-node:nth-of-type(4){animation-delay:1.5s}.data-node:nth-of-type(5){animation-delay:2s}
-  .orbit { position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; margin: -88px; border: 1px solid rgba(227,181,75,.34); border-radius: 50%; animation: orbit-spin 10s linear infinite; }
+  .orbit { position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; transform: translate(-50%,-50%); border: 1px solid rgba(227,181,75,.34); border-radius: 50%; animation: orbit-spin 10s linear infinite; }
   .orbit::before,.orbit::after { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #E3B54B; box-shadow: 0 0 16px #E3B54B; }
   .orbit::before { left: 18px; top: 18px; }.orbit::after { right: 9px; bottom: 29px; background: #2877B7; box-shadow: 0 0 16px #2877B7; }
-  .home-logo { position: absolute; left: 50%; top: 50%; width: 124px; height: 124px; margin: -62px; overflow: hidden; border-radius: 50%; filter: drop-shadow(0 0 14px rgba(40,119,183,.38)); animation: logo-breathe 10s ease-in-out infinite; }
-  .home-logo img { display: block; width: 100%; height: 100%; }
+  .home-logo { position: absolute; left: 50%; top: 50%; width: 124px; height: 124px; transform: translate(-50%,-50%); overflow: hidden; border-radius: 50%; filter: drop-shadow(0 0 14px rgba(40,119,183,.38)); animation: logo-breathe 10s ease-in-out infinite; }
+  .home-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
   .home-slogan { color: #FFF7E8; font-size: 21px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 16px rgba(227,181,75,.4); animation: slogan-reveal 10s ease-in-out infinite; }
   .home-hint { color: #E8D5A0; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 14px rgba(227,181,75,.28); }
   .ai-partners { width: min(620px,84vw); margin-top: 22px; padding: 14px 14px 16px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
@@ -118,8 +118,8 @@
   .ai-partner-logo { max-width: 100%; max-height: 46px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.08)); }
   .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
   .ai-partner-card.antigravity .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: contain; filter: none; }
-  @media(max-width:900px){ .ai-partners { width: min(560px,86vw); margin-top: 20px; padding: 14px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: 1fr; } .ai-partner-card { min-height: 78px; } }
-  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .ai-partners-row { gap: 8px; } .ai-partner-card { padding: 10px 12px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 42px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; } }
+  @media(max-width:900px){ .ai-partners { width: min(560px,86vw); margin-top: 20px; padding: 14px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: repeat(3,minmax(0,1fr)); } .ai-partner-card { min-height: 72px; } }
+  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .ai-partners-row { gap: 8px; } .ai-partner-card { min-height: 64px; padding: 8px 10px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 36px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; object-fit: cover; } }
   @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
   @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
   @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
@@ -177,18 +177,18 @@
     .welcome-input { min-height: 46px; font-size: 16px; }
     .eye-btn { width: 32px; height: 32px; right: 10px; justify-content: center; align-items: center; }
     .login-btn { min-height: 48px; font-size: 15px; }
-    .idle { padding: 16px 12px; overflow-y: auto; }
-    .idle-card { gap: 10px; }
+    .idle { padding: 16px 12px 24px; overflow-y: auto; align-items: flex-start; }
+    .idle-card { width: min(100%,380px); gap: 12px; margin: 0 auto; }
     .home-kicker { font-size: 9px; letter-spacing: 2.5px; }
     .home-title { font-size: clamp(18px,5vw,26px); }
-    .home-stage { height: clamp(180px,46vw,260px); border-radius: 18px; }
-    .orbit { width: 120px; height: 120px; margin: -60px; }
-    .home-logo { width: 86px; height: 86px; margin: -43px; }
+    .home-stage { width: min(100%,360px); height: auto; min-height: 156px; border-radius: 18px; }
+    .orbit { width: clamp(96px,31vw,124px); height: clamp(96px,31vw,124px); }
+    .home-logo { width: clamp(68px,23vw,92px); height: clamp(68px,23vw,92px); }
     .home-slogan { font-size: 15px; letter-spacing: 3px; }
     .home-hint { font-size: 13px; }
     .desktop-hint { display: none; }
     .mobile-hint { display: inline; }
-    .ai-partners { margin-top: 14px; }
+    .ai-partners { width: min(100%,360px); margin-top: 10px; padding: 12px; border-radius: 20px; }
   }
 </style>
 </head>
@@ -266,12 +266,12 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260608-reportfix3';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260608-reportfix4';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260608-reportfix3';
+const APP_VERSION='20260608-reportfix4';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 
 async function getPdfjs(){if(!_pdfjs){_pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');_pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';}return _pdfjs;}
