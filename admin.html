@@ -19,7 +19,7 @@
 <section class="card"><div class="card-head">👤 股東帳號與個人對帳單</div><div class="body"><p class="notice">股東登入已改由 Firebase 安全權限管理。請返回後臺管理中心建立股東帳號、設定臨時密碼與上傳個人 PDF。</p><a class="btn full" href="./firebase-admin.html" style="display:block;text-align:center;text-decoration:none">返回後臺管理中心</a><div hidden><span id="client-count">0</span><div id="client-list"></div><input id="client-edit-index"><span id="client-form-title"></span><input id="client-name"><input id="client-order"><input id="client-password"><textarea id="client-note"></textarea><input id="client-active" type="checkbox"><input id="new-admin-password"></div></div></section>
 </div></div>
 <script type="module">
-import { auth, db, storage, functions } from './firebase-portal.js';
+import { auth, db, storage, functions } from './firebase-portal.js?v=20260608-authfix2';
 import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { collection, deleteDoc, doc, getDocs, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';

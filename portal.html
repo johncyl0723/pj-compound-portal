@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script>
+  (function() {
+    var version = '20260608-reportfix3';
+    var url = new URL(window.location.href);
+    if (url.searchParams.get('v') !== version) {
+      url.searchParams.set('v', version);
+      window.location.replace(url.toString());
+    }
+  })();
+</script>
 <title>P&amp;J Compound Company Limited — 投資組合入口</title>
 <style>
   :root {
@@ -24,8 +34,9 @@
   .banner-text { display: flex; flex-direction: column; gap: 1px; }
   .banner-title { font-size: 16px; font-weight: 700; letter-spacing: .3px; }
   .banner-sub { font-size: 10px; opacity: .65; letter-spacing: 1.5px; text-transform: uppercase; color: #E3B54B; }
-  .banner-client { display: none; align-items: center; gap: 8px; margin-left: auto; padding: 5px 12px; border: 1px solid rgba(255,220,120,.55); border-radius: 16px; background: rgba(255,255,255,.12); color: #FFE08A; font-size: 12px; font-weight: 700; }
+  .banner-client { display: none; align-items: center; gap: 8px; margin-left: auto; max-width: min(42vw,420px); padding: 5px 12px; border: 1px solid rgba(255,220,120,.55); border-radius: 16px; background: rgba(255,255,255,.12); color: #FFE08A; font-size: 12px; font-weight: 700; }
   .banner-client.visible { display: flex; }
+  .banner-client-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .logout-btn { border: none; background: transparent; color: rgba(255,255,255,.7); cursor: pointer; font: inherit; font-size: 11px; }
   .logout-btn:hover { color: #fff; }
   .body-wrap { position: fixed; inset: var(--banner-height) 0 0 0; display: flex; }
@@ -48,6 +59,7 @@
   .sidebar-footer a { color: var(--gold); text-decoration: none; opacity: .8; }
   .main-frame { position: relative; flex: 1; overflow: hidden; background: linear-gradient(135deg,#150800,#2C1503); }
   #content-iframe { display: none; width: 100%; height: 100%; border: 0; background: #fff; }
+  .build-badge { position: fixed; right: 12px; bottom: 12px; z-index: 120; padding: 6px 10px; border: 1px solid rgba(255,220,120,.32); border-radius: 999px; background: rgba(20,8,0,.88); color: #E8D5A0; font-size: 11px; line-height: 1; letter-spacing: .3px; box-shadow: 0 8px 18px rgba(0,0,0,.22); pointer-events: none; }
   .welcome { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 32px; background: linear-gradient(135deg,#150800,#2C1503); text-align: center; }
   .welcome.hidden { display: none; }
   .welcome-card { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 42px 58px 46px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: rgba(255,255,255,.065); box-shadow: 0 20px 44px rgba(0,0,0,.2); }
@@ -140,14 +152,31 @@
     .banner-title { font-size: 13px; letter-spacing: 0; }
     .banner-logo { width: 36px; height: 36px; }
     .brand-home { gap: 10px; padding: 4px 6px 4px 2px; }
-    .banner-client { padding: 4px 10px; font-size: 11px; }
-    .sidebar { position: fixed; top: var(--banner-height); left: 0; bottom: 0; z-index: 95; transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1); width: min(var(--sidebar-width),82vw); }
+    .banner-client { max-width: 45vw; gap: 6px; padding: 6px 10px; font-size: 11px; }
+    .banner-client-label { font-size: 10px; }
+    .logout-btn { min-height: 32px; padding: 0 2px; }
+    .sidebar { position: fixed; top: var(--banner-height); left: 0; bottom: 0; z-index: 95; transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1); width: min(88vw,320px); }
     .sidebar.open { transform: translateX(0); }
+    .sidebar-section { padding: 10px 0; }
+    .nav-group-header { min-height: 46px; padding: 12px 18px; font-size: 12px; letter-spacing: 1.1px; }
+    .nav-item { min-height: 44px; padding: 11px 18px 11px 34px; font-size: 14px; line-height: 1.35; }
+    .nav-item.active { padding-left: 31px; }
+    .nav-cat-header { min-height: 38px; padding: 8px 18px 8px 22px; font-size: 11px; }
+    .nav-cat-items .nav-item { padding-left: 42px; }
+    .sidebar-footer { padding: 18px 16px 24px; font-size: 11px; }
     .main-frame { width: 100%; }
+    #content-iframe { height: calc(100dvh - var(--banner-height)); }
+    #pdf-viewer { padding: 12px 4px 18px; }
+    .pdf-loading,.pdf-error { padding: 24px 16px; font-size: 13px; }
+    .build-badge { right: 8px; bottom: 8px; padding: 5px 8px; font-size: 10px; }
     .welcome { padding: 20px 16px; }
     .welcome-card { padding: 28px 22px 32px; gap: 12px; }
     .welcome-mark { width: 88px; height: 88px; }
     .welcome h1 { font-size: 19px; }
+    .field-label { font-size: 12px; }
+    .welcome-input { min-height: 46px; font-size: 16px; }
+    .eye-btn { width: 32px; height: 32px; right: 10px; justify-content: center; align-items: center; }
+    .login-btn { min-height: 48px; font-size: 15px; }
     .idle { padding: 16px 12px; overflow-y: auto; }
     .idle-card { gap: 10px; }
     .home-kicker { font-size: 9px; letter-spacing: 2.5px; }
@@ -170,7 +199,7 @@
     <div class="banner-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Company Limited Logo"></div>
     <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
   </button>
-  <div class="banner-client" id="banner-client"><span>股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
+  <div class="banner-client" id="banner-client"><span class="banner-client-label">股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
 </header>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 <div class="body-wrap">
@@ -187,9 +216,9 @@
         <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
         <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
         <div class="welcome-form">
-          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" autocomplete="username" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
+          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" name="username" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
           <div class="field-label">進入密碼 / Password</div>
-          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
+          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" name="password" autocomplete="current-password" spellcheck="false" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
           <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
         </div>
       </div>
@@ -233,14 +262,16 @@
     </section>
     <iframe id="content-iframe" title="投資組合內容"></iframe>
     <div id="pdf-viewer"><div id="pdf-pages"></div></div>
+    <div class="build-badge" id="build-badge">Portal</div>
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260608-reportfix3';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
+const APP_VERSION='20260608-reportfix3';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 
 async function getPdfjs(){if(!_pdfjs){_pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');_pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';}return _pdfjs;}
@@ -248,27 +279,35 @@ async function getPdfjs(){if(!_pdfjs){_pdfjs=await import('https://cdn.jsdelivr.
 async function renderPDF(url){const viewer=document.getElementById('pdf-viewer'),pages=document.getElementById('pdf-pages'),frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');viewer.style.display='block';pages.innerHTML='<div class="pdf-loading">載入中...</div>';try{const lib=await getPdfjs(),pdf=await lib.getDocument({url,cMapUrl:'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/cmaps/',cMapPacked:true}).promise;pages.innerHTML='';const dpr=window.devicePixelRatio||1,cw=Math.max(viewer.clientWidth-16,300);for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i),base=page.getViewport({scale:1}),scale=(cw/base.width)*dpr,vp=page.getViewport({scale}),canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;canvas.style.width=Math.floor(vp.width/dpr)+'px';canvas.style.height=Math.floor(vp.height/dpr)+'px';canvas.style.maxWidth='100%';canvas.style.display='block';canvas.style.boxShadow='0 4px 16px rgba(0,0,0,.4)';const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);await page.render({canvasContext:ctx,viewport:vp}).promise;pages.appendChild(canvas);}}catch(err){pages.innerHTML='<div class="pdf-error">無法載入，請聯絡管理員。</div>';}}
 
 function showInFrame(url){const viewer=document.getElementById('pdf-viewer'),frame=document.getElementById('content-iframe');viewer.style.display='none';document.getElementById('pdf-pages').innerHTML='';frame.style.display='block';frame.src=url;}
+function isHtmlAsset(entry){const path=String(entry?.storagePath||'').toLowerCase(),type=String(entry?.contentType||'').toLowerCase(),url=String(entry?.downloadUrl||entry?.src||'').toLowerCase();return type.includes('text/html')||path.endsWith('.html')||path.endsWith('.htm')||url.includes('.html')||url.includes('.htm')}
+function isPdfAsset(entry){const path=String(entry?.storagePath||'').toLowerCase(),type=String(entry?.contentType||'').toLowerCase(),url=String(entry?.downloadUrl||entry?.src||'').toLowerCase();return type.includes('application/pdf')||path.endsWith('.pdf')||url.includes('.pdf')}
+function resetDocumentViews(){const frame=document.getElementById('content-iframe'),viewer=document.getElementById('pdf-viewer'),pages=document.getElementById('pdf-pages');frame.style.display='none';frame.removeAttribute('src');viewer.style.display='none';pages.innerHTML=''}
+async function fetchAssetUrl(entry){if(entry?.storagePath){const blob=await getBlob(ref(storage,entry.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);return currentBlobUrl}if(entry?.downloadUrl)return entry.downloadUrl;if(entry?.src)return entry.src;throw new Error('missing-asset-url')}
+async function presentDocument(entry){const url=await fetchAssetUrl(entry);if(isHtmlAsset(entry)){showInFrame(url);return}if(isPdfAsset(entry)||entry?.storagePath){await renderPDF(url);return}showInFrame(url)}
+function activateDocumentView(el){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');resetDocumentViews();if(window.innerWidth<=768)closeSidebar()}
 
 function toggleSidebar(){const s=document.querySelector('.sidebar'),o=document.getElementById('sidebar-overlay'),b=document.getElementById('hamburger-btn'),open=s.classList.toggle('open');o.classList.toggle('visible',open);b.classList.toggle('open',open);b.setAttribute('aria-expanded',String(open));}
 function closeSidebar(){const s=document.querySelector('.sidebar'),o=document.getElementById('sidebar-overlay'),b=document.getElementById('hamburger-btn');s.classList.remove('open');o.classList.remove('visible');b.classList.remove('open');b.setAttribute('aria-expanded','false');}
 
 function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
-function loginErrorMessage(error){switch(error?.code){case'auth/invalid-credential':case'auth/wrong-password':case'auth/user-not-found':return'Firebase 登入資料不相符。請到後臺重新設定此股東密碼後再試一次。';case'auth/user-disabled':return'此股東帳號已停用，請到後臺重新啟用。';case'auth/too-many-requests':return'嘗試次數過多，請稍候再試或到後臺重設密碼。';case'permission-denied':return'登入成功，但股東資料權限不足，請檢查 Firestore 權限設定。';default:return error?.message||'登入失敗，請稍後再試。'}}
-async function attemptLogin(){const code=document.getElementById('client-code').value.trim().toUpperCase(),password=document.getElementById('client-password').value,err=document.getElementById('welcome-error'),btn=document.querySelector('.login-btn');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';return}btn.disabled=true;btn.textContent='登入中...';try{const cred=await signInWithEmailAndPassword(auth,shareholderEmail(code),password);await showAuthenticated(cred.user)}catch(e){err.textContent=loginErrorMessage(e);document.getElementById('client-password').value='';await signOut(auth).catch(()=>{})}finally{btn.disabled=false;btn.textContent='進入 →'}}
+function loginErrorMessage(error){switch(error?.code){case'auth/missing-password':return'系統收到的是空白密碼，請重新輸入一次；若使用瀏覽器自動帶入，請點一下密碼欄後再登入。';case'auth/invalid-credential':case'auth/wrong-password':case'auth/user-not-found':return'Firebase 登入資料不相符。請到後臺重新設定此股東密碼後再試一次。';case'auth/user-disabled':return'此股東帳號已停用，請到後臺重新啟用。';case'auth/too-many-requests':return'嘗試次數過多，請稍候再試或到後臺重設密碼。';case'permission-denied':return'登入成功，但股東資料權限不足，請檢查 Firestore 權限設定。';default:return error?.message||'登入失敗，請稍後再試。'}}
+async function attemptLogin(){const codeInput=document.getElementById('client-code'),passwordInput=document.getElementById('client-password'),code=codeInput.value.trim().toUpperCase(),password=passwordInput.value,err=document.getElementById('welcome-error'),btn=document.querySelector('.login-btn');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';codeInput.focus();return}if(password.length===0){err.textContent='請先輸入密碼後再登入。';passwordInput.focus();return}btn.disabled=true;btn.textContent='登入中...';try{const cred=await signInWithEmailAndPassword(auth,shareholderEmail(code),password);await showAuthenticated(cred.user)}catch(e){err.textContent=loginErrorMessage(e);passwordInput.value='';await signOut(auth).catch(()=>{})}finally{btn.disabled=false;btn.textContent='進入 →'}}
 async function showAuthenticated(user){const snap=await getDoc(doc(db,'shareholders',user.uid));if(!snap.exists()||snap.data().active===false){await signOut(auth);throw new Error('此股東帳號尚未啟用。')}currentClient={uid:user.uid,...snap.data()};isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=currentClient.displayName;document.getElementById('banner-client-name').textContent=`${currentClient.displayName} (${currentClient.shareholderCode})`;document.getElementById('banner-client').classList.add('visible');await Promise.all([buildReports(),buildTopics(),buildStatements()]);showHome()}
-function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');document.getElementById('pdf-viewer').style.display='none';document.getElementById('pdf-pages').innerHTML='';document.getElementById('idle-screen').classList.add('visible');}
+function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');}
 function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-code').focus()}}
 async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);await signOut(auth);location.reload()}
 function buildSidebar(){document.getElementById('sub-reports').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('sub-topics').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('footer-updated').textContent='Firebase 動態同步'}
 async function buildReports(){const el=document.getElementById('sub-reports');el.innerHTML='<div class="nav-item">載入中...</div>';const snap=await getDocs(collection(db,'portalMonthlyReports')),reports=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.active!==false).sort((a,b)=>String(b.id||'').localeCompare(String(a.id||'')));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.id;item.innerHTML=`<span class="dot"></span>${r.label||`${r.year} 年 ${r.month} 月`}`;item.onclick=()=>openReport(item,r);el.appendChild(item)})}
 async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.title||'').localeCompare(String(b.title||''))),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
 async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||`${s.year} 年 ${s.month} 月`}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
-async function openStatement(el,statement){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');if(window.innerWidth<=768)closeSidebar();try{const blob=await getBlob(ref(storage,statement.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);await renderPDF(currentBlobUrl);}catch(e){document.getElementById('pdf-viewer').style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
-async function openReport(el,report){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');if(window.innerWidth<=768)closeSidebar();try{const blob=await getBlob(ref(storage,report.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);await renderPDF(currentBlobUrl);}catch(e){document.getElementById('pdf-viewer').style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。');}}
-async function openTopic(el,topic){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');if(window.innerWidth<=768)closeSidebar();try{if(topic.storagePath){const blob=await getBlob(ref(storage,topic.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);if(topic.storagePath.toLowerCase().endsWith('.html')){showInFrame(currentBlobUrl);}else{await renderPDF(currentBlobUrl);}}else if(topic.downloadUrl){try{const path=new URL(topic.downloadUrl).pathname;if(path.toLowerCase().includes('.pdf')){await renderPDF(topic.downloadUrl);}else{showInFrame(topic.downloadUrl);}}catch{showInFrame(topic.downloadUrl);}}else if(topic.src){showInFrame(topic.src);}else throw new Error('missing-topic-file');}catch(e){document.getElementById('pdf-viewer').style.display='none';document.getElementById('content-iframe').style.display='none';document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。');}}
+async function openStatement(el,statement){activateDocumentView(el);try{await presentDocument({...statement,contentType:statement.contentType||'application/pdf'})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
+async function openReport(el,report){activateDocumentView(el);try{await presentDocument(report)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
+async function openTopic(el,topic){activateDocumentView(el);try{await presentDocument(topic)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。');}}
 function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
 Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection,toggleSidebar,closeSidebar});
 buildSidebar();
+document.getElementById('build-badge').textContent=`Portal ${APP_VERSION}`;
+document.getElementById('footer-updated').textContent=`Firebase 動態同步 · ${APP_VERSION}`;
 onAuthStateChanged(auth,async user=>{if(!user||isAuthenticated)return;try{await showAuthenticated(user)}catch(e){document.getElementById('welcome-error').textContent=loginErrorMessage(e)}});
 </script>
 </body>

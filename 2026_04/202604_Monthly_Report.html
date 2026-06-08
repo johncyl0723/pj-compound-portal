@@ -128,6 +128,39 @@
   /* perf table column hide */
   .perf-table th.bm-col, .perf-table td.bm-col{transition:opacity .2s}
   .perf-table th.bm-col.hidden, .perf-table td.bm-col.hidden{display:none}
+
+  @media(max-width:768px){
+    html,body{font-size:15px}
+    .topbar{padding:14px 16px 12px}
+    .topbar-inner{align-items:flex-start;gap:12px}
+    .brand{gap:10px}
+    .logo{width:38px;height:38px;font-size:12px;border-radius:10px}
+    .brand h1{font-size:15px;line-height:1.25}
+    .brand .sub{font-size:9px;letter-spacing:1.6px}
+    .report-meta{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;font-size:12px}
+    .report-meta .val{font-size:13px}
+    .tabs{top:0}
+    .tabs-inner{padding:0 10px;gap:6px;scroll-padding:0 10px;-webkit-overflow-scrolling:touch}
+    .tab{min-height:44px;padding:11px 14px;font-size:13px}
+    main{padding:14px 12px 24px}
+    .section-title{font-size:14px;align-items:flex-start;flex-direction:column;gap:4px}
+    .section-title .en{font-size:10px}
+    .card{padding:14px}
+    .card-title{font-size:12px;margin-bottom:12px}
+    .kpi{padding:16px}
+    .kpi .label{font-size:10px}
+    .kpi .value{font-size:22px}
+    .kpi.primary .value{font-size:25px}
+    .kpi .sub{font-size:11px}
+    th,td{padding:8px 8px;font-size:12px}
+    .table-scroll,.perf-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .chart-wrap{height:220px}
+    .chart-wrap-sm{height:180px}
+    .two-col,.three-col,.dist-chart-row{gap:14px}
+    .bm-bar{gap:8px;padding:10px 12px}
+    .bm-bar-label,.bm-note{width:100%;margin:0}
+    .bm-btn,.bm-fixed{min-height:38px;padding:7px 12px;font-size:12px}
+  }
 </style>
 </head>
 <body>
