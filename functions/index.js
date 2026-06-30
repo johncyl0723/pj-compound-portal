@@ -10,9 +10,21 @@ const callableOptions = {
   region: REGION,
   invoker: "public",
 };
+const BOOTSTRAP_ADMIN_EMAILS = new Set([
+  "john.cyl@gmail.com",
+]);
+
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isBootstrapAdmin(request) {
+  return BOOTSTRAP_ADMIN_EMAILS.has(normalizeEmail(request?.auth?.token?.email));
+}
 
 function assertAdmin(request) {
-  if (!request.auth || request.auth.token.admin !== true) {
+  if (!request.auth ||
+    (request.auth.token.admin !== true && !isBootstrapAdmin(request))) {
     throw new HttpsError("permission-denied", "只有管理員可以執行這項操作。");
   }
 }
@@ -110,6 +122,17 @@ async function getPortalAdminPayload() {
   return {reports, topics, categories};
 }
 
+async function getPortalAnnouncementsPayload() {
+  const db = getFirestore();
+  const announcementsSnap = await db.collection("portalAnnouncements").get();
+  const announcements = announcementsSnap.docs
+      .map(serializeDoc)
+      .sort((a, b) =>
+        String(b.noticeDate || "").localeCompare(String(a.noticeDate || "")) ||
+        String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+  return {announcements};
+}
+
 exports.approveShareholder = onCall(callableOptions, async (request) => {
   assertAdmin(request);
   const code = normalizeCode(request.data.shareholderCode);
@@ -186,4 +209,72 @@ exports.getShareholderAdminData = onCall(callableOptions, async (request) => {
 exports.getPortalAdminData = onCall(callableOptions, async (request) => {
   assertAdmin(request);
   return await getPortalAdminPayload();
+});
+
+exports.getPortalAnnouncementsAdminData = onCall(callableOptions, async (request) => {
+  assertAdmin(request);
+  return await getPortalAnnouncementsPayload();
+});
+
+exports.savePortalAnnouncement = onCall(callableOptions, async (request) => {
+  assertAdmin(request);
+  const id = String(request.data.id || "").trim();
+  const noticeDate = String(request.data.noticeDate || "").trim();
+  const message = String(request.data.message || "").trim();
+  const active = request.data.active;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(noticeDate)) {
+    throw new HttpsError("invalid-argument", "請提供正確的公告日期。");
+  }
+  if (!message) {
+    throw new HttpsError("invalid-argument", "請提供公告內容。");
+  }
+  if (typeof active !== "boolean") {
+    throw new HttpsError("invalid-argument", "請提供公告啟用狀態。");
+  }
+
+  const db = getFirestore();
+  const ref = id ?
+    db.collection("portalAnnouncements").doc(id) :
+    db.collection("portalAnnouncements").doc();
+  const payload = {
+    noticeDate,
+    message,
+    active,
+    updatedAt: FieldValue.serverTimestamp(),
+  };
+
+  if (id) {
+    await ref.set(payload, {merge: true});
+  } else {
+    await ref.set({
+      ...payload,
+      createdAt: FieldValue.serverTimestamp(),
+    });
+  }
+
+  return {id: ref.id};
+});
+
+exports.setPortalAnnouncementActive = onCall(callableOptions, async (request) => {
+  assertAdmin(request);
+  const id = String(request.data.id || "").trim();
+  const active = request.data.active;
+  if (!id || typeof active !== "boolean") {
+    throw new HttpsError("invalid-argument", "請提供正確的公告參數。");
+  }
+  await getFirestore().collection("portalAnnouncements").doc(id).set({
+    active,
+    updatedAt: FieldValue.serverTimestamp(),
+  }, {merge: true});
+  return {id, active};
+});
+
+exports.deletePortalAnnouncement = onCall(callableOptions, async (request) => {
+  assertAdmin(request);
+  const id = String(request.data.id || "").trim();
+  if (!id) {
+    throw new HttpsError("invalid-argument", "請提供要刪除的公告編號。");
+  }
+  await getFirestore().collection("portalAnnouncements").doc(id).delete();
+  return {id};
 });
