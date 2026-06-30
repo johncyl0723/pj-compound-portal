@@ -176,7 +176,7 @@
       </div>
     </div>
     <div class="report-meta">
-      <div><div class="label">報告期間</div><div class="val">2026 年 4 月</div></div>
+      <div><div class="label">報告期間</div><div class="val">2026年04月</div></div>
       <div><div class="label">計價幣別</div><div class="val">USD</div></div>
       <div><div class="label">成立日</div><div class="val">Nov-2023</div></div>
     </div>
@@ -204,22 +204,21 @@
 <div class="panel active" id="panel-overview">
   <div class="section-title">投資組合總覽 <span class="en">Portfolio Overview — Apr 2026</span></div>
 
-  <!-- KPI row -->
   <div class="grid grid-4" style="margin-bottom:20px">
     <div class="kpi primary">
       <div class="label">投資組合淨值</div>
-      <div class="value">3,702,148</div>
+      <div class="value">3,702,221</div>
       <div class="sub">USD 計價</div>
     </div>
     <div class="kpi gold">
       <div class="label">年初至今報酬率</div>
-      <div class="value">+1.33%</div>
-      <div class="sub"><span class="chip up">+43,278 USD</span></div>
+      <div class="value up">+1.33%</div>
+      <div class="sub"><span class="chip up">+43,351 USD</span></div>
     </div>
     <div class="kpi">
       <div class="label">累計已實現損益</div>
-      <div class="value up">385,379</div>
-      <div class="sub">本年度 +62,278</div>
+      <div class="value up">385,452</div>
+      <div class="sub">本年度 +62,351 USD</div>
     </div>
     <div class="kpi">
       <div class="label">累計未實現損益</div>
@@ -228,15 +227,13 @@
     </div>
   </div>
 
-  <!-- Monthly performance chart -->
   <div class="card" style="margin-bottom:20px">
-    <div class="card-title">各月績效走勢 Monthly Performance <span style="font-size:10px;color:var(--muted);font-weight:400">(2024–2026)</span></div>
-    <!-- Benchmark toggle bar -->
+    <div class="card-title">各月績效走勢 Monthly Performance <span style="font-size:10px;color:var(--muted);font-weight:400">(2023 Q4 — 2026 Apr)</span></div>
     <div class="bm-bar" id="bm-bar-overview">
       <span class="bm-bar-label">比較基準</span>
       <span class="bm-fixed"><span class="bm-dot"></span>P&amp;J 組合</span>
-      <button class="bm-btn off" data-bm="sp"   onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
-      <button class="bm-btn off" data-bm="ml"   onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>美林 IG 債</button>
+      <button class="bm-btn off" data-bm="sp" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
+      <button class="bm-btn off" data-bm="ml" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>美林 IG 債</button>
       <button class="bm-btn off" data-bm="b720" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00720B</button>
       <button class="bm-btn off" data-bm="b772" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00772B</button>
       <button class="bm-btn off" data-bm="b785" onclick="toggleBm(this,'overview')"><span class="bm-dot"></span>00785B</button>
@@ -244,7 +241,6 @@
     <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
   </div>
 
-  <!-- Annual yield -->
   <div class="two-col">
     <div class="card">
       <div class="card-title">各年度績效 Annual Return</div>
@@ -254,14 +250,14 @@
       <div class="card-title">本月績效 vs 同期基準</div>
       <div style="padding-top:8px">
         <table>
-          <thead><tr><th>指數/基金</th><th>本月報酬</th></tr></thead>
+          <thead><tr><th>指數 / 基金</th><th>本月報酬</th></tr></thead>
           <tbody>
-            <tr class="highlight-row"><td><strong>P&J 投資組合</strong></td><td class="up">+1.33%</td></tr>
-            <tr><td>S&P 10年公債總報酬</td><td class="down">-0.22%</td></tr>
-            <tr><td>美林 IG 債券總報酬</td><td class="up">+0.56%</td></tr>
-            <tr><td>00720B 元大IG債ETF</td><td class="down">-0.82%</td></tr>
-            <tr><td>00772B 中信高評級公司債</td><td class="down">-0.81%</td></tr>
-            <tr><td>00785B 富邦金融IG債</td><td class="down">-0.69%</td></tr>
+            <tr class="highlight-row"><td><strong>P&amp;J ??蝯?</strong></td><td class="up">+1.33%</td></tr>
+            <tr><td>S&amp;P 10撟游?萇蜇?梢</td><td class="down">-0.22%</td></tr>
+            <tr><td>蝢? IG ?萄蝮賢??</td><td class="up">+0.56%</td></tr>
+            <tr><td>00720B ?之IG?湲TF</td><td class="down">-0.82%</td></tr>
+            <tr><td>00772B 銝凋縑擃?蝝?詨</td><td class="down">-0.81%</td></tr>
+            <tr><td>00785B 撖??IG??</td><td class="down">-0.69%</td></tr>
           </tbody>
         </table>
       </div>
@@ -269,53 +265,49 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ TAB 2: PERFORMANCE ═══════════════════════════════════ -->
 <div class="panel" id="panel-performance">
   <div class="section-title">績效比較報告 <span class="en">Portfolio Comparison Summary</span></div>
 
-  <!-- Summary KPIs -->
   <div class="grid grid-4" style="margin-bottom:20px">
     <div class="kpi primary">
       <div class="label">累計總報酬率</div>
       <div class="value up">+17.47%</div>
-      <div class="sub">成立至今 (Nov-2023)</div>
+      <div class="sub">起始日 Nov-2023</div>
     </div>
     <div class="kpi">
       <div class="label">最大回撤 MDD</div>
       <div class="value down">-2.25%</div>
-      <div class="sub">vs 美林IG -3.22%</div>
+      <div class="sub">vs 美林 IG -3.22%</div>
     </div>
     <div class="kpi gold">
-      <div class="label">vs 美林IG累計</div>
-      <div class="value">+0.93%</div>
-      <div class="sub">17.47% vs 16.54%</div>
+      <div class="label">vs 美林 IG 債</div>
+      <div class="value up">+0.93%</div>
+      <div class="sub">+17.47% vs +16.54%</div>
     </div>
     <div class="kpi">
-      <div class="label">vs 元大00720B累計</div>
+      <div class="label">vs 00720B</div>
       <div class="value up">+4.44%</div>
-      <div class="sub">17.47% vs 13.03%</div>
+      <div class="sub">+17.47% vs +13.03%</div>
     </div>
   </div>
 
-  <!-- Benchmark toggle bar for performance tab -->
   <div class="bm-bar" id="bm-bar-perf">
     <span class="bm-bar-label">顯示基準</span>
     <span class="bm-fixed"><span class="bm-dot"></span>P&amp;J 組合</span>
-    <button class="bm-btn off" data-bm="sp"   onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
-    <button class="bm-btn off" data-bm="ml"   onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>美林 IG 債</button>
+    <button class="bm-btn off" data-bm="sp" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>S&amp;P 10Y公債</button>
+    <button class="bm-btn off" data-bm="ml" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>美林 IG 債</button>
     <button class="bm-btn off" data-bm="b720" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00720B</button>
     <button class="bm-btn off" data-bm="b772" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00772B</button>
     <button class="bm-btn off" data-bm="b785" onclick="toggleBm(this,'perf')"><span class="bm-dot"></span>00785B</button>
   </div>
 
-  <!-- Performance line chart -->
   <div class="card" style="margin-bottom:20px">
     <div class="card-title">績效走勢對比 Performance Trend <span style="font-size:10px;font-weight:400;color:var(--muted)">(2023 Q4 — 2026 Apr)</span></div>
     <div class="chart-wrap"><canvas id="chartPerfLine"></canvas></div>
   </div>
 
   <div class="card">
-    <div class="card-title">歷月績效對照表 Monthly Performance Comparison</div>
+    <div class="card-title">歷史績效比較 Monthly Performance Comparison</div>
     <div class="perf-table-wrap">
       <table class="perf-table" id="perf-table">
         <thead>
@@ -323,7 +315,7 @@
             <th>期間</th>
             <th>P&amp;J 組合</th>
             <th class="bm-col hidden" data-bm="sp">S&amp;P 10Y公債</th>
-            <th class="bm-col hidden" data-bm="ml">美林IG債</th>
+            <th class="bm-col hidden" data-bm="ml">美林 IG 債</th>
             <th class="bm-col hidden" data-bm="b720">00720B</th>
             <th class="bm-col hidden" data-bm="b772">00772B</th>
             <th class="bm-col hidden" data-bm="b785">00785B</th>
@@ -333,12 +325,12 @@
         <tfoot id="perf-tfoot">
           <tr class="tfoot-row">
             <td>累計報酬率</td>
-            <td class="up">17.47%</td>
-            <td class="bm-col hidden" data-bm="sp">15.34%</td>
-            <td class="bm-col hidden" data-bm="ml">16.54%</td>
-            <td class="bm-col hidden" data-bm="b720">13.03%</td>
-            <td class="bm-col hidden" data-bm="b772">10.26%</td>
-            <td class="bm-col hidden" data-bm="b785">15.52%</td>
+            <td class="up">+17.47%</td>
+            <td class="bm-col hidden" data-bm="sp">+15.34%</td>
+            <td class="bm-col hidden" data-bm="ml">+16.54%</td>
+            <td class="bm-col hidden" data-bm="b720">+13.03%</td>
+            <td class="bm-col hidden" data-bm="b772">+10.26%</td>
+            <td class="bm-col hidden" data-bm="b785">+15.52%</td>
           </tr>
           <tr class="tfoot-row">
             <td>最大回撤 MDD</td>
@@ -355,39 +347,39 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ TAB 3: ALLOCATION ═══════════════════════════════════ -->
 <div class="panel" id="panel-allocation">
   <div class="section-title">資產配置明細 <span class="en">Asset Allocation Detail</span></div>
 
   <div class="two-col" style="margin-bottom:20px">
     <div style="display:flex;flex-direction:column;gap:10px">
-
-      <!-- USD -->
       <div class="card" style="border-left:3px solid #1d4ed8;padding:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
           <span style="padding:2px 9px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-weight:700;font-size:12px">USD</span>
-          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">美元資產</span>
         </div>
         <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">銀行存款</span><span style="font-variant-numeric:tabular-nums">5,669 USD</span></div>
-            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:0.3%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:0.2%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">PGN</span><span style="font-variant-numeric:tabular-nums">0 USD</span></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:0.0%;height:100%;background:#60a5fa;border-radius:2px"></div></div>
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">債券</span><span style="font-weight:600;font-variant-numeric:tabular-nums">2,703,330 USD</span></div>
-            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:100%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:99.8%;height:100%;background:#1d4ed8;border-radius:2px"></div></div>
           </div>
         </div>
         <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
-          <span>利率範圍</span><span>1.35% ~ 9.56%</span>
+          <span>資產收益區間</span><span>1.35% ~ 9.56%</span>
         </div>
       </div>
 
-      <!-- GBP -->
       <div class="card" style="border-left:3px solid #6d28d9;padding:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
           <span style="padding:2px 9px;background:#ede9fe;color:#6d28d9;border-radius:4px;font-weight:700;font-size:12px">GBP</span>
-          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">英鎊資產</span>
         </div>
         <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
           <div>
@@ -396,19 +388,18 @@
           </div>
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:var(--muted)">債券</span><span style="font-weight:600;font-variant-numeric:tabular-nums">1,935,478 GBP</span></div>
-            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:100%;height:100%;background:#6d28d9;border-radius:2px"></div></div>
+            <div style="height:3px;background:#f0f0f0;border-radius:2px"><div style="width:99.9%;height:100%;background:#6d28d9;border-radius:2px"></div></div>
           </div>
         </div>
         <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
-          <span>利率範圍</span><span>1.22% ~ 5.81%</span>
+          <span>資產收益區間</span><span>5.50% ~ 8.20%</span>
         </div>
       </div>
 
-      <!-- TWD -->
       <div class="card" style="border-left:3px solid #B8860B;padding:14px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
           <span style="padding:2px 9px;background:rgba(184,134,11,.15);color:#7a5200;border-radius:4px;font-weight:700;font-size:12px">TWD</span>
-          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">計價資產</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase">台幣資產</span>
         </div>
         <div style="font-size:12px;display:flex;flex-direction:column;gap:7px">
           <div>
@@ -421,80 +412,80 @@
           </div>
         </div>
         <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between">
-          <span>利率範圍</span><span>1.20% ~ 4.50%</span>
+          <span>資產收益區間</span><span>1.20% ~ 4.50%</span>
         </div>
       </div>
-
     </div>
     <div class="card">
-      <div class="card-title">各類資產明細</div>
+      <div class="card-title">各類資產報酬 / 成本明細</div>
       <table>
-        <thead><tr><th>資產類別</th><th>金額</th><th>利率/報酬</th><th>備註</th></tr></thead>
+        <thead><tr><th>資產項目</th><th>金額</th><th>報酬 / 成本</th><th>備註</th></tr></thead>
         <tbody>
-          <tr><td>銀行存款 (USD)</td><td>5,669</td><td>1.35%</td><td>D7/M1</td></tr>
-          <tr><td>銀行存款 (GBP)</td><td>1,341</td><td>1.22%</td><td>活期</td></tr>
-          <tr><td>銀行存款 (TWD)</td><td>492,235</td><td>1.20~1.35%</td><td>M1/M2/M3</td></tr>
-          <tr><td>特別股 (TWD)</td><td>4,703,900</td><td>4.50%</td><td>2026/9/27到期</td></tr>
-          <tr><td>債券 (USD)</td><td>2,703,330</td><td>5.06~9.56%</td><td>1.12Y~9.27Y</td></tr>
-          <tr><td>債券 (GBP)</td><td>1,935,478</td><td>5.65~5.81%</td><td>9.72Y~10.07Y</td></tr>
-          <tr class="tfoot-row"><td>總資產</td><td>4,767,723</td><td>—</td><td>USD 計價</td></tr>
+          <tr><td>?銵?甈?(USD)</td><td>5,669</td><td>1.35%</td><td>D7 / M1</td></tr>
+          <tr><td>?銵?甈?(GBP)</td><td>1,341</td><td>1.22%</td><td>瘣餅?</td></tr>
+          <tr><td>?銵?甈?(TWD)</td><td>492,235</td><td>1.20% - 1.35%</td><td>M1 / M2 / M3</td></tr>
+          <tr><td>?孵??(TWD)</td><td>4,703,900</td><td>4.50%</td><td>2026/9/27 ?唳?</td></tr>
+          <tr><td>PGN (USD)</td><td>-</td><td>4.15%</td><td>D30</td></tr>
+          <tr><td>?萄 (USD)</td><td>2,703,330</td><td>5.06% - 9.56%</td><td>1.12Y - 9.27Y</td></tr>
+          <tr><td>?萄 (GBP)</td><td>1,935,478</td><td>5.65% - 5.81%</td><td>9.72Y - 10.07Y</td></tr>
+          <tr><td>?銵狡 (TWD)</td><td>39,836,719</td><td>2.50%</td><td>?陸 DBU嚗?豢?靽狡</td></tr>
+          <tr class="tfoot-row"><td>總資產</td><td>4,767,796</td><td>USD 計價</td><td>月報摘要</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">負債與淨值結構</div>
+    <div class="card-title">資產負債與淨值摘要</div>
     <div class="grid grid-3">
       <div class="kpi">
         <div class="label">總資產</div>
-        <div class="value">4,767,723</div>
+        <div class="value">4,767,796</div>
         <div class="sub">USD</div>
       </div>
       <div class="kpi">
         <div class="label">抵押借款</div>
         <div class="value down">1,056,001</div>
-        <div class="sub">LTV 22.15%，尚可動用 3,386萬 TWD</div>
+        <div class="sub">LTV 22.15%｜尚可動用 3,386?? TWD</div>
       </div>
       <div class="kpi primary">
         <div class="label">股東淨值</div>
-        <div class="value">3,702,148</div>
-        <div class="sub">股東投入 3,260,178 + 累計盈餘 441,971</div>
+        <div class="value">3,702,221</div>
+        <div class="sub">股東投入 3,260,178 + 未分配盈餘 442,044</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ TAB 4: INCOME ═══════════════════════════════════ -->
 <div class="panel" id="panel-income">
   <div class="section-title">損益表 <span class="en">P&amp;L Summary</span></div>
 
   <div class="grid grid-4" style="margin-bottom:20px">
     <div class="kpi primary">
-      <div class="label">本期淨值</div>
-      <div class="value">3,702,148</div>
+      <div class="label">本月淨值</div>
+      <div class="value">3,702,221</div>
       <div class="sub">USD</div>
     </div>
     <div class="kpi">
-      <div class="label">本年至今已實現損益</div>
-      <div class="value up">+62,278</div>
-      <div class="sub">累計：385,379</div>
+      <div class="label">本年度已實現損益</div>
+      <div class="value up">+62,351</div>
+      <div class="sub">累計 385,452</div>
     </div>
     <div class="kpi">
-      <div class="label">本年至今未實現損益</div>
+      <div class="label">本年度未實現損益</div>
       <div class="value down">(59,835)</div>
-      <div class="sub">累計：+172,881</div>
+      <div class="sub">累計 172,881</div>
     </div>
     <div class="kpi gold">
-      <div class="label">本年至今淨值增減</div>
-      <div class="value up">+43,278</div>
+      <div class="label">本年度淨值變動</div>
+      <div class="value up">+43,351</div>
       <div class="sub">增減率 +1.33%</div>
     </div>
   </div>
 
   <div class="two-col">
     <div class="card">
-      <div class="card-title">資產負債表摘要 Balance Sheet</div>
+      <div class="card-title">投資組合資產負債表 Balance Sheet</div>
       <table>
         <thead><tr><th>項目</th><th>金額 (USD)</th></tr></thead>
         <tbody>
@@ -502,16 +493,16 @@
           <tr><td>存款類</td><td>7,010</td></tr>
           <tr><td>貨幣基金類</td><td>—</td></tr>
           <tr><td>固定收益證券類</td><td>4,638,808</td></tr>
-          <tr><td>應收利息</td><td>113,896</td></tr>
+          <tr><td>應收利息</td><td>13,968</td></tr>
           <tr><td>投資台灣分公司</td><td>8,009</td></tr>
-          <tr class="tfoot-row"><td>總資產</td><td>4,767,723</td></tr>
+          <tr class="tfoot-row"><td>總資產</td><td>4,767,796</td></tr>
           <tr><td colspan="2" style="background:#f8f5ef;font-weight:700;color:var(--green);font-size:11px;letter-spacing:.5px">負債</td></tr>
           <tr><td>抵押借款</td><td>1,056,001</td></tr>
           <tr><td>應付費用</td><td>9,574</td></tr>
           <tr><td colspan="2" style="background:#f8f5ef;font-weight:700;color:var(--green);font-size:11px;letter-spacing:.5px">股東權益</td></tr>
           <tr><td>股東投入</td><td>3,260,178</td></tr>
-          <tr><td>累計未分配盈餘</td><td>441,971</td></tr>
-          <tr class="tfoot-row"><td>淨值 (NAV)</td><td>3,702,148</td></tr>
+          <tr><td>累計未分配盈餘</td><td>442,044</td></tr>
+          <tr class="tfoot-row"><td>淨值 (NAV)</td><td>3,702,221</td></tr>
         </tbody>
       </table>
     </div>
@@ -522,13 +513,12 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ TAB 5: BONDS ═══════════════════════════════════ -->
 <div class="panel" id="panel-bonds">
-  <div class="section-title">債券資產明細表 <span class="en">Bond Portfolio Detail</span></div>
+  <div class="section-title">債券持有明細 <span class="en">Bond Portfolio Detail</span></div>
 
   <div class="card" style="margin-bottom:20px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:12px;color:var(--muted)">資料日期：2026-03-31 &nbsp;|&nbsp; 英鎊/美元匯率：1.3236 &nbsp;|&nbsp; 合計折算美元本金：4,366,361</div>
+      <div style="font-size:12px;color:var(--muted)">報表日 2026-04-30 &nbsp;|&nbsp; 英鎊 / 美元匯率 1.3236 &nbsp;|&nbsp; 折算美元本金 4,366,361</div>
     </div>
     <div class="table-scroll">
       <table id="bond-table">
@@ -541,11 +531,11 @@
             <th>票面利率</th>
             <th>市值 (USD)</th>
             <th>性質</th>
-            <th>信評</th>
+            <th>評等</th>
             <th>到期年限</th>
-            <th>贖回年限</th>
-            <th>質押狀態</th>
-            <th>保管行</th>
+            <th>下次 Call</th>
+            <th>質押 / 狀態</th>
+            <th>保管銀行</th>
           </tr>
         </thead>
         <tbody id="bond-tbody"></tbody>
@@ -562,29 +552,26 @@
     </div>
   </div>
 
-  <!-- Distribution charts -->
-  <div class="section-title section-gap">債券分佈統計 <span class="en">Bond Distribution Analysis</span></div>
+  <div class="section-title section-gap">債券分布分析 <span class="en">Bond Distribution Analysis</span></div>
   <div class="dist-chart-row">
     <div class="card">
-      <div class="card-title">依到期日分佈 By Maturity</div>
+      <div class="card-title">到期年限分布 By Maturity</div>
       <div class="chart-wrap-sm"><canvas id="chartMaturity"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">依下次贖回日分佈 By Next Call</div>
+      <div class="card-title">下次贖回分布 By Next Call</div>
       <div class="chart-wrap-sm"><canvas id="chartCall"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">依信用評等分佈 By Rating</div>
+      <div class="card-title">信用評等分布 By Rating</div>
       <div class="chart-wrap-sm"><canvas id="chartRating"></canvas></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════ TAB 6: CASHFLOW ═══════════════════════════════════ -->
 <div class="panel" id="panel-cashflow">
-  <div class="section-title">債券現金流量分析 <span class="en">Bond Cash Flow Analysis</span></div>
+  <div class="section-title">債券現金流分析 <span class="en">Bond Cash Flow Analysis</span></div>
 
-  <!-- USD cashflow -->
   <div class="cf-table-section">
     <div class="currency-tag usd-tag">USD 計價債券</div>
     <div class="table-scroll">
@@ -592,9 +579,9 @@
         <thead>
           <tr>
             <th>年度</th>
-            <th>USD 現金利息收入</th>
-            <th>USD 本金到期收入</th>
-            <th>現金流入合計</th>
+            <th>USD 利息收入</th>
+            <th>USD 本金回收</th>
+            <th>現金流總額</th>
           </tr>
         </thead>
         <tbody id="cf-usd-tbody"></tbody>
@@ -610,7 +597,6 @@
     </div>
   </div>
 
-  <!-- GBP cashflow -->
   <div class="cf-table-section">
     <div class="currency-tag gbp-tag">GBP 計價債券</div>
     <div class="table-scroll">
@@ -618,9 +604,9 @@
         <thead>
           <tr>
             <th>年度</th>
-            <th>GBP 現金利息收入</th>
-            <th>GBP 本金到期收入</th>
-            <th>現金流入合計</th>
+            <th>GBP 利息收入</th>
+            <th>GBP 本金回收</th>
+            <th>現金流總額</th>
           </tr>
         </thead>
         <tbody id="cf-gbp-tbody"></tbody>
@@ -636,13 +622,13 @@
     </div>
   </div>
 
-  <!-- Combined chart -->
   <div class="card">
-    <div class="card-title">年度現金流量總覽 Annual Cash Flow Overview</div>
+    <div class="card-title">年度現金流總覽 Annual Cash Flow Overview</div>
     <div class="chart-wrap"><canvas id="chartCashflow"></canvas></div>
   </div>
 </div>
 
+</main>
 </main>
 
 <script>
@@ -662,76 +648,600 @@ const bmState = { sp:false, ml:false, b720:false, b772:false, b785:false };
 // ════════════════════════════ DATA ════════════════════════════
 
 const PERF_DATA = [
-  { period:"2026年4月",  pj:1.33, sp:-0.22, ml:0.56,  b720:-0.82, b772:-0.81, b785:-0.69, isThis:true },
-  { period:"2026年3月",  pj:-2.80,sp:-2.49, ml:-2.02, b720:-2.27, b772:-2.30, b785:-2.84 },
-  { period:"2026年2月",  pj:0.47, sp:2.77,  ml:1.27,  b720:0.21,  b772:0.25,  b785:-0.06 },
-  { period:"2026年1月",  pj:1.07, sp:-0.41, ml:0.36,  b720:0.26,  b772:0.03,  b785:-0.19 },
-  { period:"2025年12月", pj:1.19, sp:-0.81, ml:-0.29, b720:-0.85, b772:-0.74, b785:-0.50 },
-  { period:"2025年11月", pj:1.28, sp:1.05,  ml:0.61,  b720:2.28,  b772:2.52,  b785:2.99 },
-  { period:"2025年10月", pj:0.71, sp:0.77,  ml:0.45,  b720:1.41,  b772:1.75,  b785:1.90 },
-  { period:"2025年9月",  pj:0.67, sp:0.55,  ml:0.61,  b720:3.65,  b772:3.13,  b785:2.55 },
-  { period:"2025年8月",  pj:2.59, sp:1.14,  ml:1.06,  b720:3.23,  b772:3.29,  b785:3.07 },
-  { period:"2025年7月",  pj:0.73, sp:-0.67, ml:0.15,  b720:1.95,  b772:2.13,  b785:2.78 },
-  { period:"2025年6月",  pj:1.27, sp:1.25,  ml:1.30,  b720:-0.10, b772:-0.58, b785:-0.58 },
-  { period:"2025年5月",  pj:-1.82,sp:-1.36, ml:0.00,  b720:-4.66, b772:-5.10, b785:-4.26 },
-  { period:"2025年4月",  pj:0.35, sp:0.78,  ml:-0.02, b720:-5.00, b772:-4.39, b785:-4.05 },
-  { period:"2025年Q1",   pj:2.03, sp:1.05,  ml:1.98,  b720:3.15,  b772:2.78,  b785:3.57 },
-  { period:"2024年全年", pj:8.41, sp:-1.67, ml:2.76,  b720:4.91,  b772:2.72,  b785:7.20 },
-  { period:"2023年Q4*",  pj:6.23, sp:6.09,  ml:7.91,  b720:7.88,  b772:6.07,  b785:5.73 },
+  {
+    period: '2026年4月',
+    pj: 1.33,
+    sp: -0.22,
+    ml: 0.56,
+    b720: -0.82,
+    b772: -0.81,
+    b785: -0.69,
+    isThis: true
+  },
+  {
+    period: '2026年3月',
+    pj: -2.8,
+    sp: -2.49,
+    ml: -2.02,
+    b720: -2.27,
+    b772: -2.3,
+    b785: -2.84
+  },
+  {
+    period: '2026年2月',
+    pj: 0.47,
+    sp: 2.77,
+    ml: 1.27,
+    b720: 0.21,
+    b772: 0.25,
+    b785: -0.06
+  },
+  {
+    period: '2026年1月',
+    pj: 1.07,
+    sp: -0.41,
+    ml: 0.36,
+    b720: 0.26,
+    b772: 0.03,
+    b785: -0.19
+  },
+  {
+    period: '2025年12月',
+    pj: 1.19,
+    sp: -0.81,
+    ml: -0.29,
+    b720: -0.85,
+    b772: -0.74,
+    b785: -0.5
+  },
+  {
+    period: '2025年11月',
+    pj: 1.28,
+    sp: 1.05,
+    ml: 0.61,
+    b720: 2.28,
+    b772: 2.52,
+    b785: 2.99
+  },
+  {
+    period: '2025年10月',
+    pj: 0.71,
+    sp: 0.77,
+    ml: 0.45,
+    b720: 1.41,
+    b772: 1.75,
+    b785: 1.9
+  },
+  {
+    period: '2025年9月',
+    pj: 0.67,
+    sp: 0.55,
+    ml: 0.61,
+    b720: 3.65,
+    b772: 3.13,
+    b785: 2.55
+  },
+  {
+    period: '2025年8月',
+    pj: 2.59,
+    sp: 1.14,
+    ml: 1.06,
+    b720: 3.23,
+    b772: 3.29,
+    b785: 3.07
+  },
+  {
+    period: '2025年7月',
+    pj: 0.73,
+    sp: -0.67,
+    ml: 0.15,
+    b720: 1.95,
+    b772: 2.13,
+    b785: 2.78
+  },
+  {
+    period: '2025年6月',
+    pj: 1.27,
+    sp: 1.25,
+    ml: 1.3,
+    b720: -0.1,
+    b772: -0.58,
+    b785: -0.58
+  },
+  {
+    period: '2025年5月',
+    pj: -1.82,
+    sp: -1.36,
+    ml: 0,
+    b720: -4.66,
+    b772: -5.1,
+    b785: -4.26
+  },
+  {
+    period: '2025年4月',
+    pj: 0.35,
+    sp: 0.78,
+    ml: -0.02,
+    b720: -5,
+    b772: -4.39,
+    b785: -4.05
+  },
+  {
+    period: '2025年Q1',
+    pj: 2.03,
+    sp: 1.05,
+    ml: 1.98,
+    b720: 3.15,
+    b772: 2.78,
+    b785: 3.57
+  },
+  {
+    period: '2024年1到12月',
+    pj: 8.41,
+    sp: -1.67,
+    ml: 2.76,
+    b720: 4.91,
+    b772: 2.72,
+    b785: 7.2
+  },
+  {
+    period: '2023年Q4*',
+    pj: 6.23,
+    sp: 6.09,
+    ml: 7.91,
+    b720: 7.88,
+    b772: 6.07,
+    b785: 5.73
+  }
 ];
 
 const BOND_DATA = [
-  { ccy:"USD", nom:207000,  usd:207000,   name:"BACR 7.385 11/02/28",               coupon:7.385, mktval:218012,   type:"Sen. Unsec.", rating:"Baa-",  mat:1.59,  call:2.59,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:250000,  usd:250000,   name:"STANLN 7.767 11/16/28",             coupon:7.767, mktval:265200,   type:"Sen. Unsec.", rating:"A",    mat:1.63,  call:2.63,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:250000,  usd:250000,   name:"HSBC 8.113 11/03/33",               coupon:8.113, mktval:294625,   type:"Sub_T2",      rating:"Baa1", mat:6.60,  call:7.60,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:250000,  usd:250000,   name:"LLOYDS 7.953 11/15/33",             coupon:7.953, mktval:293200,   type:"Sub_T2",      rating:"BBB-", mat:6.63,  call:7.63,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 6.301 09/22/34",                coupon:6.301, mktval:219320,   type:"Sen. Unsec.", rating:"A-",   mat:7.48,  call:8.48,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"STANLN 6.296 07/06/34",             coupon:6.296, mktval:217440,   type:"Sen. Unsec.", rating:"A",    mat:7.27,  call:8.27,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"WFC 5.389 04/24/34",                coupon:5.389, mktval:208260,   type:"Sen. Unsec.", rating:"A+",   mat:7.07,  call:8.07,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"JPMorgan Chase & Co. 4.565% 22/30", coupon:4.565, mktval:202900,   type:"Sen. Unsec.", rating:"A-",   mat:3.21,  call:4.21,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:208000,  usd:0,        name:"NatWest Group PLC 8%",              coupon:8.000, mktval:0,        type:"AT1",         rating:"BBB-", mat:"永續", call:-0.64, pledge:"到期贖回", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:0,        name:"Skandinaviska Enskilda Banken 5.125%",coupon:5.125,mktval:0,       type:"AT1",         rating:"BBB-", mat:"永續", call:0.00,  pledge:"到期贖回", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"BAC 5.819 09/15/29",                coupon:5.819, mktval:208560,   type:"Sen. Unsec.", rating:"A-",   mat:2.46,  call:3.46,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"BNP 5.335 06/12/29",                coupon:5.335, mktval:205340,   type:"Sen. Unsec.", rating:"A+",   mat:2.20,  call:3.20,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:0,        name:"NatWest Group PLC 8% (2)",          coupon:8.000, mktval:0,        type:"AT1",         rating:"BBB-", mat:"永續", call:-0.64, pledge:"到期贖回", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 5.617 09/13/30",                coupon:5.617, mktval:209260,   type:"Sen. Unsec.", rating:"A+",   mat:3.46,  call:4.46,  pledge:"質押", custody:"國泰" },
-  { ccy:"USD", nom:300000,  usd:0,        name:"SOCGEN 4.5 030427",                 coupon:4.500, mktval:0,        type:"Sen. Unsec.", rating:"A-",   mat:-0.57, call:0.93,  pledge:"到期贖回", custody:"國泰" },
-  { ccy:"USD", nom:200000,  usd:200000,   name:"UBS 6.301 09/22/34 (玉山)",         coupon:6.301, mktval:212640,   type:"Sen. Unsec.", rating:"A-",   mat:7.48,  call:8.48,  pledge:"NA",  custody:"玉山" },
-  { ccy:"GBP", nom:200000,  usd:264720,   name:"Barcap 5.851 03/25/35",             coupon:5.851, mktval:276729,   type:"Sen. Unsec.", rating:"BBB",  mat:7.98,  call:8.98,  pledge:"NA",  custody:"國泰" },
-  { ccy:"GBP", nom:227000,  usd:300457,   name:"HSBC 8.201 11/16/34",               coupon:8.201, mktval:336929,   type:"Sub_T2",      rating:"BBB",  mat:3.38,  call:8.64,  pledge:"NA",  custody:"國泰" },
-  { ccy:"GBP", nom:480000,  usd:635328,   name:"HSBC 5.813 05/22/33",               coupon:5.813, mktval:672070,   type:"Sen. Unsec.", rating:"BBB",  mat:6.07,  call:7.15,  pledge:"NA",  custody:"國泰" },
-  { ccy:"GBP", nom:200000,  usd:264720,   name:"ACAFP 5.5 07/31/32",                coupon:5.500, mktval:276756,   type:"Sen. Unsec.", rating:"A-",   mat:5.34,  call:6.34,  pledge:"NA",  custody:"玉山" },
-  { ccy:"GBP", nom:260000,  usd:344136,   name:"UBS 7.375 09/07/33",                coupon:7.375, mktval:0,        type:"Sen. Unsec.", rating:"A-",   mat:6.28,  call:7.44,  pledge:"NA",  custody:"玉山" },
+  {
+    ccy: 'USD',
+    nom: 207000,
+    usd: 207000,
+    name: 'BACR 7.385 11/02/28',
+    coupon: 7.385,
+    mktval: 218012,
+    type: 'Sen. Unsec.',
+    rating: 'Baa-',
+    mat: 2.51,
+    call: 1.51,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 250000,
+    usd: 250000,
+    name: 'STANLN 7.767 11/16/28',
+    coupon: 7.767,
+    mktval: 265200,
+    type: 'Sen. Unsec.',
+    rating: 'A',
+    mat: 2.55,
+    call: 1.55,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 250000,
+    usd: 250000,
+    name: 'HSBC 8.113 11/03/33',
+    coupon: 8.113,
+    mktval: 294625,
+    type: 'Sub_T2',
+    rating: 'Baa1',
+    mat: 7.52,
+    call: 6.52,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 250000,
+    usd: 250000,
+    name: 'LLOYDS 7.953 11/15/33',
+    coupon: 7.953,
+    mktval: 293200,
+    type: 'Sub_T2',
+    rating: 'BBB-',
+    mat: 7.55,
+    call: 6.55,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'UBS 6.301 09/22/34',
+    coupon: 6.301,
+    mktval: 219320,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 8.4,
+    call: 7.4,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'STANLN 6.296 07/06/34',
+    coupon: 6.296,
+    mktval: 217440,
+    type: 'Sen. Unsec.',
+    rating: 'A',
+    mat: 8.19,
+    call: 7.19,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'WFC 5.389 04/24/34',
+    coupon: 5.389,
+    mktval: 208260,
+    type: 'Sen. Unsec.',
+    rating: 'A+',
+    mat: 7.99,
+    call: 6.99,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'JPMorgan Chase & Co. 4.565% 22/30',
+    coupon: 4.565,
+    mktval: 202900,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 4.13,
+    call: 3.13,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 208000,
+    usd: 0,
+    name: 'NatWest Group PLC 8%',
+    coupon: 8,
+    mktval: 0,
+    type: 'AT1',
+    rating: 'BBB-',
+    mat: '瘞貊?',
+    call: -0.72,
+    pledge: '?唳?韐?',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 0,
+    name: 'Skandinaviska Enskilda Banken AB 5.125%',
+    coupon: 5.125,
+    mktval: 0,
+    type: 'AT1',
+    rating: 'BBB-',
+    mat: '瘞貊?',
+    call: 0,
+    pledge: '?唳?韐?',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'BAC 5.819 09/15/29',
+    coupon: 5.819,
+    mktval: 208560,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 3.38,
+    call: 2.38,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'BNP 5.335 06/12/29',
+    coupon: 5.335,
+    mktval: 205340,
+    type: 'Sen. Unsec.',
+    rating: 'A+',
+    mat: 3.12,
+    call: 2.12,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 0,
+    name: 'NatWest Group PLC 8% (2)',
+    coupon: 8,
+    mktval: 0,
+    type: 'AT1',
+    rating: 'BBB-',
+    mat: '瘞貊?',
+    call: -0.72,
+    pledge: '?唳?韐?',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'UBS 5.617 09/13/30',
+    coupon: 5.617,
+    mktval: 209260,
+    type: 'Sen. Unsec.',
+    rating: 'A+',
+    mat: 4.38,
+    call: 3.38,
+    pledge: '鞈芣',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 300000,
+    usd: 0,
+    name: 'SOCGEN 4.5 030427',
+    coupon: 4.5,
+    mktval: 0,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 0.84,
+    call: -0.65,
+    pledge: '?唳?韐?',
+    custody: '?陸'
+  },
+  {
+    ccy: 'USD',
+    nom: 200000,
+    usd: 200000,
+    name: 'UBS 6.301 09/22/34 (?控)',
+    coupon: 6.301,
+    mktval: 212640,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 8.4,
+    call: 7.4,
+    pledge: 'NA',
+    custody: '?控'
+  },
+  {
+    ccy: 'GBP',
+    nom: 200000,
+    usd: 264720,
+    name: 'Barcap 5.851 03/25/35',
+    coupon: 5.851,
+    mktval: 276729,
+    type: 'Sen. Unsec.',
+    rating: 'BBB',
+    mat: 8.9,
+    call: 7.9,
+    pledge: 'NA',
+    custody: '?陸'
+  },
+  {
+    ccy: 'GBP',
+    nom: 227000,
+    usd: 300457,
+    name: 'HSBC 8.201 11/16/34',
+    coupon: 8.201,
+    mktval: 336929,
+    type: 'Sub_T2',
+    rating: 'BBB',
+    mat: 8.55,
+    call: 3.3,
+    pledge: 'NA',
+    custody: '?陸'
+  },
+  {
+    ccy: 'GBP',
+    nom: 480000,
+    usd: 635328,
+    name: 'HSBC 5.813 05/22/33',
+    coupon: 5.813,
+    mktval: 672070,
+    type: 'Sen. Unsec.',
+    rating: 'BBB',
+    mat: 7.07,
+    call: 6.07,
+    pledge: 'NA',
+    custody: '?陸'
+  },
+  {
+    ccy: 'GBP',
+    nom: 200000,
+    usd: 264720,
+    name: 'ACAFP 5 1/2 07/31/32',
+    coupon: 5.5,
+    mktval: 276756,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 6.26,
+    call: 5.25,
+    pledge: 'NA',
+    custody: '?控'
+  },
+  {
+    ccy: 'GBP',
+    nom: 260000,
+    usd: 344136,
+    name: 'UBS 7.375 09/07/33',
+    coupon: 7.375,
+    mktval: 0,
+    type: 'Sen. Unsec.',
+    rating: 'A-',
+    mat: 7.36,
+    call: 6.2,
+    pledge: 'NA',
+    custody: '?控'
+  }
 ];
+
+// from Excel
 
 // from Excel 債券現金流量統計
 const CF_USD = [
-  { yr:2024, int:183557, prin:0,       tot:183557 },
-  { yr:2025, int:192118, prin:908000,  tot:1100118 },
-  { yr:2026, int:153513, prin:0,       tot:153513 },
-  { yr:2027, int:153513, prin:0,       tot:153513 },
-  { yr:2028, int:142279, prin:857000,  tot:999279 },
-  { yr:2029, int:96501,  prin:200000,  tot:296501 },
-  { yr:2030, int:80702,  prin:200000,  tot:280702 },
-  { yr:2031, int:76137,  prin:0,       tot:76137 },
-  { yr:2032, int:76137,  prin:0,       tot:76137 },
-  { yr:2033, int:76137,  prin:500000,  tot:576137 },
-  { yr:2034, int:30583,  prin:600000,  tot:630583 },
-  { yr:2035, int:0,      prin:0,       tot:0 },
+  {
+    yr: 2024,
+    int: 183557,
+    prin: 0,
+    tot: 183557
+  },
+  {
+    yr: 2025,
+    int: 192118,
+    prin: 908000,
+    tot: 1100118
+  },
+  {
+    yr: 2026,
+    int: 153513,
+    prin: 0,
+    tot: 153513
+  },
+  {
+    yr: 2027,
+    int: 153513,
+    prin: 0,
+    tot: 153513
+  },
+  {
+    yr: 2028,
+    int: 142279,
+    prin: 857000,
+    tot: 999279
+  },
+  {
+    yr: 2029,
+    int: 96501,
+    prin: 200000,
+    tot: 296501
+  },
+  {
+    yr: 2030,
+    int: 80702,
+    prin: 200000,
+    tot: 280702
+  },
+  {
+    yr: 2031,
+    int: 76137,
+    prin: 0,
+    tot: 76137
+  },
+  {
+    yr: 2032,
+    int: 76137,
+    prin: 0,
+    tot: 76137
+  },
+  {
+    yr: 2033,
+    int: 76137,
+    prin: 500000,
+    tot: 576137
+  },
+  {
+    yr: 2034,
+    int: 30583,
+    prin: 600000,
+    tot: 630583
+  },
+  {
+    yr: 2035,
+    int: 0,
+    prin: 0,
+    tot: 0
+  }
 ];
 const CF_GBP = [
-  { yr:2024, int:0,      prin:0,       tot:0 },
-  { yr:2025, int:30318,  prin:0,       tot:30318 },
-  { yr:2026, int:88396,  prin:0,       tot:88396 },
-  { yr:2027, int:88396,  prin:0,       tot:88396 },
-  { yr:2028, int:88396,  prin:0,       tot:88396 },
-  { yr:2029, int:88396,  prin:0,       tot:88396 },
-  { yr:2030, int:88396,  prin:0,       tot:88396 },
-  { yr:2031, int:88396,  prin:0,       tot:88396 },
-  { yr:2032, int:88396,  prin:200000,  tot:288396 },
-  { yr:2033, int:58221,  prin:480000,  tot:538221 },
-  { yr:2034, int:30318,  prin:227000,  tot:257318 },
-  { yr:2035, int:11702,  prin:200000,  tot:211702 },
+  {
+    yr: 2024,
+    int: 0,
+    prin: 0,
+    tot: 0
+  },
+  {
+    yr: 2025,
+    int: 30318,
+    prin: 0,
+    tot: 30318
+  },
+  {
+    yr: 2026,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2027,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2028,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2029,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2030,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2031,
+    int: 88396,
+    prin: 0,
+    tot: 88396
+  },
+  {
+    yr: 2032,
+    int: 88396,
+    prin: 200000,
+    tot: 288396
+  },
+  {
+    yr: 2033,
+    int: 58221,
+    prin: 480000,
+    tot: 538221
+  },
+  {
+    yr: 2034,
+    int: 30318,
+    prin: 227000,
+    tot: 257318
+  },
+  {
+    yr: 2035,
+    int: 11702,
+    prin: 200000,
+    tot: 211702
+  }
 ];
 
 const GREEN = '#6D3A0F', GOLD = '#B8860B', LIGHT_GREEN = '#A05C1A';
@@ -951,7 +1461,7 @@ new Chart(document.getElementById('chartPnl'), {
   data:{
     labels:['累計已實現損益','累計未實現損益','本年已實現','本年未實現'],
     datasets:[{
-      data:[385379,172881,62278,-59835],
+      data:[385452,172881,62351,-59835],
       backgroundColor:v => v.raw >= 0 ? 'rgba(109,58,15,.75)' : 'rgba(185,28,28,.65)',
       borderRadius:4
     }]
@@ -968,7 +1478,7 @@ new Chart(document.getElementById('chartMaturity'), {
   type:'bar',
   data:{
     labels:['<1Y','1-3Y','3-5Y','5-7Y','7-10Y','>10Y'],
-    datasets:[{ label:'比例', data:[0,11,26,0,63,0], backgroundColor:GREEN, borderRadius:4 }]
+    datasets:[{ label:'比例', data:[0,0,11,26,63,0], backgroundColor:GREEN, borderRadius:4 }]
   },
   options:{
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
@@ -985,7 +1495,7 @@ new Chart(document.getElementById('chartCall'), {
   type:'bar',
   data:{
     labels:['<1Y','1-3Y','3-5Y','5-7Y','7-10Y'],
-    datasets:[{ label:'比例', data:[0,12,27,22,40], backgroundColor:GOLD, borderRadius:4 }]
+    datasets:[{ label:'比例', data:[0,11,27,22,40], backgroundColor:GOLD, borderRadius:4 }]
   },
   options:{
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
