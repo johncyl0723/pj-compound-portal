@@ -41,6 +41,8 @@ For monthly reports shown in the frontend portal, backend content manager, and p
 - Always format report labels as `YYYY年MM月`
 - The month must be zero-padded, for example `2026年03月`, `2026年04月`, `2026年05月`
 - Use the same label format when creating or updating `portalMonthlyReports` documents, fallback UI labels, and any publish scripts
+- In frontend and backend monthly report lists, prefer rendering the display label from `year` and `month` when those fields exist, instead of trusting a legacy `label` field
+- If existing Firestore records contain inconsistent month labels, normalize the stored `label` values as well so data and UI stay aligned
 
 ## Version sync rule
 
