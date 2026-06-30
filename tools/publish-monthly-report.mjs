@@ -22,7 +22,7 @@ const bucket = 'pnj-compound-company-limited.firebasestorage.app';
 const storagePath = `monthlyReports/${reportId}/monthly-report.html`;
 const year = reportId.slice(0, 4);
 const month = reportId.slice(4, 6);
-const label = labelArg || `${year} 年 ${month} 月`;
+const label = labelArg || `${year}年${month}月`;
 
 async function firebaseAccessToken() {
   const configPath = path.join(os.homedir(), '.config', 'configstore', 'firebase-tools.json');
