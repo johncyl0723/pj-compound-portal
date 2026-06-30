@@ -21,7 +21,7 @@ Treat these as website-affecting changes:
 - `index.html`
 - `admin.html`
 - `firebase-admin.html`
-- files under `2026_03/` or `2026_04/`
+- files under monthly report folders such as `2026_03/`, `2026_04/`, or `2026_05/`
 - shared assets, styles, scripts, or other files rendered by GitHub Pages
 
 After finishing the change:
@@ -33,6 +33,14 @@ After finishing the change:
 5. Tell the user that GitHub Pages may take a short time to refresh.
 
 Do not leave website-affecting changes only in the local workspace unless the user explicitly says not to publish yet.
+
+## Monthly report label rule
+
+For monthly reports shown in the frontend portal, backend content manager, and published Firestore records:
+
+- Always format report labels as `YYYY年MM月`
+- The month must be zero-padded, for example `2026年03月`, `2026年04月`, `2026年05月`
+- Use the same label format when creating or updating `portalMonthlyReports` documents, fallback UI labels, and any publish scripts
 
 ## Version sync rule
 
