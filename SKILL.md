@@ -34,6 +34,67 @@ After finishing the change:
 
 Do not leave website-affecting changes only in the local workspace unless the user explicitly says not to publish yet.
 
+## Publish workflow for GitHub and Firebase
+
+Use this release flow when the request touches frontend pages plus Firebase-backed admin behavior.
+
+### GitHub Pages release
+
+1. Finish the code change and verify the relevant page locally when feasible.
+2. Run `git status --short` and confirm only intended files are included.
+3. Stage only the required files.
+4. Commit with a focused message.
+5. Push to `origin main`.
+6. Tell the user the live GitHub Pages URL may need a hard refresh such as `Ctrl+F5`.
+
+### Firestore rules release
+
+If the change updates Firestore security rules, deploy them from the repository root:
+
+```powershell
+npx firebase-tools deploy --only firestore:rules --project pnj-compound-company-limited --non-interactive
+```
+
+### Firebase Functions release
+
+If the change updates callable Functions or Firebase-backed admin workflows, do not assume the repo-local `functions/node_modules` is healthy. This project lives in a deep Google Drive path, and local dependency installs can become incomplete.
+
+Preferred successful flow:
+
+1. Copy only the deployable Firebase files into a short temporary path such as `C:\pjdeploy`:
+   - `.firebaserc`
+   - `firebase.json`
+   - `functions/index.js`
+   - `functions/package.json`
+2. In `C:\pjdeploy\functions`, run:
+
+```powershell
+npm install
+```
+
+3. Deploy only the intended functions from `C:\pjdeploy` instead of deploying all functions blindly. This avoids non-interactive failure when Firebase finds an older cloud function that is not present in the local source.
+
+Example successful pattern:
+
+```powershell
+npx firebase-tools deploy --only "functions:approveShareholder,functions:setShareholderPassword,functions:setShareholderActive,functions:getShareholderAdminData,functions:getPortalAdminData,functions:getPortalAnnouncementsAdminData,functions:savePortalAnnouncement,functions:setPortalAnnouncementActive,functions:deletePortalAnnouncement" --project pnj-compound-company-limited --non-interactive
+```
+
+4. If Firebase reports that an old function exists in the project but not in local source, do not let non-interactive deploy abort the whole release. Either:
+   - deploy only the required functions with the `--only "functions:..."` pattern above, or
+   - explicitly delete the obsolete cloud function later in a separate step.
+
+### Admin announcement fix pattern
+
+For Firebase admin features such as portal announcements, prefer this architecture:
+
+1. Frontend admin page calls callable Functions.
+2. Functions enforce admin permission checks.
+3. Functions write to Firestore.
+4. Frontend portal reads published records for display.
+
+This is more reliable than letting the admin page write directly to Firestore when permission and token-claim behavior may vary.
+
 ## Monthly report label rule
 
 For monthly reports shown in the frontend portal, backend content manager, and published Firestore records:
