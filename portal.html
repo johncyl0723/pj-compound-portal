@@ -134,9 +134,9 @@
   @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
   @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
   @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
-  @keyframes orbit-spin { to{transform:rotate(360deg)} }
+  @keyframes orbit-spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
   @keyframes orbit-spin-reverse { to{transform:rotate(-360deg)} }
-  @keyframes logo-breathe { 0%,100%{transform:scale(.94);opacity:.84}50%{transform:scale(1.04);opacity:1} }
+  @keyframes logo-breathe { 0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.84}50%{transform:translate(-50%,-50%) scale(1.04);opacity:1} }
   @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
   @keyframes announcement-marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
   @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit-cluster,.home-logo,.home-logo img,.home-slogan,.announcement-track.playing { animation: none; stroke-dashoffset: 0; opacity: 1; } }
