@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260701-announcementlayout7';
+    var version = '20260701-announcementlayout8';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -87,10 +87,10 @@
   .login-btn { width: 100%; margin-top: 6px; padding: 12px; border: 0; border-radius: 8px; background: linear-gradient(135deg,var(--gold),var(--gold-dark)); color: #fff; cursor: pointer; font: inherit; font-weight: 700; letter-spacing: .8px; }
   .login-btn:hover { filter: brightness(1.08); }
   .welcome-error { min-height: 18px; color: #ff9b9b; font-size: 12px; text-align: center; }
-  .idle { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; overflow: hidden; padding: 32px; text-align: center; background: radial-gradient(circle at 56% 42%,rgba(30,87,142,.22),transparent 26%),linear-gradient(135deg,#120700,#2C1503); }
+  .idle { position: absolute; inset: 0; display: none; align-items: flex-start; justify-content: center; overflow-y: auto; overflow-x: hidden; padding: 32px; text-align: center; background: radial-gradient(circle at 56% 42%,rgba(30,87,142,.22),transparent 26%),linear-gradient(135deg,#120700,#2C1503); }
   .idle.visible { display: flex; }
   .home-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(rgba(227,181,75,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(227,181,75,.08) 1px,transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom,transparent,black 18%,black 82%,transparent); }
-  .idle-card { position: relative; z-index: 1; width: min(880px,92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .idle-card { position: relative; z-index: 1; width: min(880px,92vw); display: flex; flex-direction: column; align-items: center; gap: 14px; margin: auto 0; padding-bottom: 28px; }
   .home-kicker { color: #E3B54B; font-size: 11px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
   .home-title { color: #FFF7E8; font-size: clamp(24px,3vw,38px); letter-spacing: 1px; }
   .home-title span { color: #E3B54B; }
@@ -111,25 +111,32 @@
   .home-hint { color: #E8D5A0; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 14px rgba(227,181,75,.28); }
   .announcement-bar { width: 100%; display: none; flex-direction: column; align-items: stretch; gap: 14px; margin: 0 0 16px; padding: 18px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); box-shadow: inset 0 1px 0 rgba(255,255,255,.06),0 18px 34px rgba(0,0,0,.22); backdrop-filter: blur(12px); overflow: hidden; }
   .announcement-bar.visible { display: flex; }
-  .announcement-bar-legacy { display: none !important; }
   .announcement-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 2px; }
   .announcement-label { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 999px; background: linear-gradient(180deg,rgba(227,181,75,.26),rgba(227,181,75,.1)); color: #F7D67E; font-size: 12px; font-weight: 900; letter-spacing: 2.6px; text-transform: uppercase; box-shadow: inset 0 1px 0 rgba(255,255,255,.1),0 8px 18px rgba(0,0,0,.14); }
   .announcement-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #F7D67E; box-shadow: 0 0 12px rgba(247,214,126,.75); }
   .announcement-caption { color: rgba(255,247,232,.72); font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; }
+  .announcement-marquee { position: relative; overflow: hidden; margin: 2px 0 0; padding: 12px 14px; border-radius: 18px; border: 1px solid rgba(227,181,75,.12); background: linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); }
+  .announcement-marquee::before,
+  .announcement-marquee::after { content: ''; position: absolute; top: 0; bottom: 0; width: 36px; pointer-events: none; z-index: 1; }
+  .announcement-marquee::before { left: 0; background: linear-gradient(90deg,rgba(45,23,8,.95),rgba(45,23,8,0)); }
+  .announcement-marquee::after { right: 0; background: linear-gradient(270deg,rgba(45,23,8,.95),rgba(45,23,8,0)); }
+  .announcement-track { display: flex; width: max-content; align-items: center; gap: 12px; }
+  .announcement-track.playing { animation: announcement-scroll 38s linear infinite; }
+  .announcement-set { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .announcement-pill { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(227,181,75,.14); background: linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03)); color: #FFF7E8; box-shadow: inset 0 1px 0 rgba(255,255,255,.04); white-space: nowrap; }
+  .announcement-pill .announcement-date { flex-shrink: 0; font-size: 11px; letter-spacing: .8px; opacity: .9; }
+  .announcement-pill .announcement-text { font-size: 13px; line-height: 1.2; font-weight: 700; color: rgba(255,247,232,.96); white-space: nowrap; }
+  .announcement-separator { width: 6px; height: 6px; border-radius: 50%; background: rgba(247,214,126,.8); flex-shrink: 0; box-shadow: 0 0 10px rgba(247,214,126,.4); }
   .announcement-window { display: grid; gap: 12px; }
-  .announcement-feature { position: relative; display: grid; gap: 10px; padding: 18px 20px 20px; border-radius: 20px; border: 1px solid rgba(227,181,75,.14); background:
+  .announcement-feature { position: relative; display: grid; gap: 12px; padding: 18px 20px 20px; border-radius: 20px; border: 1px solid rgba(227,181,75,.14); background:
     radial-gradient(circle at top right,rgba(227,181,75,.14),transparent 34%),
     linear-gradient(180deg,rgba(58,31,12,.95),rgba(37,18,6,.92)); text-align: left; box-shadow: inset 0 1px 0 rgba(255,255,255,.04),0 12px 24px rgba(0,0,0,.18); }
   .announcement-feature::after { content: 'NOTICE'; position: absolute; right: 18px; top: 16px; color: rgba(255,255,255,.07); font-size: 24px; font-weight: 900; letter-spacing: 2px; }
   .announcement-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .announcement-feature-title { max-width: calc(100% - 84px); color: #FFF7E8; font-size: clamp(24px,2.5vw,40px); line-height: 1.28; font-weight: 900; letter-spacing: .4px; text-wrap: balance; }
   .announcement-date { color: #F5CE72; font-size: 13px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; opacity: .96; }
   .announcement-tag { padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,247,232,.88); font-size: 11px; font-weight: 700; letter-spacing: 1px; }
-  .announcement-text { font-size: clamp(18px,2vw,28px); line-height: 1.55; color: #FFF8EA; text-align: left; font-weight: 800; text-wrap: pretty; }
-  .announcement-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
-  .announcement-list:empty { display: none; }
-  .announcement-item { display: grid; align-content: start; gap: 6px; min-height: 108px; padding: 14px 14px 16px; border-radius: 16px; border: 1px solid rgba(227,181,75,.1); background: linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02)); color: #FFF7E8; text-align: left; box-shadow: inset 0 1px 0 rgba(255,255,255,.03); }
-  .announcement-item .announcement-date { font-size: 11px; letter-spacing: .8px; opacity: .86; }
-  .announcement-item .announcement-text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; line-height: 1.48; font-weight: 600; color: rgba(255,247,232,.92); }
+  .announcement-text { font-size: clamp(16px,1.45vw,21px); line-height: 1.72; color: rgba(255,248,234,.92); text-align: left; font-weight: 600; text-wrap: pretty; }
   .ai-partners { width: min(680px,86vw); margin-top: 24px; padding: 16px 16px 18px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
   .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
   .ai-partners-label span { color: #E3B54B; }
@@ -140,8 +147,8 @@
   .ai-partner-logo { max-width: 100%; max-height: 46px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.08)); }
   .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
   .ai-partner-card.antigravity .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: contain; filter: none; }
-  @media(max-width:900px){ .ai-partners { width: min(620px,88vw); margin-top: 20px; padding: 14px; } .announcement-bar { gap: 12px; padding: 16px; } .announcement-text { font-size: clamp(17px,2.6vw,24px); } .announcement-list { grid-template-columns: 1fr; } .announcement-item { min-height: auto; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: repeat(3,minmax(0,1fr)); } .ai-partner-card { min-height: 72px; } }
-  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .announcement-bar { margin-bottom: 12px; padding: 12px; border-radius: 20px; } .announcement-head { align-items: flex-start; flex-direction: column; gap: 8px; } .announcement-label { font-size: 11px; letter-spacing: 2px; } .announcement-caption { font-size: 10px; letter-spacing: 1px; } .announcement-feature { padding: 16px; border-radius: 18px; } .announcement-feature::after { top: 14px; right: 14px; font-size: 18px; } .announcement-date { font-size: 11px; } .announcement-text { font-size: 18px; line-height: 1.52; } .announcement-item { padding: 12px; border-radius: 14px; } .announcement-item .announcement-text { font-size: 13px; line-height: 1.42; -webkit-line-clamp: 3; } .ai-partners-row { gap: 8px; } .ai-partner-card { min-height: 64px; padding: 8px 10px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 36px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; object-fit: cover; } }
+  @media(max-width:900px){ .ai-partners { width: min(620px,88vw); margin-top: 20px; padding: 14px; } .announcement-bar { gap: 12px; padding: 16px; } .announcement-marquee { padding: 10px 12px; } .announcement-pill { min-height: 40px; padding: 9px 12px; } .announcement-pill .announcement-text { font-size: 12px; } .announcement-feature-title { max-width: 100%; font-size: clamp(21px,3.2vw,32px); } .announcement-text { font-size: clamp(15px,2vw,18px); } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: repeat(3,minmax(0,1fr)); } .ai-partner-card { min-height: 72px; } }
+  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .announcement-bar { margin-bottom: 12px; padding: 12px; border-radius: 20px; } .announcement-head { align-items: flex-start; flex-direction: column; gap: 8px; } .announcement-label { font-size: 11px; letter-spacing: 2px; } .announcement-caption { font-size: 10px; letter-spacing: 1px; } .announcement-marquee { padding: 9px 10px; border-radius: 16px; } .announcement-marquee::before,.announcement-marquee::after { width: 22px; } .announcement-pill { min-height: 38px; padding: 8px 11px; gap: 8px; } .announcement-pill .announcement-date { font-size: 10px; } .announcement-pill .announcement-text { font-size: 12px; } .announcement-feature { padding: 16px; border-radius: 18px; } .announcement-feature::after { top: 14px; right: 14px; font-size: 18px; } .announcement-feature-title { max-width: 100%; font-size: 24px; line-height: 1.32; } .announcement-date { font-size: 11px; } .announcement-text { font-size: 15px; line-height: 1.65; } .ai-partners-row { gap: 8px; } .ai-partner-card { min-height: 64px; padding: 8px 10px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 36px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; object-fit: cover; } }
   @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
   @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
   @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
@@ -149,7 +156,8 @@
   @keyframes orbit-spin-reverse { to{transform:rotate(-360deg)} }
   @keyframes logo-breathe { 0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.84}50%{transform:translate(-50%,-50%) scale(1.04);opacity:1} }
   @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
-  @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit-cluster,.home-logo,.home-logo img,.home-slogan { animation: none; stroke-dashoffset: 0; opacity: 1; } }
+  @keyframes announcement-scroll { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 6px)); } }
+  @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit-cluster,.home-logo,.home-logo img,.home-slogan,.announcement-track.playing { animation: none; stroke-dashoffset: 0; opacity: 1; } }
   /* Hamburger button */
   .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 40px; height: 40px; margin-right: 6px; padding: 8px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; flex-shrink: 0; }
   .hamburger span { display: block; width: 20px; height: 2px; background: rgba(255,255,255,.85); border-radius: 2px; transition: transform .25s,opacity .25s; }
@@ -277,9 +285,11 @@
               <div class="announcement-label">最新公告</div>
               <div class="announcement-caption">Latest Portfolio Updates</div>
             </div>
+            <div class="announcement-marquee" aria-label="最新公告跑馬燈">
+              <div class="announcement-track" id="announcement-track"></div>
+            </div>
             <div class="announcement-window">
               <div class="announcement-feature" id="announcement-feature"></div>
-              <div class="announcement-list" id="announcement-list"></div>
             </div>
           </div>
           <div class="ai-partners-label">Powered by <span>Claude Code / Codex / Antigravity</span></div>
@@ -303,12 +313,12 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout7';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout8';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260701-announcementlayout7';
+const APP_VERSION='20260701-announcementlayout8';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
@@ -343,7 +353,9 @@ function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate
 function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?`${date.getFullYear()} 年 ${date.getMonth()+1} 月 ${date.getDate()} 日`:'--/--'}
 function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}
 function splitAnnouncementMessage(message){const text=String(message||'').replace(/\r/g,'').trim();if(!text)return[];const lines=text.split(/\n+/).map(part=>part.trim()).filter(Boolean);if(lines.length>1)return lines;const numbered=text.replace(/\s+/g,' ').split(/(?=\d+[.\u3001]\s*)/).map(part=>part.trim()).filter(Boolean);return numbered.length>1?numbered:[text]}
-function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),feature=document.getElementById('announcement-feature'),list=document.getElementById('announcement-list');const segments=items.flatMap(item=>splitAnnouncementMessage(item.message).map((message,index)=>({noticeDate:item.noticeDate,message,key:`${item.id||item.noticeDate||'announcement'}-${index}`})));if(!segments.length){bar.classList.remove('visible');feature.innerHTML='';list.innerHTML='';return}const [latest,...others]=segments;feature.innerHTML=`<div class="announcement-meta"><span class="announcement-date">${formatAnnouncementDate(latest.noticeDate)} 公告</span><span class="announcement-tag">Latest Notice</span></div><div class="announcement-text">${latest.message}</div>`;list.innerHTML=others.slice(0,3).map(item=>`<div class="announcement-item" data-key="${item.key}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');bar.classList.add('visible')}
+function announcementTitle(item){const title=String(item?.title||'').trim();if(title)return title;const segments=splitAnnouncementMessage(item?.message||'');const fallback=String(segments[0]||'').replace(/^\d+[.\u3001]\s*/,'').trim();return fallback.length>28?`${fallback.slice(0,28)}…`:fallback||'未命名公告'}
+function announcementBody(item){const message=String(item?.message||'').replace(/\r/g,'').trim();return message||announcementTitle(item)}
+function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track'),feature=document.getElementById('announcement-feature');const entries=items.map(item=>({id:item.id||item.noticeDate||'announcement',noticeDate:item.noticeDate,title:announcementTitle(item),message:announcementBody(item)})).filter(item=>item.title||item.message);if(!entries.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';feature.innerHTML='';return}const [latest]=entries;const pills=entries.map((item,index)=>`<div class="announcement-pill" data-key="${item.id}-${index}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.title}</span></div>`);const marqueeContent=pills.map((pill,index)=>`${pill}${index<pills.length-1?'<span class="announcement-separator" aria-hidden="true"></span>':''}`).join('');track.innerHTML=entries.length>1?`<div class="announcement-set">${marqueeContent}</div><div class="announcement-set" aria-hidden="true">${marqueeContent}</div>`:`<div class="announcement-set">${marqueeContent}</div>`;track.classList.toggle('playing',entries.length>1);feature.innerHTML=`<div class="announcement-meta"><span class="announcement-date">${formatAnnouncementDate(latest.noticeDate)} 公告</span><span class="announcement-tag">Key Notice</span></div><div class="announcement-feature-title">${latest.title}</div><div class="announcement-text">${latest.message}</div>`;bar.classList.add('visible')}
 async function buildAnnouncements(){const snap=await getDocs(collection(db,'portalAnnouncements')),items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(item=>item.active!==false&&String(item.message||'').trim()).sort((a,b)=>announcementSortValue(b)-announcementSortValue(a)).slice(0,8);renderAnnouncements(items)}
 async function openStatement(el,statement){activateDocumentView(el);try{await presentDocument({...statement,contentType:statement.contentType||'application/pdf'})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
 async function openReport(el,report){activateDocumentView(el);try{await presentDocument(report)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}

@@ -220,10 +220,14 @@ exports.savePortalAnnouncement = onCall(callableOptions, async (request) => {
   assertAdmin(request);
   const id = String(request.data.id || "").trim();
   const noticeDate = String(request.data.noticeDate || "").trim();
+  const title = String(request.data.title || "").trim();
   const message = String(request.data.message || "").trim();
   const active = request.data.active;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(noticeDate)) {
     throw new HttpsError("invalid-argument", "請提供正確的公告日期。");
+  }
+  if (!title) {
+    throw new HttpsError("invalid-argument", "公告主題為必填欄位");
   }
   if (!message) {
     throw new HttpsError("invalid-argument", "請提供公告內容。");
@@ -238,6 +242,7 @@ exports.savePortalAnnouncement = onCall(callableOptions, async (request) => {
     db.collection("portalAnnouncements").doc();
   const payload = {
     noticeDate,
+    title,
     message,
     active,
     updatedAt: FieldValue.serverTimestamp(),
