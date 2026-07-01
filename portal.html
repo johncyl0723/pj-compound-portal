@@ -109,17 +109,20 @@
   .home-logo img { display: block; width: 100%; height: 100%; object-fit: contain; animation: orbit-spin-reverse 10s linear infinite; }
   .home-slogan { color: #FFF7E8; font-size: 21px; font-weight: 700; letter-spacing: 5px; text-shadow: 0 0 16px rgba(227,181,75,.4); animation: slogan-reveal 10s ease-in-out infinite; }
   .home-hint { color: #E8D5A0; font-size: 18px; font-weight: 700; letter-spacing: 1px; text-shadow: 0 0 14px rgba(227,181,75,.28); }
-  .announcement-bar { width: min(720px,86vw); display: none; align-items: center; gap: 12px; margin-top: 6px; padding: 12px 16px; border: 1px solid rgba(227,181,75,.18); border-radius: 18px; background: linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); box-shadow: inset 0 1px 0 rgba(255,255,255,.06),0 10px 24px rgba(0,0,0,.14); backdrop-filter: blur(8px); overflow: hidden; }
+  .announcement-bar { width: min(560px,78vw); display: none; flex-direction: column; align-items: stretch; gap: 10px; margin: -30px auto 12px; padding: 14px 16px 16px; border: 1px solid rgba(227,181,75,.18); border-radius: 22px; background: linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04)); box-shadow: inset 0 1px 0 rgba(255,255,255,.06),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(10px); overflow: hidden; }
   .announcement-bar.visible { display: flex; }
+  .announcement-bar-legacy { display: none !important; }
+  .announcement-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .announcement-label { flex-shrink: 0; padding: 6px 10px; border-radius: 999px; background: rgba(227,181,75,.16); color: #E3B54B; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; }
-  .announcement-window { position: relative; flex: 1; overflow: hidden; mask-image: linear-gradient(90deg,transparent,black 8%,black 92%,transparent); }
-  .announcement-track { display: flex; width: max-content; align-items: center; gap: 34px; }
-  .announcement-track.playing { animation: announcement-marquee 24s linear infinite; }
-  .announcement-set { display: flex; align-items: center; gap: 34px; padding-right: 34px; }
-  .announcement-item { display: inline-flex; align-items: center; gap: 10px; color: #FFF7E8; white-space: nowrap; }
-  .announcement-date { color: #E3B54B; font-size: 12px; font-weight: 700; letter-spacing: .4px; }
-  .announcement-text { font-size: 14px; }
-  .ai-partners { width: min(620px,84vw); margin-top: 22px; padding: 14px 14px 16px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
+  .announcement-caption { color: rgba(255,247,232,.68); font-size: 11px; letter-spacing: 1px; }
+  .announcement-window { position: relative; height: 68px; overflow: hidden; border-radius: 16px; border: 1px solid rgba(227,181,75,.12); background: rgba(36,15,3,.34); mask-image: linear-gradient(180deg,transparent,black 12%,black 88%,transparent); }
+  .announcement-track { display: flex; flex-direction: column; width: 100%; }
+  .announcement-track.playing { animation: announcement-vertical 18s linear infinite; }
+  .announcement-set { display: flex; flex-direction: column; }
+  .announcement-item { min-height: 68px; display: grid; align-content: center; gap: 4px; padding: 12px 16px; color: #FFF7E8; }
+  .announcement-date { color: #E3B54B; font-size: 12px; font-weight: 700; letter-spacing: .6px; }
+  .announcement-text { font-size: 14px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ai-partners { width: min(620px,84vw); margin-top: 34px; padding: 44px 14px 16px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
   .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
   .ai-partners-label span { color: #E3B54B; }
   .ai-partners-row { display: grid; width: 100%; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
@@ -138,7 +141,7 @@
   @keyframes orbit-spin-reverse { to{transform:rotate(-360deg)} }
   @keyframes logo-breathe { 0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.84}50%{transform:translate(-50%,-50%) scale(1.04);opacity:1} }
   @keyframes slogan-reveal { 0%,54%{opacity:0;transform:translateY(10px)}70%,94%{opacity:1;transform:translateY(0)}100%{opacity:0} }
-  @keyframes announcement-marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  @keyframes announcement-vertical { from{transform:translateY(0)} to{transform:translateY(-50%)} }
   @media (prefers-reduced-motion: reduce) { .chart-line,.chart-glow,.chart-area,.data-node,.orbit-cluster,.home-logo,.home-logo img,.home-slogan,.announcement-track.playing { animation: none; stroke-dashoffset: 0; opacity: 1; } }
   /* Hamburger button */
   .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 40px; height: 40px; margin-right: 6px; padding: 8px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; flex-shrink: 0; }
@@ -201,11 +204,12 @@
     .home-hint { font-size: 13px; }
     .desktop-hint { display: none; }
     .mobile-hint { display: inline; }
-    .announcement-bar { width: min(100%,360px); flex-direction: column; align-items: stretch; gap: 8px; padding: 12px; border-radius: 20px; }
-    .announcement-label { align-self: flex-start; }
-    .announcement-window { mask-image: linear-gradient(90deg,transparent,black 4%,black 96%,transparent); }
+    .announcement-bar { width: min(100%,360px); margin: -20px auto 10px; padding: 12px; border-radius: 20px; }
+    .announcement-head { align-items: flex-start; flex-direction: column; gap: 6px; }
+    .announcement-window { height: 74px; mask-image: linear-gradient(180deg,transparent,black 8%,black 92%,transparent); }
+    .announcement-item { min-height: 74px; padding: 12px 14px; }
     .announcement-text { font-size: 13px; }
-    .ai-partners { width: min(100%,360px); margin-top: 10px; padding: 12px; border-radius: 20px; }
+    .ai-partners { width: min(100%,360px); margin-top: 26px; padding: 34px 12px 12px; border-radius: 20px; }
   }
 </style>
 </head>
@@ -330,7 +334,7 @@ async function buildStatements(){const el=document.getElementById('sub-statement
 function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate==='function')return value.toDate();if(value instanceof Date)return value;const normalized=/^\d{4}-\d{2}-\d{2}$/.test(String(value))?`${value}T00:00:00`:value;const parsed=new Date(normalized);return Number.isNaN(parsed.getTime())?null:parsed}
 function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?announcementDateFormatter.format(date):'--/--'}
 function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}
-function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');if(!items.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=items.map(item=>`<div class="announcement-item"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`;bar.classList.add('visible');track.classList.add('playing')}
+function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');if(!items.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=items.map(item=>`<div class="announcement-item"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=items.length>1?`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`:`<div class="announcement-set">${content}</div>`;bar.classList.add('visible');track.classList.toggle('playing',items.length>1)}
 async function buildAnnouncements(){const snap=await getDocs(collection(db,'portalAnnouncements')),items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(item=>item.active!==false&&String(item.message||'').trim()).sort((a,b)=>announcementSortValue(b)-announcementSortValue(a)).slice(0,8);renderAnnouncements(items)}
 async function openStatement(el,statement){activateDocumentView(el);try{await presentDocument({...statement,contentType:statement.contentType||'application/pdf'})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
 async function openReport(el,report){activateDocumentView(el);try{await presentDocument(report)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
