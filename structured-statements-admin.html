@@ -27,6 +27,15 @@
           <div class="group"><label>月份</label><select id="statement-month"></select></div>
           <div class="group"><label>股東</label><select id="editor-shareholder"></select></div>
         </div>
+        <div class="group" style="margin-bottom:12px">
+          <label>Excel 批次匯入</label>
+          <div class="row" style="margin-bottom:0">
+            <input id="statement-import-file" type="file" accept=".xlsx,.xlsm,.xls" style="flex:1">
+            <button class="btn alt" type="button" onclick="importWorkbookDraft()">匯入 Excel 並存成草稿</button>
+          </div>
+          <div class="notice">系統會依 Excel 內的股東戶號與截止日，自動對應目前月份的股東資料，並寫入資料化持股對帳單。</div>
+          <div class="status" id="import-status"></div>
+        </div>
         <div class="summary" id="editor-summary"></div>
         <div class="row">
           <div class="group"><label>報告性質</label><input id="statement-report-type"></div>
@@ -80,6 +89,7 @@
   </div>
 </main>
 <div class="build-badge" id="build-badge">Structured</div>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module">
 import { auth, db, functions } from './firebase-portal.js?v=20260630-announcementfix1';
 import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260701-structuredstatement1';
@@ -87,7 +97,7 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https:/
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
-const APP_VERSION = '20260701-structured-page1';
+const APP_VERSION = '20260702-structured-import1';
 const getShareholderAdminData = httpsCallable(functions, 'getShareholderAdminData');
 let shareholderDocs = [], draftDocs = [], statementDocs = [], editingStatementUid = '';
 const $ = (id) => document.getElementById(id);
@@ -232,6 +242,201 @@ function collectRows(kind) {
   }, []).filter(Boolean);
 }
 
+function textValue(value) {
+  return String(value ?? '').trim();
+}
+
+function numericValue(value) {
+  if (value === null || value === undefined || value === '') return '';
+  const parsed = Number(String(value).replace(/,/g, '').trim());
+  return Number.isFinite(parsed) ? String(parsed) : '';
+}
+
+function percentValue(value) {
+  const num = Number(numericValue(value));
+  if (!Number.isFinite(num)) return '';
+  const scaled = Math.abs(num) <= 1 ? num * 100 : num;
+  return String(Number(scaled.toFixed(6)));
+}
+
+function dateValue(value) {
+  if (!value) return '';
+  if (value instanceof Date && !Number.isNaN(value.getTime())) return value.toISOString().slice(0, 10);
+  const text = textValue(value);
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) return text.slice(0, 10);
+  if (/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(text)) {
+    const [y, m, d] = text.split('/');
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  return '';
+}
+
+function composeImportedName(parts) {
+  const values = parts.map((part) => textValue(part)).filter(Boolean);
+  if (!values.length) return '';
+  if (values.length >= 4 && values[0].includes('登記為') && values[values.length - 1] === ')') {
+    return `${values[0]}${values.slice(1, -1).join('、')})`;
+  }
+  return values.join('');
+}
+
+function normalizeImportedCode(prefix, seq) {
+  return `${textValue(prefix)}${textValue(seq)}`.replace(/[-\s]/g, '').toUpperCase();
+}
+
+function normalizeShareClass(raw) {
+  const text = textValue(raw).toUpperCase();
+  if (text.includes('_CS') || text.endsWith('CS')) return 'CS';
+  if (text.includes('_PS') || text.endsWith('PS')) return 'PS';
+  return text || 'PS';
+}
+
+function findSheetRow(rows, label) {
+  return rows.findIndex((row) => textValue(row?.[0]) === label);
+}
+
+function readSheet(sheetName, sheet) {
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: null });
+  const nameRow = findSheetRow(rows, '股東姓名_Name：');
+  const codeRow = findSheetRow(rows, '股東戶號_CIN：');
+  const currencyRow = findSheetRow(rows, '報告幣別_Currency:');
+  const reportTypeRow = findSheetRow(rows, '報告性質_Attributes：');
+  const shareClassRow = findSheetRow(rows, '持股份總類：');
+  const contributionHeaderRow = findSheetRow(rows, '股東名稱');
+  const notesHeaderRow = findSheetRow(rows, '說明事項_Explanatory Notes');
+  const endDateRow = rows.findIndex((row) => textValue(row?.[0]).includes('End Date'));
+  const navRow = rows.findIndex((row) => textValue(row?.[0]).includes('每單位淨值'));
+  if ([nameRow, codeRow, currencyRow, reportTypeRow, shareClassRow, contributionHeaderRow, notesHeaderRow, endDateRow, navRow].some((index) => index < 0)) {
+    throw new Error(`${sheetName} 缺少必要欄位，無法匯入。`);
+  }
+
+  const shareholderName = composeImportedName(rows[nameRow].slice(1, 6));
+  const shareholderCode = normalizeImportedCode(rows[codeRow][1], rows[codeRow][2]);
+  const endDate = dateValue(rows[endDateRow][1]);
+  if (!shareholderCode) throw new Error(`${sheetName} 找不到股東戶號。`);
+  if (!endDate) throw new Error(`${sheetName} 找不到截止日。`);
+
+  const dividendRows = [];
+  for (let offset = 0; offset < 4; offset += 1) {
+    const row = rows[shareClassRow + offset] || [];
+    const year = textValue(row[3]);
+    const amount = numericValue(row[4]);
+    const method = textValue(row[5]);
+    if (year || amount || method) dividendRows.push({ year, amount, method, sortOrder: dividendRows.length + 1 });
+  }
+
+  const contributionRows = [];
+  for (let index = contributionHeaderRow + 1; index < notesHeaderRow; index += 1) {
+    const row = rows[index] || [];
+    const rowName = textValue(row[0]);
+    const fundedAmount = numericValue(row[1]);
+    const contributionDate = dateValue(row[2]);
+    const navDate = dateValue(row[3]);
+    const navDateLabel = navDate ? '' : textValue(row[3]);
+    const buyNavPerUnit = numericValue(row[4]);
+    const unitsAcquired = numericValue(row[5]);
+    const remark = textValue(row[6]);
+    const hasValues = [rowName, fundedAmount, contributionDate, navDateLabel, navDate, buyNavPerUnit, unitsAcquired, remark].some(Boolean);
+    const isSummaryRow = !rowName && fundedAmount && unitsAcquired;
+    if (!hasValues || isSummaryRow) continue;
+    contributionRows.push({
+      shareholderName: rowName || shareholderName,
+      fundedAmount,
+      contributionDate,
+      navDateLabel,
+      navDate,
+      buyNavPerUnit,
+      unitsAcquired,
+      remark,
+      sortOrder: contributionRows.length + 1,
+    });
+  }
+
+  const notes = [];
+  for (let index = notesHeaderRow + 1; index < rows.length; index += 1) {
+    const note = textValue(rows[index]?.[0]);
+    if (note) notes.push(note);
+  }
+
+  return {
+    monthId: endDate.slice(0, 7).replace('-', ''),
+    payload: {
+      renderMode: 'structured-html',
+      contentType: 'text/html',
+      templateVersion: 1,
+      year: endDate.slice(0, 4),
+      month: endDate.slice(5, 7),
+      label: `${endDate.slice(0, 4)} 年${endDate.slice(5, 7)} 月`,
+      shareholderCode,
+      shareholderName,
+      shareClass: normalizeShareClass(rows[shareClassRow][1]),
+      currency: textValue(rows[currencyRow][1]) || 'USD',
+      reportType: textValue(rows[reportTypeRow][1]) || '股東持有權益份額報告書',
+      endDate,
+      navPerUnit: numericValue(rows[navRow][1]),
+      investedAmountUsd: numericValue((rows[shareClassRow + 1] || [])[1]),
+      unitsHeld: numericValue((rows[shareClassRow + 2] || [])[1]),
+      ownershipPercent: percentValue((rows[shareClassRow + 3] || [])[1]),
+      marketValueUsd: numericValue((rows[shareClassRow + 4] || [])[1]),
+      gainUsd: numericValue((rows[shareClassRow + 5] || [])[1]),
+      returnRatePercent: percentValue((rows[shareClassRow + 6] || [])[1]),
+      dividendRows,
+      contributionRows,
+      notes,
+    },
+  };
+}
+
+function parseWorkbookSheets(workbook) {
+  return workbook.SheetNames.map((sheetName) => readSheet(sheetName, workbook.Sheets[sheetName]));
+}
+
+async function parseWorkbookFile(file) {
+  if (!window.XLSX) throw new Error('Excel 解析器尚未載入完成，請稍後再試。');
+  const workbook = XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: true });
+  return parseWorkbookSheets(workbook);
+}
+
+function parseWorkbookBinaryString(binary) {
+  if (!window.XLSX) throw new Error('Excel 解析器尚未載入完成，請稍後再試。');
+  return parseWorkbookSheets(XLSX.read(binary, { type: 'binary', cellDates: true }));
+}
+
+async function importWorkbookDraft() {
+  const file = $('statement-import-file').files?.[0];
+  if (!file) return setStatus('import-status', '請先選擇 Excel 檔案。', 'error');
+  setStatus('import-status', '正在解析 Excel 並準備匯入...', '');
+  try {
+    const parsedSheets = await parseWorkbookFile(file);
+    const monthIds = [...new Set(parsedSheets.map((item) => item.monthId))];
+    if (monthIds.length !== 1 || monthIds[0] !== statementMonthId()) {
+      throw new Error(`Excel 截止月份為 ${monthIds.join('、')}，請先把頁面月份切換成相同月份再匯入。`);
+    }
+
+    const ownersByCode = new Map(shareholderDocs.filter((owner) => owner.active !== false).map((owner) => [owner.shareholderCode, owner]));
+    const missingCodes = parsedSheets.map((item) => item.payload.shareholderCode).filter((code) => !ownersByCode.has(code));
+    if (missingCodes.length) throw new Error(`找不到已建立的股東戶號：${missingCodes.join('、')}`);
+
+    for (const item of parsedSheets) {
+      const owner = ownersByCode.get(item.payload.shareholderCode);
+      const existing = statementFor(owner.uid);
+      const nextStatus = existing?.status || (isPublishedStatement(existing) ? 'published' : 'draft');
+      await setDoc(doc(db, 'statements', owner.uid, 'months', item.monthId), {
+        ...item.payload,
+        status: nextStatus,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+    }
+
+    $('statement-import-file').value = '';
+    await loadData();
+    setStatus('import-status', `已完成 ${parsedSheets.length} 位股東的 Excel 匯入，資料已保存為目前月份內容。`, 'ok');
+    setStatus('editor-status', 'Excel 匯入完成，已同步更新編輯器。', 'ok');
+  } catch (e) {
+    setStatus('import-status', `匯入失敗：${e.message}`, 'error');
+  }
+}
+
 function collectStatementForm() {
   const owner = editorOwner();
   if (!owner) throw new Error('請先選擇股東。');
@@ -356,7 +561,7 @@ $('statement-year').addEventListener('change', loadData);
 $('statement-month').addEventListener('change', loadData);
 $('editor-shareholder').addEventListener('change', (e) => loadStatementEditor(e.target.value));
 $('build-badge').textContent = `Structured ${APP_VERSION}`;
-Object.assign(window, { adminLogin, adminLogout, saveStatementDraft, publishStatement, previewEditorStatement, resetStatementEditor, addDividendRow, removeDividendRow, addContributionRow, removeContributionRow });
+Object.assign(window, { adminLogin, adminLogout, saveStatementDraft, publishStatement, previewEditorStatement, resetStatementEditor, addDividendRow, removeDividendRow, addContributionRow, removeContributionRow, importWorkbookDraft, parseWorkbookFile, parseWorkbookBinaryString });
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
   try {

@@ -15,5 +15,19 @@
   },
   "functions": {
     "source": "functions"
+  },
+  "hosting": {
+    "site": "pnj-compound-company-limited",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "tools/**",
+      "tmp/**",
+      "_portal_script_check.js",
+      "taiwanindex_tip_fund_mapping_2026-07-01.csv"
+    ]
   }
 }
