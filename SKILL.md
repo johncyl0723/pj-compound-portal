@@ -117,3 +117,79 @@ When debugging “I still see the old page” or “your version is different fr
 
 Before committing, review `git status` and avoid bundling unrelated changes.
 If there are unrelated local edits you did not make, do not revert them; commit only the files needed for the requested website fix.
+
+## Structured statement admin guardrails
+
+Use these checks whenever touching `structured-statements-admin.html`, `firebase-admin.html`, `functions/index.js`, or shareholder statement imports.
+
+### Data flow checklist
+
+Before concluding that "the import failed", verify all three layers separately:
+
+1. Firestore layer
+   - Read one known document directly from `statements/{uid}/months/{yyyymm}` and confirm fields such as `renderMode`, `shareholderName`, `navPerUnit`, and `ownershipPercent` are present.
+2. Callable function layer
+   - Verify `getShareholderAdminData` returns the matching statement in its `statements` array for the same month.
+   - Verify each shareholder entry includes a stable identifier usable by the frontend. Prefer returning `uid: doc.id` explicitly for `shareholders`.
+3. Frontend layer
+   - Verify the admin page version marker matches the expected build.
+   - Verify the selected shareholder id used by the dropdown can actually match the ids inside `statementDocs`.
+
+Do not stop after checking only Firestore. This project already had a real failure mode where Firestore data existed, the page was on the newest build, but the callable function omitted `uid`, so the frontend could not match shareholder rows to statement rows and silently fell back to blank defaults.
+
+### ID mapping rule
+
+For all admin/shareholder payloads:
+
+- Treat Firestore document ids as first-class data, not implicit metadata.
+- When returning shareholder docs from Functions, include `uid: doc.id`.
+- In frontend admin pages, use a helper pattern equivalent to `uid || id` when matching records, so the UI remains tolerant during mixed-version rollouts.
+
+Whenever a page uses shareholder dropdown option values, `statementFor(uid)`, account management actions, or publish/upload actions, verify they all use the same id source.
+
+### Import parsing rule
+
+For Excel statement imports:
+
+- Do not assume the workbook is flat/tabular. This project uses one worksheet per shareholder with report-style layout.
+- Skip summary rows such as total lines instead of importing them as contribution rows.
+- Normalize percentage fields into display-ready percent values if the frontend expects `7.11` rather than `0.0711`.
+- Handle exceptional name layouts such as `王慶煌(登記為：...)` explicitly instead of assuming a single-cell name.
+
+### Deploy rule for admin workflow changes
+
+If a fix touches both frontend admin pages and callable function behavior, deploy both:
+
+1. Firebase Functions
+2. Firebase Hosting
+
+Do not assume a Hosting deploy is enough when the bug involves data loading, and do not assume a Functions deploy is enough when the page contains versioned client logic.
+
+### Post-deploy verification rule
+
+After deploying a statement-admin fix, always verify in this order:
+
+1. The target page URL returns `200`.
+2. The live HTML contains the expected build/version string.
+3. One known Firestore statement document exists.
+4. One known shareholder can load non-empty fields in the live admin UI.
+
+Use `CS001` or another known shareholder as a canary record.
+
+### Release hygiene rule
+
+This repo commonly accumulates transient files such as `.firebase/`, `tmp/`, `_portal_script_check.js`, and local CSV scratch files.
+
+Before commit or deploy, confirm these are not accidentally staged unless the change explicitly requires them.
+
+### Git lock recovery rule
+
+This workspace can leave behind `.git/packed-refs.lock` or `.git/index.lock` after a successful commit with a noisy cleanup failure.
+
+If `git commit` succeeds but prints a lock-file error:
+
+1. Verify the commit actually exists with `git log -1 --oneline`
+2. Remove only the stale lock file
+3. Continue with push
+
+Do not re-run the same commit blindly before checking whether the commit already landed.
