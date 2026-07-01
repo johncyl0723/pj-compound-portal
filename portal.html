@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260701-announcementlayout2';
+    var version = '20260701-announcementlayout3';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -295,12 +295,12 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout2';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout3';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260701-announcementlayout2';
+const APP_VERSION='20260701-announcementlayout3';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
@@ -335,7 +335,6 @@ function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate
 function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?announcementDateFormatter.format(date):'--/--'}
 function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}
 function splitAnnouncementMessage(message){const text=String(message||'').replace(/\r/g,'').trim();if(!text)return[];const lines=text.split(/\n+/).map(part=>part.trim()).filter(Boolean);if(lines.length>1)return lines;const numbered=text.replace(/\s+/g,' ').split(/(?=\d+[.\u3001]\s*)/).map(part=>part.trim()).filter(Boolean);return numbered.length>1?numbered:[text]}
-function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');if(!items.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=items.map(item=>`<div class="announcement-item"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=items.length>1?`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`:`<div class="announcement-set">${content}</div>`;bar.classList.add('visible');track.classList.toggle('playing',items.length>1)}
 function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');const segments=items.flatMap(item=>splitAnnouncementMessage(item.message).map((message,index)=>({noticeDate:item.noticeDate,message,key:`${item.id||item.noticeDate||'announcement'}-${index}`})));if(!segments.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=segments.map(item=>`<div class="announcement-item" data-key="${item.key}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=segments.length>1?`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`:`<div class="announcement-set">${content}</div>`;bar.classList.add('visible');track.classList.toggle('playing',segments.length>1)}
 async function buildAnnouncements(){const snap=await getDocs(collection(db,'portalAnnouncements')),items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(item=>item.active!==false&&String(item.message||'').trim()).sort((a,b)=>announcementSortValue(b)-announcementSortValue(a)).slice(0,8);renderAnnouncements(items)}
 async function openStatement(el,statement){activateDocumentView(el);try{await presentDocument({...statement,contentType:statement.contentType||'application/pdf'})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
