@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260701-announcementlayout3';
+    var version = '20260701-announcementlayout4';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -119,9 +119,9 @@
   .announcement-track { display: flex; flex-direction: column; width: 100%; }
   .announcement-track.playing { animation: announcement-vertical 20s linear infinite; }
   .announcement-set { display: flex; flex-direction: column; }
-  .announcement-item { min-height: 138px; display: grid; align-content: start; gap: 10px; padding: 16px 18px; color: #FFF7E8; }
+  .announcement-item { min-height: 138px; display: grid; align-content: start; gap: 10px; padding: 16px 18px; color: #FFF7E8; text-align: left; }
   .announcement-date { color: #E3B54B; font-size: 12px; font-weight: 700; letter-spacing: .6px; }
-  .announcement-text { font-size: 15px; line-height: 1.72; color: rgba(255,247,232,.94); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .announcement-text { font-size: 15px; line-height: 1.72; color: rgba(255,247,232,.94); text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   .ai-partners { width: min(680px,86vw); margin-top: 24px; padding: 16px 16px 18px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
   .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
   .ai-partners-label span { color: #E3B54B; }
@@ -295,12 +295,12 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout3';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout4';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260701-announcementlayout3';
+const APP_VERSION='20260701-announcementlayout4';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
@@ -332,10 +332,10 @@ async function buildReports(){const el=document.getElementById('sub-reports');el
 async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.title||'').localeCompare(String(b.title||''))),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
 async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||formatMonthLabel(s.year,s.month)}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
 function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate==='function')return value.toDate();if(value instanceof Date)return value;const normalized=/^\d{4}-\d{2}-\d{2}$/.test(String(value))?`${value}T00:00:00`:value;const parsed=new Date(normalized);return Number.isNaN(parsed.getTime())?null:parsed}
-function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?announcementDateFormatter.format(date):'--/--'}
+function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?`${date.getFullYear()} 年 ${date.getMonth()+1} 月 ${date.getDate()} 日`:'--/--'}
 function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}
 function splitAnnouncementMessage(message){const text=String(message||'').replace(/\r/g,'').trim();if(!text)return[];const lines=text.split(/\n+/).map(part=>part.trim()).filter(Boolean);if(lines.length>1)return lines;const numbered=text.replace(/\s+/g,' ').split(/(?=\d+[.\u3001]\s*)/).map(part=>part.trim()).filter(Boolean);return numbered.length>1?numbered:[text]}
-function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');const segments=items.flatMap(item=>splitAnnouncementMessage(item.message).map((message,index)=>({noticeDate:item.noticeDate,message,key:`${item.id||item.noticeDate||'announcement'}-${index}`})));if(!segments.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=segments.map(item=>`<div class="announcement-item" data-key="${item.key}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=segments.length>1?`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`:`<div class="announcement-set">${content}</div>`;bar.classList.add('visible');track.classList.toggle('playing',segments.length>1)}
+function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track');const segments=items.flatMap(item=>splitAnnouncementMessage(item.message).map((message,index)=>({noticeDate:item.noticeDate,message,key:`${item.id||item.noticeDate||'announcement'}-${index}`,showDate:index===0})));if(!segments.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';return}const content=segments.map(item=>`<div class="announcement-item" data-key="${item.key}">${item.showDate?`<span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span>`:''}<span class="announcement-text">${item.message}</span></div>`).join('');track.innerHTML=segments.length>1?`<div class="announcement-set">${content}</div><div class="announcement-set" aria-hidden="true">${content}</div>`:`<div class="announcement-set">${content}</div>`;bar.classList.add('visible');track.classList.toggle('playing',segments.length>1)}
 async function buildAnnouncements(){const snap=await getDocs(collection(db,'portalAnnouncements')),items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(item=>item.active!==false&&String(item.message||'').trim()).sort((a,b)=>announcementSortValue(b)-announcementSortValue(a)).slice(0,8);renderAnnouncements(items)}
 async function openStatement(el,statement){activateDocumentView(el);try{await presentDocument({...statement,contentType:statement.contentType||'application/pdf'})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
 async function openReport(el,report){activateDocumentView(el);try{await presentDocument(report)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
