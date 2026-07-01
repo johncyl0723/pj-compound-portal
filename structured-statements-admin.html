@@ -104,6 +104,7 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const isBootstrapAdminEmail = (user) => String(user?.email || '').trim().toLowerCase() === 'john.cyl@gmail.com';
 const hasPortalAdminAccess = (token, user) => token?.claims?.admin === true || isBootstrapAdminEmail(user);
+const shareholderUid = (entry) => String(entry?.uid || entry?.id || '');
 
 function setStatus(id, text, type = '') {
   const el = $(id);
@@ -113,10 +114,10 @@ function setStatus(id, text, type = '') {
 
 function statementMonthId() { return $('statement-year').value + $('statement-month').value; }
 function statementLabel() { return `${$('statement-year').value} 年${$('statement-month').value} 月`; }
-function statementFor(uid) { return statementDocs.find((s) => s.uid === uid); }
+function statementFor(uid) { return statementDocs.find((s) => shareholderUid(s) === uid); }
 function isPublishedStatement(st) { return !!st && (st.status === 'published' || (!st.status && st.publishedAt)); }
 function hasEditableStatement(st) { return !!st && (hasStatementStructuredData(st) || st.renderMode === 'structured-html'); }
-function editorOwner() { return shareholderDocs.find((s) => s.uid === editingStatementUid) || shareholderDocs.find((s) => s.uid === $('editor-shareholder').value) || null; }
+function editorOwner() { return shareholderDocs.find((s) => shareholderUid(s) === editingStatementUid) || shareholderDocs.find((s) => shareholderUid(s) === $('editor-shareholder').value) || null; }
 
 function adminLoginErrorMessage(error) {
   switch (error?.code) {
@@ -157,7 +158,7 @@ function defaultStatementData(owner) {
 
 function renderTopSummary() {
   const active = shareholderDocs.filter((s) => s.active !== false);
-  const published = active.filter((s) => isPublishedStatement(statementFor(s.uid))).length;
+  const published = active.filter((s) => isPublishedStatement(statementFor(shareholderUid(s)))).length;
   $('top-summary').innerHTML = [
     `<span>月份 ${statementLabel()}</span>`,
     `<span>股東 ${active.length} 位</span>`,
@@ -176,11 +177,11 @@ function setEditorSummary(owner, st) {
 
 function renderEditorShareholders() {
   const active = shareholderDocs.filter((s) => s.active !== false).sort((a, b) => a.shareholderCode.localeCompare(b.shareholderCode));
-  $('editor-shareholder').innerHTML = active.map((s) => `<option value="${esc(s.uid)}">${esc(s.shareholderCode)} ${esc(s.displayName)}</option>`).join('');
-  if (editingStatementUid && active.some((s) => s.uid === editingStatementUid)) $('editor-shareholder').value = editingStatementUid;
+  $('editor-shareholder').innerHTML = active.map((s) => `<option value="${esc(shareholderUid(s))}">${esc(s.shareholderCode)} ${esc(s.displayName)}</option>`).join('');
+  if (editingStatementUid && active.some((s) => shareholderUid(s) === editingStatementUid)) $('editor-shareholder').value = editingStatementUid;
   else if (active[0]) {
-    $('editor-shareholder').value = active[0].uid;
-    editingStatementUid = active[0].uid;
+    $('editor-shareholder').value = shareholderUid(active[0]);
+    editingStatementUid = shareholderUid(active[0]);
   }
 }
 
@@ -215,7 +216,7 @@ function fillStatementEditor(data) {
 function loadStatementEditor(uid) {
   editingStatementUid = uid;
   $('editor-shareholder').value = uid;
-  const owner = shareholderDocs.find((s) => s.uid === uid);
+  const owner = shareholderDocs.find((s) => shareholderUid(s) === uid);
   const current = statementFor(uid);
   const data = hasEditableStatement(current) ? normalizeStatementData(current) : defaultStatementData(owner);
   setEditorSummary(owner, current);
@@ -419,9 +420,10 @@ async function importWorkbookDraft() {
 
     for (const item of parsedSheets) {
       const owner = ownersByCode.get(item.payload.shareholderCode);
-      const existing = statementFor(owner.uid);
+      const ownerUid = shareholderUid(owner);
+      const existing = statementFor(ownerUid);
       const nextStatus = existing?.status || (isPublishedStatement(existing) ? 'published' : 'draft');
-      await setDoc(doc(db, 'statements', owner.uid, 'months', item.monthId), {
+      await setDoc(doc(db, 'statements', ownerUid, 'months', item.monthId), {
         ...item.payload,
         status: nextStatus,
         updatedAt: serverTimestamp(),
@@ -481,8 +483,9 @@ async function saveStatement(status = 'draft') {
   let payload;
   try { payload = collectStatementForm(); } catch (e) { setStatus('editor-status', e.message, 'error'); return; }
   const owner = editorOwner();
+  const ownerUid = shareholderUid(owner);
   setStatus('editor-status', `正在保存 ${owner.shareholderCode} 的資料...`);
-  await setDoc(doc(db, 'statements', owner.uid, 'months', statementMonthId()), {
+  await setDoc(doc(db, 'statements', ownerUid, 'months', statementMonthId()), {
     ...payload,
     status,
     publishedAt: status === 'published' ? serverTimestamp() : null,
@@ -502,10 +505,10 @@ async function loadData() {
   statementDocs = result.statements || [];
   renderTopSummary();
   renderEditorShareholders();
-  if (editingStatementUid && shareholderDocs.some((s) => s.uid === editingStatementUid)) loadStatementEditor(editingStatementUid);
+  if (editingStatementUid && shareholderDocs.some((s) => shareholderUid(s) === editingStatementUid)) loadStatementEditor(editingStatementUid);
   else {
     const firstActive = shareholderDocs.find((s) => s.active !== false);
-    if (firstActive) loadStatementEditor(firstActive.uid);
+    if (firstActive) loadStatementEditor(shareholderUid(firstActive));
   }
 }
 

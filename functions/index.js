@@ -73,7 +73,7 @@ async function getShareholderAdminPayload(monthId) {
   const shareholdersSnap = await db.collection("shareholders").get();
   const draftsSnap = await db.collection("shareholderDrafts").get();
   const shareholders = shareholdersSnap.docs
-      .map(serializeDoc)
+      .map((doc) => ({uid: doc.id, ...serializeValue(doc.data())}))
       .sort((a, b) => String(a.shareholderCode || "").localeCompare(String(b.shareholderCode || "")));
   const drafts = draftsSnap.docs
       .map(serializeDoc)
