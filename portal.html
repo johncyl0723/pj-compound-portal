@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260701-announcementlayout5';
+    var version = '20260701-announcementlayout6';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -115,13 +115,13 @@
   .announcement-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 2px; }
   .announcement-label { flex-shrink: 0; padding: 5px 12px; border-radius: 999px; background: linear-gradient(180deg,rgba(227,181,75,.22),rgba(227,181,75,.12)); color: #F0C96A; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
   .announcement-caption { color: rgba(255,247,232,.58); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; }
-  .announcement-window { position: relative; height: 120px; overflow: hidden; border-radius: 16px; border: 1px solid rgba(227,181,75,.1); background: linear-gradient(180deg,rgba(32,15,5,.5),rgba(71,42,17,.26)); }
+  .announcement-window { position: relative; height: 108px; overflow: hidden; border-radius: 16px; border: 1px solid rgba(227,181,75,.1); background: linear-gradient(180deg,rgba(32,15,5,.5),rgba(71,42,17,.26)); }
   .announcement-track { display: flex; flex-direction: column; width: 100%; }
   .announcement-track.playing { animation: announcement-vertical 20s linear infinite; }
   .announcement-set { display: flex; flex-direction: column; }
-  .announcement-item { min-height: 120px; display: grid; align-content: start; gap: 4px; padding: 10px 14px; color: #FFF7E8; text-align: left; }
+  .announcement-item { display: grid; align-content: start; gap: 2px; padding: 8px 14px 6px; color: #FFF7E8; text-align: left; }
   .announcement-date { color: #F0C96A; font-size: 11px; font-weight: 700; letter-spacing: .9px; text-transform: uppercase; opacity: .92; }
-  .announcement-text { font-size: 14px; line-height: 1.48; color: rgba(255,247,232,.95); text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .announcement-text { font-size: 14px; line-height: 1.38; color: rgba(255,247,232,.95); text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   .ai-partners { width: min(680px,86vw); margin-top: 24px; padding: 16px 16px 18px; border: 1px solid rgba(227,181,75,.16); border-radius: 24px; background: linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
   .ai-partners-label { margin-bottom: 10px; color: rgba(255,245,232,.8); font-size: 10px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
   .ai-partners-label span { color: #E3B54B; }
@@ -132,8 +132,8 @@
   .ai-partner-logo { max-width: 100%; max-height: 46px; width: auto; height: auto; display: block; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.08)); }
   .ai-partner-card.codex .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: cover; filter: none; }
   .ai-partner-card.antigravity .ai-partner-logo { width: 100%; height: 100%; max-height: none; object-fit: contain; filter: none; }
-  @media(max-width:900px){ .ai-partners { width: min(620px,88vw); margin-top: 20px; padding: 14px; } .announcement-window { height: 116px; } .announcement-item { min-height: 116px; padding: 10px 13px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: repeat(3,minmax(0,1fr)); } .ai-partner-card { min-height: 72px; } }
-  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .announcement-bar { margin-bottom: 12px; padding: 12px; } .announcement-window { height: 108px; } .announcement-item { min-height: 108px; padding: 10px 12px; gap: 4px; } .announcement-date { font-size: 10px; } .announcement-text { font-size: 13px; line-height: 1.42; -webkit-line-clamp: 4; } .ai-partners-row { gap: 8px; } .ai-partner-card { min-height: 64px; padding: 8px 10px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 36px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; object-fit: cover; } }
+  @media(max-width:900px){ .ai-partners { width: min(620px,88vw); margin-top: 20px; padding: 14px; } .announcement-window { height: 102px; } .announcement-item { padding: 8px 13px 6px; } .home-hint { font-size: 16px; } .ai-partners-row { grid-template-columns: repeat(3,minmax(0,1fr)); } .ai-partner-card { min-height: 72px; } }
+  @media(max-width:600px){ .ai-partners-label { font-size: 10px; letter-spacing: 1.8px; } .announcement-bar { margin-bottom: 12px; padding: 12px; } .announcement-window { height: 98px; } .announcement-item { padding: 8px 11px 6px; gap: 2px; } .announcement-date { font-size: 10px; } .announcement-text { font-size: 13px; line-height: 1.34; -webkit-line-clamp: 4; } .ai-partners-row { gap: 8px; } .ai-partner-card { min-height: 64px; padding: 8px 10px; border-radius: 16px; } .ai-partner-card.codex { padding: 0; } .ai-partner-logo { max-height: 36px; } .ai-partner-card.antigravity .ai-partner-logo { width: 100%; max-height: none; } .ai-partner-card.codex .ai-partner-logo { max-height: none; object-fit: cover; } }
   @keyframes chart-draw { 0%,8%{stroke-dashoffset:850}48%,100%{stroke-dashoffset:0} }
   @keyframes area-rise { 0%,28%{opacity:0}58%,100%{opacity:.72} }
   @keyframes node-pulse { 0%,32%{opacity:0;transform:scale(.3)}48%,72%{opacity:1;transform:scale(1)}86%,100%{opacity:.25;transform:scale(.72)} }
@@ -206,9 +206,9 @@
     .mobile-hint { display: inline; }
     .announcement-bar { width: 100%; margin: 0 0 10px; padding: 12px; border-radius: 20px; }
     .announcement-head { align-items: flex-start; flex-direction: column; gap: 6px; }
-    .announcement-window { height: 108px; }
-    .announcement-item { min-height: 108px; padding: 10px 12px; gap: 4px; }
-    .announcement-text { font-size: 13px; line-height: 1.42; }
+    .announcement-window { height: 98px; }
+    .announcement-item { padding: 8px 11px 6px; gap: 2px; }
+    .announcement-text { font-size: 13px; line-height: 1.34; }
     .ai-partners { width: min(100%,360px); margin-top: 18px; padding: 12px; border-radius: 20px; }
   }
 </style>
@@ -295,12 +295,12 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout5';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout6';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260701-announcementlayout5';
+const APP_VERSION='20260701-announcementlayout6';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
