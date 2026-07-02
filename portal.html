@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script>
   (function() {
-    var version = '20260701-announcementlayout11';
+    var version = '20260702-statementfix1';
     var url = new URL(window.location.href);
     if (url.searchParams.get('v') !== version) {
       url.searchParams.set('v', version);
@@ -315,16 +315,21 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260701-announcementlayout11';
-import { buildShareholderStatementHtml, hasStatementStructuredData } from './assets/shareholder-statement-template.js?v=20260701-structuredstatement1';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260702-statementfix1';
+import { buildShareholderStatementHtml, hasStatementStructuredData } from './assets/shareholder-statement-template.js?v=20260702-statementfix1';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260701-announcementlayout11';
+const APP_VERSION='20260702-statementfix1';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
+function getStatementDisplayLabel(statement){
+  if (statement?.year && statement?.month) return formatMonthLabel(statement.year, statement.month);
+  if (/^\d{6}$/.test(String(statement?.id || ''))) return formatMonthLabel(String(statement.id).slice(0, 4), String(statement.id).slice(4, 6));
+  return statement?.label || '未命名對帳單';
+}
 
 async function getPdfjs(){if(!_pdfjs){_pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');_pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';}return _pdfjs;}
 
@@ -352,7 +357,7 @@ async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);aw
 function buildSidebar(){document.getElementById('sub-reports').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('sub-topics').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('footer-updated').textContent='Firebase 動態同步'}
 async function buildReports(){const el=document.getElementById('sub-reports');el.innerHTML='<div class="nav-item">載入中...</div>';const snap=await getDocs(collection(db,'portalMonthlyReports')),reports=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.active!==false).sort((a,b)=>String(b.id||'').localeCompare(String(a.id||'')));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.id;const label=(r.year&&r.month)?formatMonthLabel(r.year,r.month):(r.label||'未命名月報');item.innerHTML=`<span class="dot"></span>${label}`;item.onclick=()=>openReport(item,r);el.appendChild(item)})}
 async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.title||'').localeCompare(String(b.title||''))),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
-async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${s.label||formatMonthLabel(s.year,s.month)}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
+async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${getStatementDisplayLabel(s)}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
 function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate==='function')return value.toDate();if(value instanceof Date)return value;const normalized=/^\d{4}-\d{2}-\d{2}$/.test(String(value))?`${value}T00:00:00`:value;const parsed=new Date(normalized);return Number.isNaN(parsed.getTime())?null:parsed}
 function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?`${date.getFullYear()} 年 ${date.getMonth()+1} 月 ${date.getDate()} 日`:'--/--'}
 function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}

@@ -91,13 +91,13 @@
 <div class="build-badge" id="build-badge">Structured</div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module">
-import { auth, db, functions } from './firebase-portal.js?v=20260630-announcementfix1';
-import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260701-structuredstatement1';
+import { auth, db, functions } from './firebase-portal.js?v=20260702-statementfix1';
+import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-statementfix1';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
-const APP_VERSION = '20260702-structured-import1';
+const APP_VERSION = '20260702-statementfix1';
 const getShareholderAdminData = httpsCallable(functions, 'getShareholderAdminData');
 let shareholderDocs = [], draftDocs = [], statementDocs = [], editingStatementUid = '';
 const $ = (id) => document.getElementById(id);
@@ -208,7 +208,7 @@ function fillStatementEditor(data) {
   $('statement-note-1').value = data.notes?.[0] || DEFAULT_NOTES[0];
   $('statement-note-2').value = data.notes?.[1] || DEFAULT_NOTES[1];
   $('statement-note-3').value = data.notes?.[2] || DEFAULT_NOTES[2];
-  renderDividendRows(data.dividendRows || []);
+  renderDividendRows((data.dividendRows || []).filter((row) => !isDividendHeaderLike(row)));
   renderContributionRows(data.contributionRows || []);
   previewEditorStatement();
 }
@@ -245,6 +245,13 @@ function collectRows(kind) {
 
 function textValue(value) {
   return String(value ?? '').trim();
+}
+
+function isDividendHeaderLike(row = {}) {
+  const year = textValue(row.year);
+  const amount = textValue(row.amount);
+  const method = textValue(row.method);
+  return year === '股利年度' || amount === '金額' || method === '領取方式';
 }
 
 function numericValue(value) {
@@ -323,7 +330,8 @@ function readSheet(sheetName, sheet) {
     const year = textValue(row[3]);
     const amount = numericValue(row[4]);
     const method = textValue(row[5]);
-    if (year || amount || method) dividendRows.push({ year, amount, method, sortOrder: dividendRows.length + 1 });
+    const dividendRow = { year, amount, method, sortOrder: dividendRows.length + 1 };
+    if ((year || amount || method) && !isDividendHeaderLike(dividendRow)) dividendRows.push(dividendRow);
   }
 
   const contributionRows = [];
@@ -442,7 +450,7 @@ async function importWorkbookDraft() {
 function collectStatementForm() {
   const owner = editorOwner();
   if (!owner) throw new Error('請先選擇股東。');
-  const dividendRows = collectRows('dividend').map((row, index) => ({ year: row.year || '', amount: row.amount || '', method: row.method || '', sortOrder: index + 1 })).filter((row) => row.year || row.amount || row.method);
+  const dividendRows = collectRows('dividend').map((row, index) => ({ year: row.year || '', amount: row.amount || '', method: row.method || '', sortOrder: index + 1 })).filter((row) => (row.year || row.amount || row.method) && !isDividendHeaderLike(row));
   const contributionRows = collectRows('contribution').map((row, index) => ({ shareholderName: row.name || owner.displayName, fundedAmount: row.amount || '', contributionDate: row.date || '', navDateLabel: row['nav-label'] || '', navDate: '', buyNavPerUnit: row['buy-nav'] || '', unitsAcquired: row.units || '', remark: row.remark || '', sortOrder: index + 1 })).filter((row) => row.shareholderName || row.fundedAmount || row.contributionDate || row.navDateLabel || row.buyNavPerUnit || row.unitsAcquired || row.remark);
   return {
     renderMode: 'structured-html',

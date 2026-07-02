@@ -53,6 +53,13 @@ function normalizeArray(rows) {
   return Array.isArray(rows) ? rows.filter(Boolean) : [];
 }
 
+function isDividendHeaderLike(row = {}) {
+  const year = String(row.year ?? "").trim();
+  const amount = String(row.amount ?? "").trim();
+  const method = String(row.method ?? "").trim();
+  return year === "股利年度" || amount === "金額" || method === "領取方式";
+}
+
 export function hasStatementStructuredData(entry) {
   return !!entry && (
     entry.renderMode === "structured-html" ||
@@ -62,12 +69,15 @@ export function hasStatementStructuredData(entry) {
 }
 
 export function normalizeStatementData(entry = {}) {
-  const dividendRows = normalizeArray(entry.dividendRows).map((row, index) => ({
-    year: row.year ?? "",
-    amount: row.amount ?? "",
-    method: row.method ?? "",
-    sortOrder: row.sortOrder ?? index + 1,
-  })).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  const dividendRows = normalizeArray(entry.dividendRows)
+    .map((row, index) => ({
+      year: row.year ?? "",
+      amount: row.amount ?? "",
+      method: row.method ?? "",
+      sortOrder: row.sortOrder ?? index + 1,
+    }))
+    .filter((row) => !isDividendHeaderLike(row))
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 
   const contributionRows = normalizeArray(entry.contributionRows).map((row, index) => ({
     shareholderName: row.shareholderName ?? entry.shareholderName ?? "",

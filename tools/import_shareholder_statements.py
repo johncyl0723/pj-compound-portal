@@ -221,6 +221,10 @@ def compose_name(parts: list[str]) -> str:
     return "".join(values)
 
 
+def is_dividend_header_like(year: Any, amount: Any, method: Any) -> bool:
+    return clean_text(year) == "股利年度" or clean_text(amount) == "金額" or clean_text(method) == "領取方式"
+
+
 def find_row(ws: Any, needle: str) -> int | None:
     for row in range(1, ws.max_row + 1):
         if clean_text(ws.cell(row, 1).value) == needle:
@@ -252,7 +256,7 @@ def parse_sheet(ws: Any) -> dict[str, Any]:
         year_text = clean_text(ws.cell(row, 4).value)
         amount = normalize_number(ws.cell(row, 5).value)
         method = clean_text(ws.cell(row, 6).value)
-        if year_text or amount is not None or method:
+        if (year_text or amount is not None or method) and not is_dividend_header_like(year_text, amount, method):
             dividend_rows.append({
                 "year": year_text,
                 "amount": amount if amount is not None else "",
