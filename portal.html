@@ -21,6 +21,7 @@
     --sidebar-bg: #1E0D02; --sidebar-hover: rgba(184,134,11,.14);
     --sidebar-active: rgba(184,134,11,.25); --sidebar-text: #E8D5A0;
     --sidebar-muted: rgba(232,213,160,.5); --sidebar-width: 268px; --banner-height: 64px;
+    --sidebar-min-width: 220px; --sidebar-max-width: 420px; --resize-handle-width: 14px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif; font-size: 14px; background: #150800; color: #fff; }
@@ -40,7 +41,14 @@
   .logout-btn { border: none; background: transparent; color: rgba(255,255,255,.7); cursor: pointer; font: inherit; font-size: 11px; }
   .logout-btn:hover { color: #fff; }
   .body-wrap { position: fixed; inset: var(--banner-height) 0 0 0; display: flex; }
-  .sidebar { width: var(--sidebar-width); flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid rgba(184,134,11,.18); }
+  .sidebar { width: var(--sidebar-width); min-width: var(--sidebar-min-width); max-width: var(--sidebar-max-width); flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid rgba(184,134,11,.18); }
+  .sidebar-resizer { position: relative; width: var(--resize-handle-width); flex: 0 0 var(--resize-handle-width); cursor: col-resize; background: linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01)); touch-action: none; }
+  .sidebar-resizer::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(184,134,11,.12),rgba(184,134,11,.04)); }
+  .sidebar-resizer::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: linear-gradient(180deg,rgba(255,255,255,.12),rgba(184,134,11,.55),rgba(255,255,255,.12)); box-shadow: 0 0 10px rgba(184,134,11,.18); transition: background .18s, box-shadow .18s; }
+  .sidebar-resizer:hover::after,
+  .sidebar-resizer.is-dragging::after { background: linear-gradient(180deg,rgba(255,255,255,.28),rgba(227,181,75,.95),rgba(255,255,255,.28)); box-shadow: 0 0 16px rgba(227,181,75,.35); }
+  body.is-resizing { cursor: col-resize; user-select: none; }
+  body.is-resizing iframe { pointer-events: none; }
   .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
   .nav-group-header { display: flex; align-items: center; padding: 11px 18px; margin: 0 4px; border-radius: 4px; color: var(--gold); cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; user-select: none; }
   .nav-group-header:hover { background: var(--sidebar-hover); }
@@ -188,8 +196,9 @@
     .banner-client { max-width: 45vw; gap: 6px; padding: 6px 10px; font-size: 11px; }
     .banner-client-label { font-size: 10px; }
     .logout-btn { min-height: 32px; padding: 0 2px; }
-    .sidebar { position: fixed; top: var(--banner-height); left: 0; bottom: 0; z-index: 95; transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1); width: min(88vw,320px); }
+    .sidebar { position: fixed; top: var(--banner-height); left: 0; bottom: 0; z-index: 95; transform: translateX(-100%); transition: transform .3s cubic-bezier(.4,0,.2,1); width: min(88vw,320px); min-width: 0; max-width: none; }
     .sidebar.open { transform: translateX(0); }
+    .sidebar-resizer { display: none; }
     .sidebar-section { padding: 10px 0; }
     .nav-group-header { min-height: 46px; padding: 12px 18px; font-size: 12px; letter-spacing: 1.1px; }
     .nav-item { min-height: 44px; padding: 11px 18px 11px 34px; font-size: 14px; line-height: 1.35; }
@@ -244,6 +253,7 @@
     <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">📄</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
     <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./firebase-admin.html">⚙ 後臺管理 Admin</a></div>
   </nav>
+  <div class="sidebar-resizer" id="sidebar-resizer" role="separator" aria-label="調整左側欄寬度" aria-orientation="vertical" tabindex="0"></div>
   <main class="main-frame">
     <section class="welcome" id="welcome-screen">
       <div class="welcome-card">
@@ -323,7 +333,21 @@ import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebas
 
 const APP_VERSION='20260702-statementfix1';
 let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
+const SIDEBAR_WIDTH_KEY='pj-portal-sidebar-width';
+const SIDEBAR_MIN_WIDTH=220;
+const SIDEBAR_MAX_WIDTH=420;
+let isSidebarResizing=false;
 const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
+function clampSidebarWidth(width){return Math.min(SIDEBAR_MAX_WIDTH,Math.max(SIDEBAR_MIN_WIDTH,width))}
+function setSidebarWidth(width){document.documentElement.style.setProperty('--sidebar-width',`${clampSidebarWidth(width)}px`)}
+function loadSidebarWidth(){const saved=Number(localStorage.getItem(SIDEBAR_WIDTH_KEY));setSidebarWidth(Number.isFinite(saved)?saved:268)}
+function persistSidebarWidth(width){localStorage.setItem(SIDEBAR_WIDTH_KEY,String(clampSidebarWidth(width)))}
+function isDesktopLayout(){return window.innerWidth>768}
+function startSidebarResize(event){if(!isDesktopLayout())return;isSidebarResizing=true;document.body.classList.add('is-resizing');const resizer=document.getElementById('sidebar-resizer');resizer.classList.add('is-dragging');if(typeof resizer.setPointerCapture==='function'&&event.pointerId!=null)resizer.setPointerCapture(event.pointerId);updateSidebarWidthFromClientX(event.clientX)}
+function stopSidebarResize(event){if(!isSidebarResizing)return;isSidebarResizing=false;document.body.classList.remove('is-resizing');const resizer=document.getElementById('sidebar-resizer');resizer.classList.remove('is-dragging');if(event&&typeof resizer.releasePointerCapture==='function'&&event.pointerId!=null){try{resizer.releasePointerCapture(event.pointerId)}catch(_){}}persistSidebarWidth(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width'))||268)}
+function updateSidebarWidthFromClientX(clientX){if(!isDesktopLayout())return;setSidebarWidth(clientX)}
+function handleSidebarResizeKeydown(event){if(!isDesktopLayout())return;const step=event.shiftKey?24:12;const current=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width'))||268;if(event.key==='ArrowLeft'){event.preventDefault();const next=clampSidebarWidth(current-step);setSidebarWidth(next);persistSidebarWidth(next)}else if(event.key==='ArrowRight'){event.preventDefault();const next=clampSidebarWidth(current+step);setSidebarWidth(next);persistSidebarWidth(next)}}
+function initSidebarResizer(){loadSidebarWidth();const resizer=document.getElementById('sidebar-resizer');resizer.addEventListener('pointerdown',startSidebarResize);resizer.addEventListener('pointermove',event=>{if(isSidebarResizing)updateSidebarWidthFromClientX(event.clientX)});resizer.addEventListener('pointerup',stopSidebarResize);resizer.addEventListener('pointercancel',stopSidebarResize);resizer.addEventListener('keydown',handleSidebarResizeKeydown);window.addEventListener('pointermove',event=>{if(isSidebarResizing)updateSidebarWidthFromClientX(event.clientX)});window.addEventListener('pointerup',stopSidebarResize);window.addEventListener('resize',()=>{if(!isDesktopLayout())stopSidebarResize();});if(!isDesktopLayout())setSidebarWidth(268)}
 function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
 function getStatementDisplayLabel(statement){
   if (statement?.year && statement?.month) return formatMonthLabel(statement.year, statement.month);
@@ -375,6 +399,7 @@ async function openReport(el,report){activateDocumentView(el);try{await presentD
 async function openTopic(el,topic){activateDocumentView(el);try{await presentDocument(topic)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。');}}
 function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
 Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection,toggleSidebar,closeSidebar});
+initSidebarResizer();
 buildSidebar();
 document.getElementById('build-badge').textContent=`Portal ${APP_VERSION}`;
 document.getElementById('footer-updated').textContent=`Firebase 動態同步 · ${APP_VERSION}`;

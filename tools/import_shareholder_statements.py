@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import os
 import shutil
 import subprocess
 import sys
@@ -21,7 +20,6 @@ from openpyxl import load_workbook
 PROJECT_ID = "pnj-compound-company-limited"
 FIRESTORE_BASE = f"https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents"
 DEFAULT_MONTH_ID = "202605"
-DEFAULT_LABEL = "2026 年 05 月"
 
 
 @dataclass
@@ -47,14 +45,14 @@ def find_npx() -> str:
     for candidate in candidates:
         if candidate and Path(candidate).exists():
             return candidate
-    raise RuntimeError("找不到 npx，無法讀取 firebase-tools 登入資訊。")
+    raise RuntimeError("找不到 npx，請先安裝 Node.js 與 firebase-tools。")
 
 
 def get_access_token() -> str:
     data = run_json([find_npx(), "firebase-tools", "login:list", "--json"])
     accounts = data.get("result") or []
     if not accounts:
-        raise RuntimeError("找不到 Firebase 登入資訊，請先在這台電腦登入 firebase-tools。")
+        raise RuntimeError("找不到 Firebase 登入資訊，請先登入 firebase-tools。")
     token = accounts[0].get("tokens", {}).get("access_token")
     if not token:
         raise RuntimeError("找不到 Firebase access token。")
@@ -146,10 +144,11 @@ def to_firestore_value(value: Any) -> dict[str, Any]:
     if isinstance(value, str):
         return {"stringValue": value}
     if isinstance(value, list):
-        return {"arrayValue": {"values": [to_firestore_value(item) for item in value]}}
+        values = [to_firestore_value(item) for item in value]
+        return {"arrayValue": {"values": values}} if values else {"arrayValue": {}}
     if isinstance(value, dict):
         return {"mapValue": {"fields": {key: to_firestore_value(item) for key, item in value.items()}}}
-    raise TypeError(f"不支援的 Firestore 值型別: {type(value)!r}")
+    raise TypeError(f"不支援的 Firestore 型別: {type(value)!r}")
 
 
 def to_firestore_fields(data: dict[str, Any]) -> dict[str, Any]:
@@ -172,6 +171,10 @@ def normalize_date(value: Any) -> str:
     text = clean_text(value)
     if text.endswith(" 00:00:00"):
         text = text[:10]
+    if "/" in text and len(text.split("/")) == 3:
+        parts = text.split("/")
+        if len(parts[0]) == 4:
+            return f"{parts[0]}-{parts[1].zfill(2)}-{parts[2].zfill(2)}"
     return text
 
 
@@ -213,45 +216,92 @@ def infer_share_class(raw: str) -> str:
 
 
 def compose_name(parts: list[str]) -> str:
-    values = [part for part in parts if part]
-    if not values:
-        return ""
-    if len(values) >= 4 and "登記為" in values[0] and values[-1] == ")":
+    values = [clean_text(part) for part in parts if clean_text(part)]
+    if len(values) >= 3 and values[-1] == ")" and "(" in values[0]:
         return f"{values[0]}{'、'.join(values[1:-1])})"
     return "".join(values)
+
+
+def format_statement_label(year: str, month: str) -> str:
+    return f"{year} 年 {month} 月"
+
+
+def contains_any(text: str, needles: list[str]) -> bool:
+    lowered = text.lower()
+    return any(needle.lower() in lowered for needle in needles)
+
+
+def find_row_by_first_cell(ws: Any, needles: list[str]) -> int | None:
+    for row in range(1, ws.max_row + 1):
+        value = clean_text(ws.cell(row, 1).value)
+        if contains_any(value, needles):
+            return row
+    return None
+
+
+def find_dividend_header_row(ws: Any) -> int | None:
+    for row in range(1, ws.max_row + 1):
+        year = clean_text(ws.cell(row, 4).value)
+        amount = clean_text(ws.cell(row, 5).value)
+        method = clean_text(ws.cell(row, 6).value)
+        if year == "股利年度" and amount == "金額" and method == "領取方式":
+            return row
+    return None
+
+
+def find_contribution_header_row(ws: Any) -> int | None:
+    for row in range(1, ws.max_row + 1):
+        name = clean_text(ws.cell(row, 1).value)
+        amount = clean_text(ws.cell(row, 2).value)
+        date_value = clean_text(ws.cell(row, 3).value)
+        if "股東名稱" in name and ("投資金額" in amount or "已到位投資金額" in amount) and "投入日期" in date_value:
+            return row
+    return None
 
 
 def is_dividend_header_like(year: Any, amount: Any, method: Any) -> bool:
     return clean_text(year) == "股利年度" or clean_text(amount) == "金額" or clean_text(method) == "領取方式"
 
 
-def find_row(ws: Any, needle: str) -> int | None:
-    for row in range(1, ws.max_row + 1):
-        if clean_text(ws.cell(row, 1).value) == needle:
-            return row
-    return None
+def is_total_row(name: str, funded_amount: float | int | None, units: float | int | None) -> bool:
+    normalized_name = clean_text(name)
+    return (
+        "合計" in normalized_name or
+        "total" in normalized_name.lower() or
+        (not normalized_name and funded_amount is not None and units is not None)
+    )
 
 
 def parse_sheet(ws: Any) -> dict[str, Any]:
-    name_row = find_row(ws, "股東姓名_Name：")
-    code_row = find_row(ws, "股東戶號_CIN：")
-    currency_row = find_row(ws, "報告幣別_Currency:")
-    end_date_row = next((row for row in range(1, ws.max_row + 1) if "End Date" in clean_text(ws.cell(row, 1).value)), None)
-    nav_row = next((row for row in range(1, ws.max_row + 1) if "每單位淨值" in clean_text(ws.cell(row, 1).value)), None)
-    report_type_row = find_row(ws, "報告性質_Attributes：")
-    share_class_row = find_row(ws, "持股份總類：")
-    contribution_header_row = find_row(ws, "股東名稱")
-    notes_header_row = find_row(ws, "說明事項_Explanatory Notes")
+    name_row = find_row_by_first_cell(ws, ["_Name", "股東姓名"])
+    code_row = find_row_by_first_cell(ws, ["_CIN", "戶號"])
+    currency_row = find_row_by_first_cell(ws, ["_Currency", "幣別"])
+    report_type_row = find_row_by_first_cell(ws, ["_Attributes", "報告性質"])
+    end_date_row = find_row_by_first_cell(ws, ["End Date", "結算截止日"])
+    nav_row = find_row_by_first_cell(ws, ["淨值", "每單位淨值", "值：", "值:"])
+    share_class_row = find_dividend_header_row(ws)
+    contribution_header_row = find_contribution_header_row(ws)
+    notes_header_row = find_row_by_first_cell(ws, ["Explanatory Notes", "說明事項"])
 
-    if not all([name_row, code_row, currency_row, end_date_row, nav_row, report_type_row, share_class_row, contribution_header_row, notes_header_row]):
-        raise RuntimeError(f"{ws.title} 缺少必要欄位，無法安全匯入。")
+    if not all([
+        name_row,
+        code_row,
+        currency_row,
+        report_type_row,
+        end_date_row,
+        nav_row,
+        share_class_row,
+        contribution_header_row,
+        notes_header_row,
+    ]):
+        raise RuntimeError(f"{ws.title} 缺少必要欄位，請檢查模板格式。")
 
-    name = compose_name([clean_text(ws.cell(name_row, col).value) for col in range(2, 7)])
+    name = compose_name([ws.cell(name_row, col).value for col in range(2, 7)])
     shareholder_code = normalize_code(ws.cell(code_row, 2).value, ws.cell(code_row, 3).value)
     share_class_raw = clean_text(ws.cell(share_class_row, 2).value)
 
     dividend_rows: list[dict[str, Any]] = []
-    for offset in range(4):
+    for offset in range(1, 5):
         row = share_class_row + offset
         year_text = clean_text(ws.cell(row, 4).value)
         amount = normalize_number(ws.cell(row, 5).value)
@@ -277,7 +327,7 @@ def parse_sheet(ws: Any) -> dict[str, Any]:
         row_values = [raw_name, funded_amount, contribution_date, nav_cell, buy_nav, units, remark]
         if not any(value not in ("", None) for value in row_values):
             continue
-        if not raw_name and funded_amount is not None and units is not None:
+        if is_total_row(raw_name, funded_amount, units):
             continue
 
         nav_date = normalize_date(nav_cell) if isinstance(nav_cell, (datetime, date)) else ""
@@ -314,7 +364,7 @@ def parse_sheet(ws: Any) -> dict[str, Any]:
             "templateVersion": 1,
             "year": year,
             "month": month,
-            "label": f"{year} 年 {month} 月",
+            "label": format_statement_label(year, month),
             "reportType": clean_text(ws.cell(report_type_row, 2).value),
             "shareholderCode": shareholder_code,
             "shareholderName": name,
@@ -358,9 +408,7 @@ def get_statement_doc(token: str, uid: str, month_id: str) -> tuple[bool, dict[s
 
 
 def patch_statement_doc(token: str, uid: str, month_id: str, fields: dict[str, Any]) -> dict[str, Any]:
-    params = []
-    for field_name in fields:
-        params.append(("updateMask.fieldPaths", field_name))
+    params = [("updateMask.fieldPaths", field_name) for field_name in fields]
     query = urllib.parse.urlencode(params)
     url = f"{FIRESTORE_BASE}/statements/{uid}/months/{month_id}?{query}"
     body = {"fields": to_firestore_fields(fields)}
@@ -393,7 +441,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--xlsx", required=True, help="Excel 檔案路徑")
     parser.add_argument("--month-id", default=DEFAULT_MONTH_ID)
-    parser.add_argument("--preview-out", default="tmp/xlsx/import_preview.json")
+    parser.add_argument("--preview-out", default="tmp/import_preview.json")
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
 
@@ -414,7 +462,7 @@ def main() -> int:
 
     missing_codes = [row["shareholderCode"] for row in preview if not row["matchedUid"]]
     if missing_codes:
-        raise RuntimeError(f"以下戶號在 shareholders 集合中找不到對應帳號: {', '.join(missing_codes)}")
+        raise RuntimeError(f"下列戶號找不到已建立股東: {', '.join(missing_codes)}")
 
     if not args.apply:
         print(json.dumps({
@@ -430,8 +478,10 @@ def main() -> int:
         payload = item["payload"]
         month_id = item["monthId"] or args.month_id
         owner = shareholders[payload["shareholderCode"]]
-        exists, _existing = get_statement_doc(token, owner.uid, month_id)
-        fields = build_patch_fields(payload, None if exists else "draft")
+        exists, existing_doc = get_statement_doc(token, owner.uid, month_id)
+        existing_fields = parse_firestore_fields(existing_doc.get("fields", {})) if existing_doc else {}
+        existing_status = clean_text(existing_fields.get("status"))
+        fields = build_patch_fields(payload, existing_status if exists and existing_status else (None if exists else "draft"))
         patch_statement_doc(token, owner.uid, month_id, fields)
         results.append({
             "shareholderCode": payload["shareholderCode"],
@@ -439,7 +489,7 @@ def main() -> int:
             "uid": owner.uid,
             "monthId": month_id,
             "existingDoc": exists,
-            "statusAction": "preserved" if exists else "created-draft",
+            "statusAction": existing_status or ("created-draft" if not exists else "preserved"),
         })
 
     print(json.dumps({

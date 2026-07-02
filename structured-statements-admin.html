@@ -91,13 +91,13 @@
 <div class="build-badge" id="build-badge">Structured</div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module">
-import { auth, db, functions } from './firebase-portal.js?v=20260702-statementfix1';
-import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-statementfix1';
+import { auth, db, functions } from './firebase-portal.js?v=20260702-adminwritefix1';
+import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-adminwritefix1';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
-const APP_VERSION = '20260702-statementfix1';
+const APP_VERSION = '20260702-adminwritefix1';
 const getShareholderAdminData = httpsCallable(functions, 'getShareholderAdminData');
 let shareholderDocs = [], draftDocs = [], statementDocs = [], editingStatementUid = '';
 const $ = (id) => document.getElementById(id);
@@ -110,6 +110,24 @@ function setStatus(id, text, type = '') {
   const el = $(id);
   el.textContent = text;
   el.className = `status ${type}`;
+}
+
+function firebaseActionErrorMessage(error, scope = '資料保存') {
+  const code = error?.code || '';
+  const head = scope ? `${scope}失敗：` : '';
+  switch (code) {
+    case 'permission-denied':
+      return `${head}目前登入帳號沒有寫入權限，請重新登入管理員後再試。`;
+    case 'unauthenticated':
+      return `${head}登入狀態已失效，請重新登入。`;
+    case 'deadline-exceeded':
+      return `${head}等待 Firebase 回應逾時，請稍後重試。`;
+    case 'unavailable':
+    case 'auth/network-request-failed':
+      return `${head}網路或 Firebase 服務暫時不可用，請稍後重試。`;
+    default:
+      return `${head}${error?.message || '請稍後再試。'}`;
+  }
 }
 
 function statementMonthId() { return $('statement-year').value + $('statement-month').value; }
@@ -493,14 +511,19 @@ async function saveStatement(status = 'draft') {
   const owner = editorOwner();
   const ownerUid = shareholderUid(owner);
   setStatus('editor-status', `正在保存 ${owner.shareholderCode} 的資料...`);
-  await setDoc(doc(db, 'statements', ownerUid, 'months', statementMonthId()), {
-    ...payload,
-    status,
-    publishedAt: status === 'published' ? serverTimestamp() : null,
-    updatedAt: serverTimestamp(),
-  }, { merge: true });
-  await loadData();
-  setStatus('editor-status', `${owner.shareholderCode} 已${status === 'published' ? '發布' : '保存為草稿'}。`, 'ok');
+  try {
+    await setDoc(doc(db, 'statements', ownerUid, 'months', statementMonthId()), {
+      ...payload,
+      status,
+      publishedAt: status === 'published' ? serverTimestamp() : null,
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    await loadData();
+    setStatus('editor-status', `${owner.shareholderCode} 已${status === 'published' ? '發布' : '保存為草稿'}。`, 'ok');
+  } catch (e) {
+    setStatus('editor-status', firebaseActionErrorMessage(e, `${owner.shareholderCode} ${status === 'published' ? '發布' : '保存'}`), 'error');
+    throw e;
+  }
 }
 
 async function saveStatementDraft() { await saveStatement('draft'); }
