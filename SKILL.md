@@ -105,6 +105,22 @@ For monthly reports shown in the frontend portal, backend content manager, and p
 - In frontend and backend monthly report lists, prefer rendering the display label from `year` and `month` when those fields exist, instead of trusting a legacy `label` field
 - If existing Firestore records contain inconsistent month labels, normalize the stored `label` values as well so data and UI stay aligned
 
+## Monthly report generator guardrail
+
+When updating or generating monthly report HTML with `tools/build-monthly-report.mjs`:
+
+1. Treat generated inline JavaScript as a release artifact that must parse cleanly.
+2. After generating a report HTML file, run a syntax check against the page script body, not only a visual spot check.
+3. Be especially careful with replacement strings for chart labels inside `replaceRegex(...)`.
+4. Prefer ASCII-safe chart labels in generated script replacements when the source file already shows encoding noise. Do not inject fragile mixed-encoding text into inline JavaScript labels.
+5. If one chart block fails to parse, assume later charts may silently disappear because the whole script stops executing. Check the first syntax error before reviewing missing visuals.
+
+Known failure mode from the 2026-02 monthly report:
+
+- The generator replaced the `chartPnl` labels with a malformed quoted array inside inline JavaScript.
+- Result: browser script parsing stopped, and the monthly performance chart area rendered blank even though the HTML cards and containers existed.
+- Required fix pattern: correct the generator replacement string first, then regenerate or patch the affected monthly HTML file, then re-run script syntax validation.
+
 ## Version sync rule
 
 When debugging “I still see the old page” or “your version is different from mine” problems:

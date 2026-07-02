@@ -577,7 +577,7 @@ html = replaceRegex(
 html = replaceRegex(
   html,
   /new Chart\(document\.getElementById\('chartPnl'\), \{[\s\S]*?data:\[[^\]]+\],/m,
-  `new Chart(document.getElementById('chartPnl'), {\n  type:'bar',\n  data:{\n    labels:['蝝航?撌脣祕?暹???,'蝝航??芸祕?暹???,'?砍僑撌脣祕??,'?砍僑?芸祕??],\n    datasets:[{\n      data:${JSON.stringify(report.income.pnlChartValues)},`,
+  `new Chart(document.getElementById('chartPnl'), {\n  type:'bar',\n  data:{\n    labels:['Cum Realized','Cum Unrealized','YTD Realized','YTD Unrealized'],\n    datasets:[{\n      data:${JSON.stringify(report.income.pnlChartValues)},`,
   'pnl chart',
 );
 html = replaceRegex(
