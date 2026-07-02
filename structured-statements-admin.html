@@ -1,79 +1,79 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>股東持股資料化管理 - P&amp;J Compound Company Limited</title>
+<title>結構化月報管理 - P&amp;J Compound Company Limited</title>
 <style>
 :root{--brown:#6D3A0F;--dark:#2C1503;--gold:#B8860B;--cream:#FAF7F2;--ink:#1C1917;--muted:#6B6560;--border:#E8E2D8;--pos:#15803D;--neg:#B91C1C}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:'Segoe UI','Microsoft JhengHei',system-ui,sans-serif;font-size:14px}.banner{height:64px;display:flex;align-items:center;gap:12px;padding:0 26px;background:linear-gradient(135deg,var(--dark),var(--brown));color:#fff}.banner img{width:42px;height:42px}.banner h1{font-size:17px}.badge{padding:4px 10px;border:1px solid rgba(255,220,120,.5);border-radius:14px;color:#ffe08a;font-size:11px;font-weight:700}.back{margin-left:auto;color:#fff;text-decoration:none;font-size:12px}.page{max-width:1440px;margin:auto;padding:28px 20px 60px}.head h2{margin:0;color:var(--brown)}.head p{color:var(--muted);font-size:13px;line-height:1.7}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}.card{overflow:hidden;border:1px solid var(--border);border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}.card-head{padding:14px 17px;border-bottom:1px solid var(--border);background:#fdfaf6;color:var(--brown);font-weight:700}.body{padding:15px 17px}.row{display:flex;gap:10px;margin-bottom:10px}.group{display:flex;flex:1;flex-direction:column;gap:4px}.group label{color:var(--muted);font-size:11px;font-weight:700}.group input,.group select,.group textarea{width:100%;padding:9px;border:1px solid var(--border);border-radius:6px;font:inherit}.group textarea{min-height:96px;resize:vertical}.summary{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.summary span{padding:6px 10px;border-radius:14px;background:#fdfaf6;border:1px solid var(--border);font-size:12px}.table-wrap{border:1px solid var(--border);border-radius:8px;overflow:auto}.grid-table{width:100%;border-collapse:collapse;font-size:12px}.grid-table th,.grid-table td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top;text-align:left}.grid-table th{background:#fdfaf6;color:var(--brown);white-space:nowrap}.grid-table tr:last-child td{border-bottom:0}.grid-table input{width:100%;padding:7px;border:1px solid var(--border);border-radius:5px;font:inherit}.btn{padding:9px 12px;border:0;border-radius:7px;background:linear-gradient(135deg,var(--dark),var(--brown));color:#fff;cursor:pointer;font:inherit;font-size:12px;font-weight:700}.btn.alt{border:1px solid var(--border);background:#fff;color:var(--brown)}.btn.warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}.btn:disabled{opacity:.5;cursor:not-allowed}.notice{color:var(--muted);font-size:12px;line-height:1.65}.ok{color:var(--pos);font-weight:700}.error{color:var(--neg);font-weight:700}.status{min-height:20px;margin-top:8px;font-size:12px;line-height:1.5}.pill{display:inline-block;padding:2px 7px;border-radius:10px;background:#dcfce7;color:#15803d;font-size:10px;font-weight:700}.pill.draft{background:#fef3c7;color:#92400e}.pill.missing{background:#f1f5f9;color:#475569}.gate{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,var(--dark),#150800)}.gate.hidden{display:none}.gate-card{width:min(410px,100%);padding:30px;border-radius:16px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.45)}.gate-card h2{margin-top:0;color:var(--brown)}.gate-card input{width:100%;margin-bottom:9px;padding:11px;border:1px solid var(--border);border-radius:7px;font:inherit}.gate-card .btn{width:100%}.preview-frame{width:100%;height:920px;border:1px solid var(--border);border-radius:8px;background:#f3f4f6}.build-badge{position:fixed;right:12px;bottom:12px;z-index:30;padding:6px 10px;border:1px solid rgba(109,58,15,.18);border-radius:999px;background:rgba(255,255,255,.95);color:var(--brown);font-size:11px;box-shadow:0 8px 18px rgba(0,0,0,.12)}@media(max-width:1100px){.grid{grid-template-columns:1fr}.preview-frame{height:760px}}@media(max-width:720px){.row{flex-direction:column}.banner{padding:0 14px}.page{padding:18px 12px 36px}}
 </style>
 </head>
 <body>
-<div class="gate" id="gate"><div class="gate-card"><h2>Firebase 管理員登入</h2><p class="notice">這個頁面專門用來手動輸入股東持股資料。</p><input id="admin-email" type="email" value="john.cyl@gmail.com" autocomplete="username"><input id="admin-password" type="password" placeholder="管理員密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLogin()"><button class="btn" onclick="adminLogin()">登入後臺</button><div class="status error" id="gate-status"></div></div></div>
-<header class="banner"><img src="assets/pj-compound-mark.svg" alt="P&J Compound Logo"><h1>P&amp;J Compound Company Limited</h1><span class="badge">Structured Statements</span><a class="back" href="./firebase-admin.html">返回後臺主頁</a></header>
+<div class="gate" id="gate"><div class="gate-card"><h2>Firebase 管理員登入</h2><p class="notice">請使用具有 Firebase 後台管理權限的帳號登入，才能編輯結構化月報。</p><input id="admin-email" type="email" autocomplete="username" placeholder="管理員 Email"><input id="admin-password" type="password" placeholder="管理員密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLogin()"><button class="btn" onclick="adminLogin()">登入管理後台</button><div class="status error" id="gate-status"></div></div></div>
+<header class="banner"><img src="assets/pj-compound-mark.svg" alt="P&J Compound Logo"><h1>P&amp;J Compound Company Limited</h1><span class="badge">Structured Statements</span><a class="back" href="./firebase-admin.html">返回管理首頁</a></header>
 <main class="page">
   <div class="head">
-    <h2>股東持股資料化管理</h2>
-    <p>這個頁面專門處理「和 PDF 幾乎一致」的資料化股東持股報表。資料會寫進原本的 `statements/{uid}/months/{yyyymm}`，不會影響目前穩定運作的 PDF 後臺頁。</p>
+    <h2>結構化月報管理</h2>
+    <p>這個頁面用來維護每位股東每月的結構化月報資料。資料會寫入 `statements/{uid}/months/{yyyymm}`，供前台與 PDF 版本同步使用。</p>
     <div class="summary" id="top-summary"></div>
   </div>
   <div class="grid">
     <section class="card">
-      <div class="card-head">資料輸入</div>
+      <div class="card-head">月報資料編輯</div>
       <div class="body">
         <div class="row">
-          <div class="group"><label>年份</label><select id="statement-year"><option>2025</option><option selected>2026</option><option>2027</option><option>2028</option></select></div>
+          <div class="group"><label>年度</label><select id="statement-year"><option>2025</option><option selected>2026</option><option>2027</option><option>2028</option></select></div>
           <div class="group"><label>月份</label><select id="statement-month"></select></div>
           <div class="group"><label>股東</label><select id="editor-shareholder"></select></div>
         </div>
         <div class="group" style="margin-bottom:12px">
-          <label>Excel 批次匯入</label>
+          <label>Excel 草稿匯入</label>
           <div class="row" style="margin-bottom:0">
             <input id="statement-import-file" type="file" accept=".xlsx,.xlsm,.xls" style="flex:1">
-            <button class="btn alt" type="button" onclick="importWorkbookDraft()">匯入 Excel 並存成草稿</button>
+            <button class="btn alt" type="button" onclick="importWorkbookDraft()">匯入 Excel 草稿</button>
           </div>
-          <div class="notice">系統會依 Excel 內的股東戶號與截止日，自動對應目前月份的股東資料，並寫入資料化持股對帳單。</div>
+          <div class="notice">請選擇依照既有月報範本整理的 Excel 檔案。系統會將每位股東的資料匯入目前選定月份，並保留既有已發布狀態。</div>
           <div class="status" id="import-status"></div>
         </div>
         <div class="summary" id="editor-summary"></div>
         <div class="row">
-          <div class="group"><label>報告性質</label><input id="statement-report-type"></div>
-          <div class="group"><label>股份種類</label><select id="statement-share-class"><option value="PS">特別股 PS</option><option value="CS">普通股 CS</option></select></div>
+          <div class="group"><label>報表類型</label><input id="statement-report-type"></div>
+          <div class="group"><label>股權類別</label><select id="statement-share-class"><option value="PS">特別股 PS</option><option value="CS">普通股 CS</option></select></div>
           <div class="group"><label>幣別</label><input id="statement-currency" value="USD"></div>
         </div>
         <div class="row">
-          <div class="group"><label>計算截止日</label><input id="statement-end-date" type="date"></div>
-          <div class="group"><label>每單位淨值</label><input id="statement-nav-per-unit" type="number" step="0.0001"></div>
+          <div class="group"><label>結算日期</label><input id="statement-end-date" type="date"></div>
+          <div class="group"><label>每單位 NAV</label><input id="statement-nav-per-unit" type="number" step="0.0001"></div>
         </div>
         <div class="row">
-          <div class="group"><label>已投資股份金額 USD</label><input id="statement-invested-amount" type="number" step="0.01"></div>
-          <div class="group"><label>持有權益單位數</label><input id="statement-units-held" type="number" step="0.01"></div>
-          <div class="group"><label>持有權益比例 %</label><input id="statement-ownership-percent" type="number" step="0.01"></div>
+          <div class="group"><label>累計投入金額 USD</label><input id="statement-invested-amount" type="number" step="0.01"></div>
+          <div class="group"><label>持有單位數</label><input id="statement-units-held" type="number" step="0.01"></div>
+          <div class="group"><label>持股比例 %</label><input id="statement-ownership-percent" type="number" step="0.01"></div>
         </div>
         <div class="row">
-          <div class="group"><label>目前持有權益市值 USD</label><input id="statement-market-value" type="number" step="0.01"></div>
-          <div class="group"><label>投資增值 USD</label><input id="statement-gain-usd" type="number" step="0.01"></div>
-          <div class="group"><label>累計增值報酬率 %</label><input id="statement-return-rate" type="number" step="0.01"></div>
+          <div class="group"><label>期末市值 USD</label><input id="statement-market-value" type="number" step="0.01"></div>
+          <div class="group"><label>累計損益 USD</label><input id="statement-gain-usd" type="number" step="0.01"></div>
+          <div class="group"><label>累積報酬率 %</label><input id="statement-return-rate" type="number" step="0.01"></div>
         </div>
         <div class="group">
           <label>股利明細</label>
-          <div class="table-wrap"><table class="grid-table"><thead><tr><th>年度</th><th>金額</th><th>領取方式</th><th>操作</th></tr></thead><tbody id="dividend-rows"></tbody></table></div>
+          <div class="table-wrap"><table class="grid-table"><thead><tr><th>年度</th><th>金額</th><th>發放方式</th><th>操作</th></tr></thead><tbody id="dividend-rows"></tbody></table></div>
           <div class="row" style="margin-top:8px"><button class="btn alt" type="button" onclick="addDividendRow()">新增股利列</button></div>
         </div>
         <div class="group">
-          <label>投入明細</label>
-          <div class="table-wrap"><table class="grid-table"><thead><tr><th>股東名稱</th><th>投資金額</th><th>投入日期</th><th>淨值日期/文字</th><th>買入淨值</th><th>取得單位數</th><th>備註</th><th>操作</th></tr></thead><tbody id="contribution-rows"></tbody></table></div>
+          <label>股東投入明細</label>
+          <div class="table-wrap"><table class="grid-table"><thead><tr><th>股東姓名</th><th>投入金額</th><th>投入日期</th><th>NAV 日期標籤</th><th>買入 NAV</th><th>取得單位數</th><th>備註</th><th>操作</th></tr></thead><tbody id="contribution-rows"></tbody></table></div>
           <div class="row" style="margin-top:8px"><button class="btn alt" type="button" onclick="addContributionRow()">新增投入列</button></div>
         </div>
         <div class="row">
-          <div class="group"><label>說明事項 1</label><textarea id="statement-note-1"></textarea></div>
-          <div class="group"><label>說明事項 2</label><textarea id="statement-note-2"></textarea></div>
-          <div class="group"><label>說明事項 3</label><textarea id="statement-note-3"></textarea></div>
+          <div class="group"><label>說明備註 1</label><textarea id="statement-note-1"></textarea></div>
+          <div class="group"><label>說明備註 2</label><textarea id="statement-note-2"></textarea></div>
+          <div class="group"><label>說明備註 3</label><textarea id="statement-note-3"></textarea></div>
         </div>
         <div class="row">
-          <button class="btn" onclick="saveStatementDraft()">保存為草稿</button>
-          <button class="btn alt" onclick="publishStatement()">直接發布</button>
+          <button class="btn" onclick="saveStatementDraft()">儲存草稿</button>
+          <button class="btn alt" onclick="publishStatement()">發布月報</button>
           <button class="btn alt" onclick="previewEditorStatement()">更新預覽</button>
           <button class="btn alt" onclick="resetStatementEditor()">重設表單</button>
         </div>
@@ -81,7 +81,7 @@
       </div>
     </section>
     <section class="card">
-      <div class="card-head">版面預覽</div>
+      <div class="card-head">即時預覽</div>
       <div class="body">
         <iframe id="statement-preview" class="preview-frame"></iframe>
       </div>
@@ -91,19 +91,20 @@
 <div class="build-badge" id="build-badge">Structured</div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module">
-import { auth, db, functions } from './firebase-portal.js?v=20260702-adminwritefix1';
-import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-adminwritefix1';
+import { auth, db, functions } from './firebase-portal.js?v=20260702-adminwritefix2';
+import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-adminwritefix2';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
-const APP_VERSION = '20260702-adminwritefix1';
+const APP_VERSION = '20260702-adminwritefix2';
 const getShareholderAdminData = httpsCallable(functions, 'getShareholderAdminData');
 let shareholderDocs = [], draftDocs = [], statementDocs = [], editingStatementUid = '';
+let lastLoadedMonthId = '';
+let loadSequence = 0;
+const SELECTION_STORAGE_KEY = 'structured-statements-admin-selection';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const isBootstrapAdminEmail = (user) => String(user?.email || '').trim().toLowerCase() === 'john.cyl@gmail.com';
-const hasPortalAdminAccess = (token, user) => token?.claims?.admin === true || isBootstrapAdminEmail(user);
 const shareholderUid = (entry) => String(entry?.uid || entry?.id || '');
 
 function setStatus(id, text, type = '') {
@@ -112,30 +113,49 @@ function setStatus(id, text, type = '') {
   el.className = `status ${type}`;
 }
 
-function firebaseActionErrorMessage(error, scope = '資料保存') {
+function firebaseActionErrorMessage(error, scope = '操作') {
   const code = error?.code || '';
   const head = scope ? `${scope}失敗：` : '';
   switch (code) {
     case 'permission-denied':
-      return `${head}目前登入帳號沒有寫入權限，請重新登入管理員後再試。`;
+      return `${head}目前登入帳號沒有足夠權限。`;
     case 'unauthenticated':
       return `${head}登入狀態已失效，請重新登入。`;
     case 'deadline-exceeded':
-      return `${head}等待 Firebase 回應逾時，請稍後重試。`;
+      return `${head}等待 Firebase 回應逾時，請稍後再試。`;
     case 'unavailable':
     case 'auth/network-request-failed':
-      return `${head}網路或 Firebase 服務暫時不可用，請稍後重試。`;
+      return `${head}網路或 Firebase 服務暫時不可用。`;
     default:
       return `${head}${error?.message || '請稍後再試。'}`;
   }
 }
 
 function statementMonthId() { return $('statement-year').value + $('statement-month').value; }
-function statementLabel() { return `${$('statement-year').value} 年${$('statement-month').value} 月`; }
+function statementLabel() { return `${$('statement-year').value} 年 ${$('statement-month').value} 月`; }
 function statementFor(uid) { return statementDocs.find((s) => shareholderUid(s) === uid); }
 function isPublishedStatement(st) { return !!st && (st.status === 'published' || (!st.status && st.publishedAt)); }
 function hasEditableStatement(st) { return !!st && (hasStatementStructuredData(st) || st.renderMode === 'structured-html'); }
 function editorOwner() { return shareholderDocs.find((s) => shareholderUid(s) === editingStatementUid) || shareholderDocs.find((s) => shareholderUid(s) === $('editor-shareholder').value) || null; }
+
+function saveSelectionState() {
+  try {
+    localStorage.setItem(SELECTION_STORAGE_KEY, JSON.stringify({
+      year: $('statement-year').value,
+      month: $('statement-month').value,
+      shareholderUid: $('editor-shareholder').value || editingStatementUid || '',
+    }));
+  } catch {}
+}
+
+function restoreSelectionState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SELECTION_STORAGE_KEY) || '{}');
+    if (saved.year && [...$('statement-year').options].some((option) => option.value === saved.year)) $('statement-year').value = saved.year;
+    if (saved.month && [...$('statement-month').options].some((option) => option.value === saved.month)) $('statement-month').value = saved.month;
+    if (saved.shareholderUid) editingStatementUid = saved.shareholderUid;
+  } catch {}
+}
 
 function adminLoginErrorMessage(error) {
   switch (error?.code) {
@@ -144,7 +164,7 @@ function adminLoginErrorMessage(error) {
     case 'auth/user-not-found':
       return '這組 Email / 密碼目前無法登入 Firebase 管理後台。';
     case 'auth/too-many-requests':
-      return '嘗試次數過多，請稍候再試。';
+      return '嘗試次數過多，請稍後再試。';
     case 'auth/user-disabled':
       return '這個 Firebase 帳號已被停用。';
     default:
@@ -152,8 +172,8 @@ function adminLoginErrorMessage(error) {
   }
 }
 
-async function fetchShareholderAdminPayload() {
-  const result = await getShareholderAdminData({ monthId: statementMonthId() });
+async function fetchShareholderAdminPayload(monthId) {
+  const result = await getShareholderAdminData({ monthId });
   return result.data || result;
 }
 
@@ -165,7 +185,7 @@ function defaultStatementData(owner) {
     currency: 'USD',
     notes: [...DEFAULT_NOTES],
     dividendRows: [
-      { year: '2025', amount: '', method: '返投', sortOrder: 1 },
+      { year: '2025', amount: '', method: '現金', sortOrder: 1 },
       { year: '2026', amount: '', method: '', sortOrder: 2 },
       { year: '2027', amount: '', method: '', sortOrder: 3 },
       { year: '2028', amount: '', method: '', sortOrder: 4 },
@@ -181,7 +201,7 @@ function renderTopSummary() {
     `<span>月份 ${statementLabel()}</span>`,
     `<span>股東 ${active.length} 位</span>`,
     `<span>已發布 ${published} 份</span>`,
-    `<span>頁面版本 ${APP_VERSION}</span>`,
+    `<span>版本 ${APP_VERSION}</span>`,
   ].join('');
 }
 
@@ -239,6 +259,7 @@ function loadStatementEditor(uid) {
   const data = hasEditableStatement(current) ? normalizeStatementData(current) : defaultStatementData(owner);
   setEditorSummary(owner, current);
   fillStatementEditor(data);
+  saveSelectionState();
 }
 
 function resetStatementEditor() {
@@ -269,7 +290,7 @@ function isDividendHeaderLike(row = {}) {
   const year = textValue(row.year);
   const amount = textValue(row.amount);
   const method = textValue(row.method);
-  return year === '股利年度' || amount === '金額' || method === '領取方式';
+  return year === '年度' || amount === '金額' || method === '發放方式';
 }
 
 function numericValue(value) {
@@ -300,9 +321,6 @@ function dateValue(value) {
 function composeImportedName(parts) {
   const values = parts.map((part) => textValue(part)).filter(Boolean);
   if (!values.length) return '';
-  if (values.length >= 4 && values[0].includes('登記為') && values[values.length - 1] === ')') {
-    return `${values[0]}${values.slice(1, -1).join('、')})`;
-  }
   return values.join('');
 }
 
@@ -323,24 +341,24 @@ function findSheetRow(rows, label) {
 
 function readSheet(sheetName, sheet) {
   const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: null });
-  const nameRow = findSheetRow(rows, '股東姓名_Name：');
-  const codeRow = findSheetRow(rows, '股東戶號_CIN：');
-  const currencyRow = findSheetRow(rows, '報告幣別_Currency:');
-  const reportTypeRow = findSheetRow(rows, '報告性質_Attributes：');
-  const shareClassRow = findSheetRow(rows, '持股份總類：');
-  const contributionHeaderRow = findSheetRow(rows, '股東名稱');
-  const notesHeaderRow = findSheetRow(rows, '說明事項_Explanatory Notes');
+  const nameRow = findSheetRow(rows, '股東姓名_Shareholder Name');
+  const codeRow = findSheetRow(rows, '股東戶號_CIN');
+  const currencyRow = findSheetRow(rows, '幣別_Currency:');
+  const reportTypeRow = findSheetRow(rows, '報表類型_Attributes');
+  const shareClassRow = findSheetRow(rows, '股權類別_Share Class');
+  const contributionHeaderRow = findSheetRow(rows, '股東投入明細');
+  const notesHeaderRow = findSheetRow(rows, '註解_Explanatory Notes');
   const endDateRow = rows.findIndex((row) => textValue(row?.[0]).includes('End Date'));
-  const navRow = rows.findIndex((row) => textValue(row?.[0]).includes('每單位淨值'));
+  const navRow = rows.findIndex((row) => textValue(row?.[0]).includes('NAV'));
   if ([nameRow, codeRow, currencyRow, reportTypeRow, shareClassRow, contributionHeaderRow, notesHeaderRow, endDateRow, navRow].some((index) => index < 0)) {
-    throw new Error(`${sheetName} 缺少必要欄位，無法匯入。`);
+    throw new Error(`${sheetName} 缺少必要欄位，請確認 Excel 範本。`);
   }
 
   const shareholderName = composeImportedName(rows[nameRow].slice(1, 6));
   const shareholderCode = normalizeImportedCode(rows[codeRow][1], rows[codeRow][2]);
   const endDate = dateValue(rows[endDateRow][1]);
-  if (!shareholderCode) throw new Error(`${sheetName} 找不到股東戶號。`);
-  if (!endDate) throw new Error(`${sheetName} 找不到截止日。`);
+  if (!shareholderCode) throw new Error(`${sheetName} 缺少股東戶號。`);
+  if (!endDate) throw new Error(`${sheetName} 缺少結算日期。`);
 
   const dividendRows = [];
   for (let offset = 0; offset < 4; offset += 1) {
@@ -393,12 +411,12 @@ function readSheet(sheetName, sheet) {
       templateVersion: 1,
       year: endDate.slice(0, 4),
       month: endDate.slice(5, 7),
-      label: `${endDate.slice(0, 4)} 年${endDate.slice(5, 7)} 月`,
+      label: `${endDate.slice(0, 4)} 年 ${endDate.slice(5, 7)} 月`,
       shareholderCode,
       shareholderName,
       shareClass: normalizeShareClass(rows[shareClassRow][1]),
       currency: textValue(rows[currencyRow][1]) || 'USD',
-      reportType: textValue(rows[reportTypeRow][1]) || '股東持有權益份額報告書',
+      reportType: textValue(rows[reportTypeRow][1]) || 'Monthly Statement',
       endDate,
       navPerUnit: numericValue(rows[navRow][1]),
       investedAmountUsd: numericValue((rows[shareClassRow + 1] || [])[1]),
@@ -419,30 +437,30 @@ function parseWorkbookSheets(workbook) {
 }
 
 async function parseWorkbookFile(file) {
-  if (!window.XLSX) throw new Error('Excel 解析器尚未載入完成，請稍後再試。');
+  if (!window.XLSX) throw new Error('Excel 解析工具尚未載入。');
   const workbook = XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: true });
   return parseWorkbookSheets(workbook);
 }
 
 function parseWorkbookBinaryString(binary) {
-  if (!window.XLSX) throw new Error('Excel 解析器尚未載入完成，請稍後再試。');
+  if (!window.XLSX) throw new Error('Excel 解析工具尚未載入。');
   return parseWorkbookSheets(XLSX.read(binary, { type: 'binary', cellDates: true }));
 }
 
 async function importWorkbookDraft() {
   const file = $('statement-import-file').files?.[0];
   if (!file) return setStatus('import-status', '請先選擇 Excel 檔案。', 'error');
-  setStatus('import-status', '正在解析 Excel 並準備匯入...', '');
+  setStatus('import-status', '正在讀取 Excel...','');
   try {
     const parsedSheets = await parseWorkbookFile(file);
     const monthIds = [...new Set(parsedSheets.map((item) => item.monthId))];
     if (monthIds.length !== 1 || monthIds[0] !== statementMonthId()) {
-      throw new Error(`Excel 截止月份為 ${monthIds.join('、')}，請先把頁面月份切換成相同月份再匯入。`);
+      throw new Error('Excel 月份為 ' + monthIds.join(', ') + '，與目前選取月份不一致。');
     }
 
     const ownersByCode = new Map(shareholderDocs.filter((owner) => owner.active !== false).map((owner) => [owner.shareholderCode, owner]));
     const missingCodes = parsedSheets.map((item) => item.payload.shareholderCode).filter((code) => !ownersByCode.has(code));
-    if (missingCodes.length) throw new Error(`找不到已建立的股東戶號：${missingCodes.join('、')}`);
+    if (missingCodes.length) throw new Error('找不到以下已建立股東：' + missingCodes.join(', '));
 
     for (const item of parsedSheets) {
       const owner = ownersByCode.get(item.payload.shareholderCode);
@@ -458,48 +476,16 @@ async function importWorkbookDraft() {
 
     $('statement-import-file').value = '';
     await loadData();
-    setStatus('import-status', `已完成 ${parsedSheets.length} 位股東的 Excel 匯入，資料已保存為目前月份內容。`, 'ok');
-    setStatus('editor-status', 'Excel 匯入完成，已同步更新編輯器。', 'ok');
+    setStatus('import-status', '完成：已匯入 ' + parsedSheets.length + ' 份 Excel 草稿。', 'ok');
+    setStatus('editor-status', 'Excel 草稿已同步到本月資料。', 'ok');
   } catch (e) {
-    setStatus('import-status', `匯入失敗：${e.message}`, 'error');
+    setStatus('import-status', '匯入失敗：' + e.message, 'error');
   }
 }
-
-function collectStatementForm() {
-  const owner = editorOwner();
-  if (!owner) throw new Error('請先選擇股東。');
-  const dividendRows = collectRows('dividend').map((row, index) => ({ year: row.year || '', amount: row.amount || '', method: row.method || '', sortOrder: index + 1 })).filter((row) => (row.year || row.amount || row.method) && !isDividendHeaderLike(row));
-  const contributionRows = collectRows('contribution').map((row, index) => ({ shareholderName: row.name || owner.displayName, fundedAmount: row.amount || '', contributionDate: row.date || '', navDateLabel: row['nav-label'] || '', navDate: '', buyNavPerUnit: row['buy-nav'] || '', unitsAcquired: row.units || '', remark: row.remark || '', sortOrder: index + 1 })).filter((row) => row.shareholderName || row.fundedAmount || row.contributionDate || row.navDateLabel || row.buyNavPerUnit || row.unitsAcquired || row.remark);
-  return {
-    renderMode: 'structured-html',
-    contentType: 'text/html',
-    templateVersion: 1,
-    year: $('statement-year').value,
-    month: $('statement-month').value,
-    label: statementLabel(),
-    shareholderCode: owner.shareholderCode,
-    shareholderName: owner.displayName,
-    shareClass: $('statement-share-class').value,
-    currency: $('statement-currency').value.trim() || 'USD',
-    reportType: $('statement-report-type').value.trim() || '股東持有權益份額報告書',
-    endDate: $('statement-end-date').value,
-    navPerUnit: $('statement-nav-per-unit').value,
-    investedAmountUsd: $('statement-invested-amount').value,
-    unitsHeld: $('statement-units-held').value,
-    ownershipPercent: $('statement-ownership-percent').value,
-    marketValueUsd: $('statement-market-value').value,
-    gainUsd: $('statement-gain-usd').value,
-    returnRatePercent: $('statement-return-rate').value,
-    dividendRows,
-    contributionRows,
-    notes: [$('statement-note-1').value.trim(), $('statement-note-2').value.trim(), $('statement-note-3').value.trim()].filter(Boolean),
-  };
-}
-
 function previewEditorStatement() {
   try {
     $('statement-preview').srcdoc = buildShareholderStatementHtml(collectStatementForm());
-    setStatus('editor-status', '版面預覽已更新。', 'ok');
+    setStatus('editor-status', '預覽已更新。', 'ok');
   } catch (e) {
     setStatus('editor-status', `預覽失敗：${e.message}`, 'error');
   }
@@ -510,7 +496,7 @@ async function saveStatement(status = 'draft') {
   try { payload = collectStatementForm(); } catch (e) { setStatus('editor-status', e.message, 'error'); return; }
   const owner = editorOwner();
   const ownerUid = shareholderUid(owner);
-  setStatus('editor-status', `正在保存 ${owner.shareholderCode} 的資料...`);
+  setStatus('editor-status', `正在儲存 ${owner.shareholderCode} 的月報...`);
   try {
     await setDoc(doc(db, 'statements', ownerUid, 'months', statementMonthId()), {
       ...payload,
@@ -519,9 +505,9 @@ async function saveStatement(status = 'draft') {
       updatedAt: serverTimestamp(),
     }, { merge: true });
     await loadData();
-    setStatus('editor-status', `${owner.shareholderCode} 已${status === 'published' ? '發布' : '保存為草稿'}。`, 'ok');
+    setStatus('editor-status', `${owner.shareholderCode} ${status === 'published' ? '已發布' : '草稿已儲存'}。`, 'ok');
   } catch (e) {
-    setStatus('editor-status', firebaseActionErrorMessage(e, `${owner.shareholderCode} ${status === 'published' ? '發布' : '保存'}`), 'error');
+    setStatus('editor-status', firebaseActionErrorMessage(e, `${owner.shareholderCode} ${status === 'published' ? '發布失敗' : '儲存失敗'}`), 'error');
     throw e;
   }
 }
@@ -530,10 +516,14 @@ async function saveStatementDraft() { await saveStatement('draft'); }
 async function publishStatement() { await saveStatement('published'); }
 
 async function loadData() {
-  const result = await fetchShareholderAdminPayload();
+  const requestedMonthId = statementMonthId();
+  const sequence = ++loadSequence;
+  const result = await fetchShareholderAdminPayload(requestedMonthId);
+  if (sequence !== loadSequence) return;
   shareholderDocs = result.shareholders || [];
   draftDocs = result.drafts || [];
   statementDocs = result.statements || [];
+  lastLoadedMonthId = requestedMonthId;
   renderTopSummary();
   renderEditorShareholders();
   if (editingStatementUid && shareholderDocs.some((s) => shareholderUid(s) === editingStatementUid)) loadStatementEditor(editingStatementUid);
@@ -541,6 +531,12 @@ async function loadData() {
     const firstActive = shareholderDocs.find((s) => s.active !== false);
     if (firstActive) loadStatementEditor(shareholderUid(firstActive));
   }
+  saveSelectionState();
+}
+
+async function reloadIfSelectionChanged() {
+  if (!auth.currentUser) return;
+  if (statementMonthId() !== lastLoadedMonthId) await loadData();
 }
 
 async function adminLogin() {
@@ -548,7 +544,7 @@ async function adminLogin() {
   try {
     const cred = await signInWithEmailAndPassword(auth, $('admin-email').value.trim(), $('admin-password').value);
     const token = await cred.user.getIdTokenResult(true);
-    if (!hasPortalAdminAccess(token, cred.user)) {
+    if (token?.claims?.admin !== true) {
       await signOut(auth);
       throw new Error('此帳號尚未取得後台管理權限。');
     }
@@ -590,22 +586,25 @@ function removeContributionRow(index) {
 }
 
 $('statement-month').innerHTML = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0')).map((m) => `<option>${m}</option>`).join('');
-$('statement-month').value = '05';
-$('statement-year').addEventListener('change', loadData);
-$('statement-month').addEventListener('change', loadData);
-$('editor-shareholder').addEventListener('change', (e) => loadStatementEditor(e.target.value));
+$('statement-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
+restoreSelectionState();
+$('statement-year').addEventListener('change', () => { saveSelectionState(); loadData(); });
+$('statement-month').addEventListener('change', () => { saveSelectionState(); loadData(); });
+$('editor-shareholder').addEventListener('change', (e) => { saveSelectionState(); loadStatementEditor(e.target.value); });
 $('build-badge').textContent = `Structured ${APP_VERSION}`;
 Object.assign(window, { adminLogin, adminLogout, saveStatementDraft, publishStatement, previewEditorStatement, resetStatementEditor, addDividendRow, removeDividendRow, addContributionRow, removeContributionRow, importWorkbookDraft, parseWorkbookFile, parseWorkbookBinaryString });
+window.addEventListener('pageshow', () => { restoreSelectionState(); reloadIfSelectionChanged(); });
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
   try {
     const token = await user.getIdTokenResult(true);
-    if (hasPortalAdminAccess(token, user)) {
+    if (token?.claims?.admin === true) {
       $('gate').classList.add('hidden');
       await loadData();
+      setTimeout(() => reloadIfSelectionChanged(), 0);
     }
   } catch (e) {
-    setStatus('gate-status', '登入驗證失敗。', 'error');
+    setStatus('gate-status', '登入狀態確認失敗，請重新登入。', 'error');
   }
 });
 </script>

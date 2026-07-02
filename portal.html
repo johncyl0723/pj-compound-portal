@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<title>P&amp;J Compound Company Limited — 投資組合入口</title>
+<title>P&amp;J Compound Company Limited 投資組合入口網站</title>
 <style>
   :root {
     --brown: #6D3A0F; --brown-dark: #2C1503; --brown-light: #A05C1A;
@@ -236,28 +236,28 @@
     <div class="banner-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Company Limited Logo"></div>
     <div class="banner-text"><div class="banner-title">P&amp;J Compound Company Limited</div><div class="banner-sub">Investment Portfolio Portal</div></div>
   </button>
-  <div class="banner-client" id="banner-client"><span class="banner-client-label">股東 / 客戶 <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
+  <div class="banner-client" id="banner-client"><span class="banner-client-label">股東 / Client <b id="banner-client-name"></b></span><button class="logout-btn" onclick="logout()">登出</button></div>
 </header>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 <div class="body-wrap">
   <nav class="sidebar">
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-reports" onclick="toggleSection('reports')"><span class="icon">📊</span>月報表 Monthly Reports<span class="chevron">▶</span></div><div class="nav-sub" id="sub-reports"></div></div>
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-topics" onclick="toggleSection('topics')"><span class="icon">📚</span>財經專題 Research<span class="chevron">▶</span></div><div class="nav-sub" id="sub-topics"></div></div>
-    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">📄</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
-    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>本系統僅供客戶內部參閱<br><span id="footer-updated"></span><br><br><a href="./firebase-admin.html">⚙ 後臺管理 Admin</a></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-reports" onclick="toggleSection('reports')"><span class="icon">📊</span>月度月報 Monthly Reports<span class="chevron">▶</span></div><div class="nav-sub open" id="sub-reports"></div></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-topics" onclick="toggleSection('topics')"><span class="icon">📚</span>財經專題 Research<span class="chevron">▶</span></div><div class="nav-sub open" id="sub-topics"></div></div>
+    <div class="sidebar-section"><div class="nav-group-header open" id="hdr-statements" onclick="toggleSection('statements')"><span class="icon">🧾</span>個人對帳單 Statements<span class="chevron">▶</span></div><div class="nav-sub open" id="sub-statements"><div class="nav-item">登入後載入</div></div></div>
+    <div class="sidebar-footer">P&amp;J Compound Company Limited<br>股東專屬投資組合入口網站<br><span id="footer-updated"></span></div>
   </nav>
-  <div class="sidebar-resizer" id="sidebar-resizer" role="separator" aria-label="調整左側欄寬度" aria-orientation="vertical" tabindex="0"></div>
+  <div class="sidebar-resizer" id="sidebar-resizer" role="separator" aria-label="調整側邊欄寬度" aria-orientation="vertical" tabindex="0"></div>
   <main class="main-frame">
     <section class="welcome" id="welcome-screen">
       <div class="welcome-card">
         <div class="brand-mark welcome-mark"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
         <div class="brand-name"><div class="brand-name-main">P&amp;J Compound</div><div class="brand-name-sub">Company Limited</div></div>
-        <div class="welcome-divider"></div><h1>歡迎使用投資組合入口</h1>
+        <div class="welcome-divider"></div><h1>登入投資組合入口網站</h1>
         <div class="welcome-form">
-          <div class="field-label">股東編號 / Shareholder ID</div><input class="welcome-input" id="client-code" name="username" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="例如：PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
-          <div class="field-label">進入密碼 / Password</div>
-          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" name="password" autocomplete="current-password" spellcheck="false" placeholder="請輸入股東 / 客戶專屬密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
-          <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">進入 →</button>
+          <div class="field-label">股東戶號 / Shareholder ID</div><input class="welcome-input" id="client-code" name="username" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="請輸入 PS001" onkeydown="if(event.key==='Enter')document.getElementById('client-password').focus()">
+          <div class="field-label">登入密碼 / Password</div>
+          <div class="input-wrap"><input class="welcome-input" type="password" id="client-password" name="password" autocomplete="current-password" spellcheck="false" placeholder="請輸入股東專屬登入密碼" onkeydown="if(event.key==='Enter')attemptLogin()"><button class="eye-btn" type="button" onclick="togglePassword('client-password',this)" aria-label="顯示密碼" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="eye-slash" d="M4 4l16 16"/></svg></button></div>
+          <div class="welcome-error" id="welcome-error"></div><button class="login-btn" onclick="attemptLogin()">登入 →</button>
         </div>
       </div>
     </section>
@@ -265,7 +265,7 @@
       <div class="home-grid"></div>
       <div class="idle-card">
         <div class="home-kicker">P&amp;J Compound Company Limited</div>
-        <h1 class="home-title"><span id="home-client-name"></span>，歡迎回來</h1>
+        <h1 class="home-title"><span id="home-client-name"></span><span>，歡迎回來</span></h1>
         <div class="home-stage">
           <svg class="finance-chart" viewBox="0 0 760 330" preserveAspectRatio="none" aria-hidden="true">
             <defs>
@@ -282,15 +282,15 @@
             <div class="home-logo"><img src="assets/pj-compound-mark.svg" alt="P&amp;J Compound Logo"></div>
           </div>
         </div>
-        <div class="home-slogan">穩健複利・長期共贏</div>
-        <div class="home-hint"><span class="desktop-hint">請從左側選單選擇月報表、財經專題或個人對帳單</span><span class="mobile-hint">請點左上角 ☰ 選單選擇月報表、財經專題或個人對帳單</span></div>
-        <div class="ai-partners" aria-label="AI 協作夥伴">
+        <div class="home-slogan">穩健投資  長期成長  透明管理</div>
+        <div class="home-hint"><span class="desktop-hint">請從左側選單開啟月度月報、財經專題或個人對帳單</span><span class="mobile-hint">請先開啟左上選單，再選擇月度月報、財經專題或個人對帳單</span></div>
+        <div class="ai-partners" aria-label="AI 合作夥伴">
           <div class="announcement-bar" id="announcement-bar" aria-live="polite">
             <div class="announcement-head">
               <div class="announcement-label">最新公告</div>
               <div class="announcement-caption">Latest Portfolio Updates</div>
             </div>
-            <div class="announcement-marquee" aria-label="最新公告跑馬燈">
+            <div class="announcement-marquee" aria-label="公告跑馬燈">
               <div class="announcement-track" id="announcement-track"></div>
             </div>
             <div class="announcement-window">
@@ -312,7 +312,7 @@
         </div>
       </div>
     </section>
-    <iframe id="content-iframe" title="投資組合內容"></iframe>
+    <iframe id="content-iframe" title="投資內容檢視"></iframe>
     <div id="pdf-viewer"><div id="pdf-pages"></div></div>
     <div class="build-badge" id="build-badge">Portal</div>
   </main>
@@ -324,79 +324,637 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https:/
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION='20260702-statementfix1';
-let isAuthenticated=false,currentClient=null,currentBlobUrl='',_pdfjs=null;
-const SIDEBAR_WIDTH_KEY='pj-portal-sidebar-width';
-const SIDEBAR_MIN_WIDTH=220;
-const SIDEBAR_MAX_WIDTH=420;
-let isSidebarResizing=false;
-const announcementDateFormatter=new Intl.DateTimeFormat('zh-TW',{month:'2-digit',day:'2-digit'});
-function clampSidebarWidth(width){return Math.min(SIDEBAR_MAX_WIDTH,Math.max(SIDEBAR_MIN_WIDTH,width))}
-function setSidebarWidth(width){document.documentElement.style.setProperty('--sidebar-width',`${clampSidebarWidth(width)}px`)}
-function loadSidebarWidth(){const saved=Number(localStorage.getItem(SIDEBAR_WIDTH_KEY));setSidebarWidth(Number.isFinite(saved)?saved:268)}
-function persistSidebarWidth(width){localStorage.setItem(SIDEBAR_WIDTH_KEY,String(clampSidebarWidth(width)))}
-function isDesktopLayout(){return window.innerWidth>768}
-function startSidebarResize(event){if(!isDesktopLayout())return;isSidebarResizing=true;document.body.classList.add('is-resizing');const resizer=document.getElementById('sidebar-resizer');resizer.classList.add('is-dragging');if(typeof resizer.setPointerCapture==='function'&&event.pointerId!=null)resizer.setPointerCapture(event.pointerId);updateSidebarWidthFromClientX(event.clientX)}
-function stopSidebarResize(event){if(!isSidebarResizing)return;isSidebarResizing=false;document.body.classList.remove('is-resizing');const resizer=document.getElementById('sidebar-resizer');resizer.classList.remove('is-dragging');if(event&&typeof resizer.releasePointerCapture==='function'&&event.pointerId!=null){try{resizer.releasePointerCapture(event.pointerId)}catch(_){}}persistSidebarWidth(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width'))||268)}
-function updateSidebarWidthFromClientX(clientX){if(!isDesktopLayout())return;setSidebarWidth(clientX)}
-function handleSidebarResizeKeydown(event){if(!isDesktopLayout())return;const step=event.shiftKey?24:12;const current=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width'))||268;if(event.key==='ArrowLeft'){event.preventDefault();const next=clampSidebarWidth(current-step);setSidebarWidth(next);persistSidebarWidth(next)}else if(event.key==='ArrowRight'){event.preventDefault();const next=clampSidebarWidth(current+step);setSidebarWidth(next);persistSidebarWidth(next)}}
-function initSidebarResizer(){loadSidebarWidth();const resizer=document.getElementById('sidebar-resizer');resizer.addEventListener('pointerdown',startSidebarResize);resizer.addEventListener('pointermove',event=>{if(isSidebarResizing)updateSidebarWidthFromClientX(event.clientX)});resizer.addEventListener('pointerup',stopSidebarResize);resizer.addEventListener('pointercancel',stopSidebarResize);resizer.addEventListener('keydown',handleSidebarResizeKeydown);window.addEventListener('pointermove',event=>{if(isSidebarResizing)updateSidebarWidthFromClientX(event.clientX)});window.addEventListener('pointerup',stopSidebarResize);window.addEventListener('resize',()=>{if(!isDesktopLayout())stopSidebarResize();});if(!isDesktopLayout())setSidebarWidth(268)}
-function formatMonthLabel(year,month){return `${year}年${String(month).padStart(2,'0')}月`}
-function getStatementDisplayLabel(statement){
+const APP_VERSION = '20260702-statementfix1';
+const SIDEBAR_WIDTH_KEY = 'pj-portal-sidebar-width';
+const SIDEBAR_MIN_WIDTH = 220;
+const SIDEBAR_MAX_WIDTH = 420;
+
+let isAuthenticated = false;
+let currentClient = null;
+let currentBlobUrl = '';
+let isSidebarResizing = false;
+let pdfjsLib = null;
+const activeBlobUrls = new Set();
+
+function clampSidebarWidth(width) {
+  return Math.min(SIDEBAR_MAX_WIDTH, Math.max(SIDEBAR_MIN_WIDTH, width));
+}
+
+function setSidebarWidth(width) {
+  document.documentElement.style.setProperty('--sidebar-width', `${clampSidebarWidth(width)}px`);
+}
+
+function loadSidebarWidth() {
+  const saved = Number(localStorage.getItem(SIDEBAR_WIDTH_KEY));
+  setSidebarWidth(Number.isFinite(saved) ? saved : 268);
+}
+
+function persistSidebarWidth(width) {
+  localStorage.setItem(SIDEBAR_WIDTH_KEY, String(clampSidebarWidth(width)));
+}
+
+function isDesktopLayout() {
+  return window.innerWidth > 768;
+}
+
+function createTrackedBlobUrl(blob) {
+  const url = URL.createObjectURL(blob);
+  activeBlobUrls.add(url);
+  return url;
+}
+
+function revokeAllBlobUrls() {
+  for (const url of activeBlobUrls) {
+    URL.revokeObjectURL(url);
+  }
+  activeBlobUrls.clear();
+  currentBlobUrl = '';
+}
+
+function startSidebarResize(event) {
+  if (!isDesktopLayout()) return;
+  isSidebarResizing = true;
+  document.body.classList.add('is-resizing');
+  const resizer = document.getElementById('sidebar-resizer');
+  resizer.classList.add('is-dragging');
+  if (typeof resizer.setPointerCapture === 'function' && event.pointerId != null) {
+    resizer.setPointerCapture(event.pointerId);
+  }
+  setSidebarWidth(event.clientX);
+}
+
+function stopSidebarResize(event) {
+  if (!isSidebarResizing) return;
+  isSidebarResizing = false;
+  document.body.classList.remove('is-resizing');
+  const resizer = document.getElementById('sidebar-resizer');
+  resizer.classList.remove('is-dragging');
+  if (event && typeof resizer.releasePointerCapture === 'function' && event.pointerId != null) {
+    try { resizer.releasePointerCapture(event.pointerId); } catch (_) {}
+  }
+  persistSidebarWidth(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 268);
+}
+
+function handleSidebarResizeKeydown(event) {
+  if (!isDesktopLayout()) return;
+  const step = event.shiftKey ? 24 : 12;
+  const current = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || 268;
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    const next = clampSidebarWidth(current - step);
+    setSidebarWidth(next);
+    persistSidebarWidth(next);
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    const next = clampSidebarWidth(current + step);
+    setSidebarWidth(next);
+    persistSidebarWidth(next);
+  }
+}
+
+function initSidebarResizer() {
+  loadSidebarWidth();
+  const resizer = document.getElementById('sidebar-resizer');
+  resizer.addEventListener('pointerdown', startSidebarResize);
+  resizer.addEventListener('pointermove', (event) => {
+    if (isSidebarResizing && isDesktopLayout()) setSidebarWidth(event.clientX);
+  });
+  resizer.addEventListener('pointerup', stopSidebarResize);
+  resizer.addEventListener('pointercancel', stopSidebarResize);
+  resizer.addEventListener('keydown', handleSidebarResizeKeydown);
+  window.addEventListener('pointermove', (event) => {
+    if (isSidebarResizing && isDesktopLayout()) setSidebarWidth(event.clientX);
+  });
+  window.addEventListener('pointerup', stopSidebarResize);
+  window.addEventListener('resize', () => {
+    if (!isDesktopLayout()) stopSidebarResize();
+  });
+  if (!isDesktopLayout()) setSidebarWidth(268);
+}
+
+function formatMonthLabel(year, month) {
+  return `${year} 年 ${String(month).padStart(2, '0')} 月`;
+}
+
+function getStatementDisplayLabel(statement) {
   if (statement?.year && statement?.month) return formatMonthLabel(statement.year, statement.month);
   if (/^\d{6}$/.test(String(statement?.id || ''))) return formatMonthLabel(String(statement.id).slice(0, 4), String(statement.id).slice(4, 6));
   return statement?.label || '未命名對帳單';
 }
 
-async function getPdfjs(){if(!_pdfjs){_pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');_pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';}return _pdfjs;}
+async function getPdfjs() {
+  if (!pdfjsLib) {
+    pdfjsLib = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+  }
+  return pdfjsLib;
+}
 
-async function renderPDF(url){const viewer=document.getElementById('pdf-viewer'),pages=document.getElementById('pdf-pages'),frame=document.getElementById('content-iframe');frame.style.display='none';frame.removeAttribute('src');viewer.style.display='block';pages.innerHTML='<div class="pdf-loading">載入中...</div>';try{const lib=await getPdfjs(),pdf=await lib.getDocument({url,cMapUrl:'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/cmaps/',cMapPacked:true}).promise;pages.innerHTML='';const dpr=window.devicePixelRatio||1,cw=Math.max(viewer.clientWidth-16,300);for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i),base=page.getViewport({scale:1}),scale=(cw/base.width)*dpr,vp=page.getViewport({scale}),canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;canvas.style.width=Math.floor(vp.width/dpr)+'px';canvas.style.height=Math.floor(vp.height/dpr)+'px';canvas.style.maxWidth='100%';canvas.style.display='block';canvas.style.boxShadow='0 4px 16px rgba(0,0,0,.4)';const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);await page.render({canvasContext:ctx,viewport:vp}).promise;pages.appendChild(canvas);}}catch(err){pages.innerHTML='<div class="pdf-error">無法載入，請聯絡管理員。</div>';}}
+async function renderPDF(url) {
+  const viewer = document.getElementById('pdf-viewer');
+  const pages = document.getElementById('pdf-pages');
+  const frame = document.getElementById('content-iframe');
+  frame.style.display = 'none';
+  frame.removeAttribute('src');
+  viewer.style.display = 'block';
+  pages.innerHTML = '<div class="pdf-loading">載入中...</div>';
+  try {
+    const lib = await getPdfjs();
+    const pdf = await lib.getDocument({
+      url,
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/cmaps/',
+      cMapPacked: true,
+    }).promise;
+    pages.innerHTML = '';
+    const dpr = window.devicePixelRatio || 1;
+    const contentWidth = Math.max(viewer.clientWidth - 16, 300);
+    for (let i = 1; i <= pdf.numPages; i += 1) {
+      const page = await pdf.getPage(i);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = (contentWidth / baseViewport.width) * dpr;
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      canvas.style.width = `${Math.floor(viewport.width / dpr)}px`;
+      canvas.style.height = `${Math.floor(viewport.height / dpr)}px`;
+      canvas.style.maxWidth = '100%';
+      canvas.style.display = 'block';
+      canvas.style.boxShadow = '0 4px 16px rgba(0,0,0,.4)';
+      const context = canvas.getContext('2d');
+      context.fillStyle = '#fff';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: context, viewport }).promise;
+      pages.appendChild(canvas);
+    }
+  } catch (_) {
+    pages.innerHTML = '<div class="pdf-error">無法載入 PDF，請稍後再試。</div>';
+  }
+}
 
-function showInFrame(url){const viewer=document.getElementById('pdf-viewer'),frame=document.getElementById('content-iframe');viewer.style.display='none';document.getElementById('pdf-pages').innerHTML='';frame.style.display='block';frame.removeAttribute('srcdoc');frame.src=url;}
-function showHtmlDocument(html){const viewer=document.getElementById('pdf-viewer'),frame=document.getElementById('content-iframe');viewer.style.display='none';document.getElementById('pdf-pages').innerHTML='';frame.style.display='block';frame.removeAttribute('src');frame.srcdoc=html;}
-function isHtmlAsset(entry){const path=String(entry?.storagePath||'').toLowerCase(),type=String(entry?.contentType||'').toLowerCase(),url=String(entry?.downloadUrl||entry?.src||'').toLowerCase();return type.includes('text/html')||path.endsWith('.html')||path.endsWith('.htm')||url.includes('.html')||url.includes('.htm')}
-function isPdfAsset(entry){const path=String(entry?.storagePath||'').toLowerCase(),type=String(entry?.contentType||'').toLowerCase(),url=String(entry?.downloadUrl||entry?.src||'').toLowerCase();return type.includes('application/pdf')||path.endsWith('.pdf')||url.includes('.pdf')}
-function resetDocumentViews(){const frame=document.getElementById('content-iframe'),viewer=document.getElementById('pdf-viewer'),pages=document.getElementById('pdf-pages');frame.style.display='none';frame.removeAttribute('src');frame.removeAttribute('srcdoc');viewer.style.display='none';pages.innerHTML=''}
-async function fetchAssetUrl(entry){if(entry?.storagePath){const blob=await getBlob(ref(storage,entry.storagePath));if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=URL.createObjectURL(blob);return currentBlobUrl}if(entry?.downloadUrl)return entry.downloadUrl;if(entry?.src)return entry.src;throw new Error('missing-asset-url')}
-async function presentDocument(entry){if(hasStatementStructuredData(entry)){showHtmlDocument(buildShareholderStatementHtml(entry));return}const url=await fetchAssetUrl(entry);if(isHtmlAsset(entry)){showInFrame(url);return}if(isPdfAsset(entry)||entry?.storagePath){await renderPDF(url);return}showInFrame(url)}
-function activateDocumentView(el){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('idle-screen').classList.remove('visible');resetDocumentViews();if(window.innerWidth<=768)closeSidebar()}
+function showInFrame(url) {
+  const viewer = document.getElementById('pdf-viewer');
+  const frame = document.getElementById('content-iframe');
+  viewer.style.display = 'none';
+  document.getElementById('pdf-pages').innerHTML = '';
+  frame.style.display = 'block';
+  frame.removeAttribute('srcdoc');
+  frame.src = url;
+}
 
-function toggleSidebar(){const s=document.querySelector('.sidebar'),o=document.getElementById('sidebar-overlay'),b=document.getElementById('hamburger-btn'),open=s.classList.toggle('open');o.classList.toggle('visible',open);b.classList.toggle('open',open);b.setAttribute('aria-expanded',String(open));}
-function closeSidebar(){const s=document.querySelector('.sidebar'),o=document.getElementById('sidebar-overlay'),b=document.getElementById('hamburger-btn');s.classList.remove('open');o.classList.remove('visible');b.classList.remove('open');b.setAttribute('aria-expanded','false');}
+function showHtmlDocument(html) {
+  const viewer = document.getElementById('pdf-viewer');
+  const frame = document.getElementById('content-iframe');
+  viewer.style.display = 'none';
+  document.getElementById('pdf-pages').innerHTML = '';
+  frame.style.display = 'block';
+  frame.removeAttribute('src');
+  frame.srcdoc = html;
+}
 
-function togglePassword(id,button){const input=document.getElementById(id),isVisible=input.type==='password';input.type=isVisible?'text':'password';button.classList.toggle('is-visible',isVisible);button.setAttribute('aria-pressed',String(isVisible));button.setAttribute('aria-label',isVisible?'隱藏密碼':'顯示密碼')}
-function loginErrorMessage(error){switch(error?.code){case'auth/missing-password':return'系統收到的是空白密碼，請重新輸入一次；若使用瀏覽器自動帶入，請點一下密碼欄後再登入。';case'auth/invalid-credential':case'auth/wrong-password':case'auth/user-not-found':return'Firebase 登入資料不相符。請到後臺重新設定此股東密碼後再試一次。';case'auth/user-disabled':return'此股東帳號已停用，請到後臺重新啟用。';case'auth/too-many-requests':return'嘗試次數過多，請稍候再試或到後臺重設密碼。';case'permission-denied':return'登入成功，但股東資料權限不足，請檢查 Firestore 權限設定。';default:return error?.message||'登入失敗，請稍後再試。'}}
-async function attemptLogin(){const codeInput=document.getElementById('client-code'),passwordInput=document.getElementById('client-password'),code=codeInput.value.trim().toUpperCase(),password=passwordInput.value,err=document.getElementById('welcome-error'),btn=document.querySelector('.login-btn');err.textContent='';if(!/^(PS|CS)\d{3}$/.test(code)){err.textContent='請輸入正確的股東編號，例如 PS001。';codeInput.focus();return}if(password.length===0){err.textContent='請先輸入密碼後再登入。';passwordInput.focus();return}btn.disabled=true;btn.textContent='登入中...';try{const cred=await signInWithEmailAndPassword(auth,shareholderEmail(code),password);await showAuthenticated(cred.user)}catch(e){err.textContent=loginErrorMessage(e);passwordInput.value='';await signOut(auth).catch(()=>{})}finally{btn.disabled=false;btn.textContent='進入 →'}}
-async function showAuthenticated(user){const snap=await getDoc(doc(db,'shareholders',user.uid));if(!snap.exists()||snap.data().active===false){await signOut(auth);throw new Error('此股東帳號尚未啟用。')}currentClient={uid:user.uid,...snap.data()};isAuthenticated=true;document.getElementById('welcome-screen').classList.add('hidden');document.getElementById('home-client-name').textContent=currentClient.displayName;document.getElementById('banner-client-name').textContent=`${currentClient.displayName} (${currentClient.shareholderCode})`;document.getElementById('banner-client').classList.add('visible');await Promise.all([buildReports(),buildTopics(),buildStatements(),buildAnnouncements()]);showHome()}
-function showHome(){document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');}
-function goHome(){if(isAuthenticated)showHome();else{document.getElementById('welcome-screen').classList.remove('hidden');document.getElementById('client-code').focus()}}
-async function logout(){if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);await signOut(auth);location.reload()}
-function buildSidebar(){document.getElementById('sub-reports').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('sub-topics').innerHTML='<div class="nav-item">登入後載入</div>';document.getElementById('footer-updated').textContent='Firebase 動態同步'}
-async function buildReports(){const el=document.getElementById('sub-reports');el.innerHTML='<div class="nav-item">載入中...</div>';const snap=await getDocs(collection(db,'portalMonthlyReports')),reports=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.active!==false).sort((a,b)=>String(b.id||'').localeCompare(String(a.id||'')));el.innerHTML=reports.length?'':'<div class="nav-item">尚無月報</div>';reports.forEach(r=>{const item=document.createElement('div');item.className='nav-item';item.dataset.key=r.id;const label=(r.year&&r.month)?formatMonthLabel(r.year,r.month):(r.label||'未命名月報');item.innerHTML=`<span class="dot"></span>${label}`;item.onclick=()=>openReport(item,r);el.appendChild(item)})}
-function topicSortValue(topic){return /^\d{4}-\d{2}-\d{2}$/.test(String(topic?.publishDate||''))?String(topic.publishDate):''}
-function compareTopics(a,b){return String(topicSortValue(b)).localeCompare(String(topicSortValue(a)))||(a.order||999)-(b.order||999)||String(b.id||'').localeCompare(String(a.id||''))||String(a.title||'').localeCompare(String(b.title||''))}
-async function buildTopics(){const el=document.getElementById('sub-topics');el.innerHTML='<div class="nav-item">載入中...</div>';const [topicSnap,catSnap]=await Promise.all([getDocs(collection(db,'portalTopics')),getDocs(collection(db,'portalCategories'))]),topics=topicSnap.docs.map(d=>({id:d.id,...d.data()})).filter(t=>t.active!==false).sort(compareTopics),cats=catSnap.docs.map(d=>({key:d.id,...d.data()})).sort((a,b)=>(a.order||999)-(b.order||999)||String(a.name||'').localeCompare(String(b.name||'')));el.innerHTML='';if(!topics.length){el.innerHTML='<div class="nav-item">尚無主題</div>';return}const map={};cats.forEach(c=>map[c.key]={...c,items:[]});const uncat=[];topics.forEach(t=>t.categoryKey&&map[t.categoryKey]?map[t.categoryKey].items.push(t):uncat.push(t));const make=t=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${t.title}`;item.onclick=()=>openTopic(item,t);return item};cats.forEach(c=>{const data=map[c.key];if(!data.items.length)return;const hdr=document.createElement('div'),sub=document.createElement('div');hdr.className='nav-cat-header';hdr.innerHTML=`${c.name}<span class="cat-chevron">▶</span>`;sub.className='nav-cat-items open';data.items.forEach(t=>sub.appendChild(make(t)));hdr.onclick=()=>sub.classList.toggle('open');el.append(hdr,sub)});uncat.forEach(t=>el.appendChild(make(t)))}
-async function buildStatements(){const el=document.getElementById('sub-statements');el.innerHTML='<div class="nav-item">載入中...</div>';const snaps=await getDocs(collection(db,'statements',currentClient.uid,'months')),items=snaps.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.status==='published'||(!s.status&&s.publishedAt)).sort((a,b)=>b.id.localeCompare(a.id));el.innerHTML=items.length?'':'<div class="nav-item">尚無個人對帳單</div>';items.forEach(s=>{const item=document.createElement('div');item.className='nav-item';item.innerHTML=`<span class="dot"></span>${getStatementDisplayLabel(s)}`;item.onclick=()=>openStatement(item,s);el.appendChild(item)})}
-function toAnnouncementDate(value){if(!value)return null;if(typeof value?.toDate==='function')return value.toDate();if(value instanceof Date)return value;const normalized=/^\d{4}-\d{2}-\d{2}$/.test(String(value))?`${value}T00:00:00`:value;const parsed=new Date(normalized);return Number.isNaN(parsed.getTime())?null:parsed}
-function formatAnnouncementDate(value){const date=toAnnouncementDate(value);return date?`${date.getFullYear()} 年 ${date.getMonth()+1} 月 ${date.getDate()} 日`:'--/--'}
-function announcementSortValue(entry){const date=toAnnouncementDate(entry.noticeDate);const updated=toAnnouncementDate(entry.updatedAt)||toAnnouncementDate(entry.createdAt);return Math.max(date?date.getTime():0,updated?updated.getTime():0)}
-function splitAnnouncementMessage(message){const text=String(message||'').replace(/\r/g,'').trim();if(!text)return[];const lines=text.split(/\n+/).map(part=>part.trim()).filter(Boolean);if(lines.length>1)return lines;const numbered=text.replace(/\s+/g,' ').split(/(?=\d+[.\u3001]\s*)/).map(part=>part.trim()).filter(Boolean);return numbered.length>1?numbered:[text]}
-function escapeHtml(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function announcementTitle(item){const title=String(item?.title||'').trim();if(title)return title;const segments=splitAnnouncementMessage(item?.message||'');const fallback=String(segments[0]||'').replace(/^\d+[.\u3001]\s*/,'').trim();return fallback.length>28?`${fallback.slice(0,28)}…`:fallback||'未命名公告'}
-function announcementBody(item){const message=String(item?.message||'').replace(/\r/g,'').trim();return message||announcementTitle(item)}
-function renderAnnouncementBody(message){const segments=splitAnnouncementMessage(message);if(segments.length>1){return `<ol class="announcement-text announcement-text-list">${segments.map(segment=>`<li>${escapeHtml(segment).replace(/^\d+[.\u3001]\s*/,'')}</li>`).join('')}</ol>`}return `<div class="announcement-text">${escapeHtml(message)}</div>`}
-function renderAnnouncements(items){const bar=document.getElementById('announcement-bar'),track=document.getElementById('announcement-track'),feature=document.getElementById('announcement-feature');const entries=items.map(item=>({id:item.id||item.noticeDate||'announcement',noticeDate:item.noticeDate,title:announcementTitle(item),message:announcementBody(item)})).filter(item=>item.title||item.message);if(!entries.length){bar.classList.remove('visible');track.classList.remove('playing');track.innerHTML='';feature.innerHTML='';return}const [latest]=entries;const pills=entries.map((item,index)=>`<div class="announcement-pill" data-key="${item.id}-${index}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${escapeHtml(item.title)}</span></div>`);const marqueeContent=pills.map((pill,index)=>`${pill}${index<pills.length-1?'<span class="announcement-separator" aria-hidden="true"></span>':''}`).join('');track.innerHTML=entries.length>1?`<div class="announcement-set">${marqueeContent}</div><div class="announcement-set" aria-hidden="true">${marqueeContent}</div>`:`<div class="announcement-set">${marqueeContent}</div>`;track.classList.toggle('playing',entries.length>1);feature.innerHTML=`<div class="announcement-meta"><span class="announcement-date">${formatAnnouncementDate(latest.noticeDate)} 公告</span><span class="announcement-tag">Key Notice</span></div><div class="announcement-feature-title">${escapeHtml(latest.title)}</div>${renderAnnouncementBody(latest.message)}`;bar.classList.add('visible')}
-async function buildAnnouncements(){const snap=await getDocs(collection(db,'portalAnnouncements')),items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(item=>item.active!==false&&String(item.message||'').trim()).sort((a,b)=>announcementSortValue(b)-announcementSortValue(a)).slice(0,8);renderAnnouncements(items)}
-async function openStatement(el,statement){activateDocumentView(el);try{const contentType=hasStatementStructuredData(statement)?'text/html':(statement.contentType||'application/pdf');await presentDocument({...statement,contentType})}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取對帳單，請聯絡管理員。');}}
-async function openReport(el,report){activateDocumentView(el);try{await presentDocument(report)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取月報，請聯絡管理員。')}}
-async function openTopic(el,topic){activateDocumentView(el);try{await presentDocument(topic)}catch(e){resetDocumentViews();document.getElementById('idle-screen').classList.add('visible');alert('無法讀取財經專題，請聯絡管理員。');}}
-function toggleSection(id){document.getElementById('hdr-'+id).classList.toggle('open');const sub=document.getElementById('sub-'+id);sub.style.display=sub.style.display==='none'?'block':'none'}
-Object.assign(window,{togglePassword,attemptLogin,goHome,logout,toggleSection,toggleSidebar,closeSidebar});
+function isHtmlAsset(entry) {
+  const path = String(entry?.storagePath || '').toLowerCase();
+  const type = String(entry?.contentType || '').toLowerCase();
+  const url = String(entry?.downloadUrl || entry?.src || '').toLowerCase();
+  return type.includes('text/html') || path.endsWith('.html') || path.endsWith('.htm') || url.includes('.html') || url.includes('.htm');
+}
+
+function isPdfAsset(entry) {
+  const path = String(entry?.storagePath || '').toLowerCase();
+  const type = String(entry?.contentType || '').toLowerCase();
+  const url = String(entry?.downloadUrl || entry?.src || '').toLowerCase();
+  return type.includes('application/pdf') || path.endsWith('.pdf') || url.includes('.pdf');
+}
+
+function resetDocumentViews() {
+  const frame = document.getElementById('content-iframe');
+  const viewer = document.getElementById('pdf-viewer');
+  const pages = document.getElementById('pdf-pages');
+  frame.style.display = 'none';
+  frame.removeAttribute('src');
+  frame.removeAttribute('srcdoc');
+  viewer.style.display = 'none';
+  pages.innerHTML = '';
+  revokeAllBlobUrls();
+}
+
+async function fetchAssetUrl(entry) {
+  if (entry?.storagePath) {
+    const blob = await getBlob(ref(storage, entry.storagePath));
+    currentBlobUrl = createTrackedBlobUrl(blob);
+    return currentBlobUrl;
+  }
+  if (entry?.downloadUrl) return entry.downloadUrl;
+  if (entry?.src) return entry.src;
+  throw new Error('missing-asset-url');
+}
+
+async function presentDocument(entry) {
+  if (hasStatementStructuredData(entry)) {
+    showHtmlDocument(buildShareholderStatementHtml(entry));
+    return;
+  }
+  const url = await fetchAssetUrl(entry);
+  if (isHtmlAsset(entry)) {
+    showInFrame(url);
+    return;
+  }
+  if (isPdfAsset(entry) || entry?.storagePath) {
+    await renderPDF(url);
+    return;
+  }
+  showInFrame(url);
+}
+
+function activateDocumentView(el) {
+  document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('idle-screen').classList.remove('visible');
+  resetDocumentViews();
+  if (window.innerWidth <= 768) closeSidebar();
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const button = document.getElementById('hamburger-btn');
+  const open = sidebar.classList.toggle('open');
+  overlay.classList.toggle('visible', open);
+  button.classList.toggle('open', open);
+  button.setAttribute('aria-expanded', String(open));
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const button = document.getElementById('hamburger-btn');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('visible');
+  button.classList.remove('open');
+  button.setAttribute('aria-expanded', 'false');
+}
+
+function togglePassword(id, button) {
+  const input = document.getElementById(id);
+  const isVisible = input.type === 'password';
+  input.type = isVisible ? 'text' : 'password';
+  button.classList.toggle('is-visible', isVisible);
+  button.setAttribute('aria-pressed', String(isVisible));
+  button.setAttribute('aria-label', isVisible ? '隱藏密碼' : '顯示密碼');
+}
+
+function loginErrorMessage(error) {
+  switch (error?.code) {
+    case 'auth/missing-password':
+      return '請輸入密碼後再登入。';
+    case 'auth/invalid-credential':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      return '登入資料不正確，請確認股東戶號與密碼。';
+    case 'auth/user-disabled':
+      return '這個帳號目前已停用，請聯絡管理員。';
+    case 'auth/too-many-requests':
+      return '嘗試次數過多，請稍後再試。';
+    case 'permission-denied':
+      return '目前帳號沒有讀取權限，請聯絡管理員。';
+    default:
+      return error?.message || '登入失敗，請稍後再試。';
+  }
+}
+
+async function attemptLogin() {
+  const codeInput = document.getElementById('client-code');
+  const passwordInput = document.getElementById('client-password');
+  const code = codeInput.value.trim().toUpperCase();
+  const password = passwordInput.value;
+  const errorEl = document.getElementById('welcome-error');
+  const button = document.querySelector('.login-btn');
+  errorEl.textContent = '';
+  if (!/^(PS|CS)\d{3}$/.test(code)) {
+    errorEl.textContent = '請輸入正確的股東戶號，例如 PS001。';
+    codeInput.focus();
+    return;
+  }
+  if (password.length === 0) {
+    errorEl.textContent = '請輸入密碼後再登入。';
+    passwordInput.focus();
+    return;
+  }
+  button.disabled = true;
+  button.textContent = '登入中...';
+  try {
+    const cred = await signInWithEmailAndPassword(auth, shareholderEmail(code), password);
+    await showAuthenticated(cred.user);
+  } catch (error) {
+    errorEl.textContent = loginErrorMessage(error);
+    passwordInput.value = '';
+    await signOut(auth).catch(() => {});
+  } finally {
+    button.disabled = false;
+    button.textContent = '進入 →';
+  }
+}
+
+async function showAuthenticated(user) {
+  const snap = await getDoc(doc(db, 'shareholders', user.uid));
+  if (!snap.exists() || snap.data().active === false) {
+    await signOut(auth);
+    throw new Error('這個帳號目前沒有可用的股東資料。');
+  }
+  currentClient = { uid: user.uid, ...snap.data() };
+  isAuthenticated = true;
+  document.getElementById('welcome-screen').classList.add('hidden');
+  document.getElementById('home-client-name').textContent = currentClient.displayName;
+  document.getElementById('banner-client-name').textContent = `${currentClient.displayName} (${currentClient.shareholderCode})`;
+  document.getElementById('banner-client').classList.add('visible');
+  await Promise.all([buildReports(), buildTopics(), buildStatements(), buildAnnouncements()]);
+  showHome();
+}
+
+function showHome() {
+  document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+  resetDocumentViews();
+  document.getElementById('idle-screen').classList.add('visible');
+}
+
+function goHome() {
+  if (isAuthenticated) showHome();
+  else {
+    document.getElementById('welcome-screen').classList.remove('hidden');
+    document.getElementById('client-code').focus();
+  }
+}
+
+async function logout() {
+  revokeAllBlobUrls();
+  await signOut(auth);
+  location.reload();
+}
+
+function buildSidebar() {
+  document.getElementById('sub-reports').innerHTML = '<div class="nav-item">登入後載入</div>';
+  document.getElementById('sub-topics').innerHTML = '<div class="nav-item">登入後載入</div>';
+  document.getElementById('footer-updated').textContent = 'Firebase 內容同步中';
+}
+
+async function buildReports() {
+  const el = document.getElementById('sub-reports');
+  el.innerHTML = '<div class="nav-item">載入中...</div>';
+  const snap = await getDocs(collection(db, 'portalMonthlyReports'));
+  const reports = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+    .filter((r) => r.active !== false)
+    .sort((a, b) => String(b.id || '').localeCompare(String(a.id || '')));
+  el.innerHTML = reports.length ? '' : '<div class="nav-item">尚無月報</div>';
+  reports.forEach((report) => {
+    const item = document.createElement('div');
+    const dot = document.createElement('span');
+    item.className = 'nav-item';
+    item.dataset.key = String(report.id || '');
+    dot.className = 'dot';
+    item.append(dot, document.createTextNode((report.year && report.month) ? formatMonthLabel(report.year, report.month) : (report.label || '未命名月報')));
+    item.onclick = () => openReport(item, report);
+    el.appendChild(item);
+  });
+}
+
+function topicSortValue(topic) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(topic?.publishDate || '')) ? String(topic.publishDate) : '';
+}
+
+function compareTopics(a, b) {
+  return String(topicSortValue(b)).localeCompare(String(topicSortValue(a))) ||
+    (a.order || 999) - (b.order || 999) ||
+    String(b.id || '').localeCompare(String(a.id || '')) ||
+    String(a.title || '').localeCompare(String(b.title || ''));
+}
+
+async function buildTopics() {
+  const el = document.getElementById('sub-topics');
+  el.innerHTML = '<div class="nav-item">載入中...</div>';
+  const [topicSnap, catSnap] = await Promise.all([
+    getDocs(collection(db, 'portalTopics')),
+    getDocs(collection(db, 'portalCategories')),
+  ]);
+  const topics = topicSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
+    .filter((t) => t.active !== false)
+    .sort(compareTopics);
+  const categories = catSnap.docs.map((d) => ({ key: d.id, ...d.data() }))
+    .sort((a, b) => (a.order || 999) - (b.order || 999) || String(a.name || '').localeCompare(String(b.name || '')));
+  el.innerHTML = '';
+  if (!topics.length) {
+    el.innerHTML = '<div class="nav-item">尚無主題</div>';
+    return;
+  }
+  const grouped = {};
+  categories.forEach((category) => {
+    grouped[category.key] = { ...category, items: [] };
+  });
+  const uncategorized = [];
+  topics.forEach((topic) => {
+    if (topic.categoryKey && grouped[topic.categoryKey]) grouped[topic.categoryKey].items.push(topic);
+    else uncategorized.push(topic);
+  });
+  const makeItem = (topic) => {
+    const item = document.createElement('div');
+    const dot = document.createElement('span');
+    item.className = 'nav-item';
+    dot.className = 'dot';
+    item.append(dot, document.createTextNode(String(topic.title || '')));
+    item.onclick = () => openTopic(item, topic);
+    return item;
+  };
+  categories.forEach((category) => {
+    const data = grouped[category.key];
+    if (!data.items.length) return;
+    const header = document.createElement('div');
+    const sub = document.createElement('div');
+    const chevron = document.createElement('span');
+    header.className = 'nav-cat-header';
+    header.append(document.createTextNode(String(category.name || '')));
+    chevron.className = 'cat-chevron';
+    chevron.textContent = '▶';
+    header.appendChild(chevron);
+    sub.className = 'nav-cat-items open';
+    data.items.forEach((topic) => sub.appendChild(makeItem(topic)));
+    header.onclick = () => sub.classList.toggle('open');
+    el.append(header, sub);
+  });
+  uncategorized.forEach((topic) => el.appendChild(makeItem(topic)));
+}
+
+async function buildStatements() {
+  const el = document.getElementById('sub-statements');
+  el.innerHTML = '<div class="nav-item">載入中...</div>';
+  const snaps = await getDocs(collection(db, 'statements', currentClient.uid, 'months'));
+  const items = snaps.docs.map((d) => ({ id: d.id, ...d.data() }))
+    .filter((s) => s.status === 'published' || (!s.status && s.publishedAt))
+    .sort((a, b) => b.id.localeCompare(a.id));
+  el.innerHTML = items.length ? '' : '<div class="nav-item">尚無個人對帳單</div>';
+  items.forEach((statement) => {
+    const item = document.createElement('div');
+    const dot = document.createElement('span');
+    item.className = 'nav-item';
+    dot.className = 'dot';
+    item.append(dot, document.createTextNode(getStatementDisplayLabel(statement)));
+    item.onclick = () => openStatement(item, statement);
+    el.appendChild(item);
+  });
+}
+
+function toAnnouncementDate(value) {
+  if (!value) return null;
+  if (typeof value?.toDate === 'function') return value.toDate();
+  if (value instanceof Date) return value;
+  const normalized = /^\d{4}-\d{2}-\d{2}$/.test(String(value)) ? `${value}T00:00:00` : value;
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatAnnouncementDate(value) {
+  const date = toAnnouncementDate(value);
+  return date ? `${date.getFullYear()} 年 ${date.getMonth() + 1} 月 ${date.getDate()} 日` : '--/--';
+}
+
+function announcementSortValue(entry) {
+  const date = toAnnouncementDate(entry.noticeDate);
+  const updated = toAnnouncementDate(entry.updatedAt) || toAnnouncementDate(entry.createdAt);
+  return Math.max(date ? date.getTime() : 0, updated ? updated.getTime() : 0);
+}
+
+function splitAnnouncementMessage(message) {
+  const text = String(message || '').replace(/\r/g, '').trim();
+  if (!text) return [];
+  const lines = text.split(/\n+/).map((part) => part.trim()).filter(Boolean);
+  if (lines.length > 1) return lines;
+  const numbered = text.replace(/\s+/g, ' ').split(/(?=\d+[.\u3001]\s*)/).map((part) => part.trim()).filter(Boolean);
+  return numbered.length > 1 ? numbered : [text];
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function announcementTitle(item) {
+  const title = String(item?.title || '').trim();
+  if (title) return title;
+  const segments = splitAnnouncementMessage(item?.message || '');
+  const fallback = String(segments[0] || '').replace(/^\d+[.\u3001]\s*/, '').trim();
+  return fallback.length > 28 ? `${fallback.slice(0, 28)}...` : (fallback || '未命名公告');
+}
+
+function announcementBody(item) {
+  const message = String(item?.message || '').replace(/\r/g, '').trim();
+  return message || announcementTitle(item);
+}
+
+function renderAnnouncementBody(message) {
+  const segments = splitAnnouncementMessage(message);
+  if (segments.length > 1) {
+    return `<ol class="announcement-text announcement-text-list">${segments.map((segment) => `<li>${escapeHtml(segment).replace(/^\d+[.\u3001]\s*/, '')}</li>`).join('')}</ol>`;
+  }
+  return `<div class="announcement-text">${escapeHtml(message)}</div>`;
+}
+
+function renderAnnouncements(items) {
+  const bar = document.getElementById('announcement-bar');
+  const track = document.getElementById('announcement-track');
+  const feature = document.getElementById('announcement-feature');
+  const entries = items.map((item) => ({
+    id: item.id || item.noticeDate || 'announcement',
+    noticeDate: item.noticeDate,
+    title: announcementTitle(item),
+    message: announcementBody(item),
+  })).filter((item) => item.title || item.message);
+  if (!entries.length) {
+    bar.classList.remove('visible');
+    track.classList.remove('playing');
+    track.innerHTML = '';
+    feature.innerHTML = '';
+    return;
+  }
+  const latest = entries[0];
+  const pills = entries.map((item, index) => `<div class="announcement-pill" data-key="${escapeHtml(String(item.id))}-${index}"><span class="announcement-date">${formatAnnouncementDate(item.noticeDate)} 公告</span><span class="announcement-text">${escapeHtml(item.title)}</span></div>`);
+  const marqueeContent = pills.map((pill, index) => `${pill}${index < pills.length - 1 ? '<span class="announcement-separator" aria-hidden="true"></span>' : ''}`).join('');
+  track.innerHTML = entries.length > 1
+    ? `<div class="announcement-set">${marqueeContent}</div><div class="announcement-set" aria-hidden="true">${marqueeContent}</div>`
+    : `<div class="announcement-set">${marqueeContent}</div>`;
+  track.classList.toggle('playing', entries.length > 1);
+  feature.innerHTML = `<div class="announcement-meta"><span class="announcement-date">${formatAnnouncementDate(latest.noticeDate)} 公告</span><span class="announcement-tag">Key Notice</span></div><div class="announcement-feature-title">${escapeHtml(latest.title)}</div>${renderAnnouncementBody(latest.message)}`;
+  bar.classList.add('visible');
+}
+
+async function buildAnnouncements() {
+  const snap = await getDocs(collection(db, 'portalAnnouncements'));
+  const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+    .filter((item) => item.active !== false && String(item.message || '').trim())
+    .sort((a, b) => announcementSortValue(b) - announcementSortValue(a))
+    .slice(0, 8);
+  renderAnnouncements(items);
+}
+
+async function openStatement(el, statement) {
+  activateDocumentView(el);
+  try {
+    const contentType = hasStatementStructuredData(statement) ? 'text/html' : (statement.contentType || 'application/pdf');
+    await presentDocument({ ...statement, contentType });
+  } catch (_) {
+    resetDocumentViews();
+    document.getElementById('idle-screen').classList.add('visible');
+    alert('無法讀取對帳單，請聯絡管理員。');
+  }
+}
+
+async function openReport(el, report) {
+  activateDocumentView(el);
+  try {
+    await presentDocument(report);
+  } catch (_) {
+    resetDocumentViews();
+    document.getElementById('idle-screen').classList.add('visible');
+    alert('無法讀取月報，請聯絡管理員。');
+  }
+}
+
+async function openTopic(el, topic) {
+  activateDocumentView(el);
+  try {
+    await presentDocument(topic);
+  } catch (_) {
+    resetDocumentViews();
+    document.getElementById('idle-screen').classList.add('visible');
+    alert('無法讀取財經專題，請聯絡管理員。');
+  }
+}
+
+function toggleSection(id) {
+  document.getElementById(`hdr-${id}`).classList.toggle('open');
+  document.getElementById(`sub-${id}`).classList.toggle('open');
+}
+
+Object.assign(window, {
+  togglePassword,
+  attemptLogin,
+  goHome,
+  logout,
+  toggleSection,
+  toggleSidebar,
+  closeSidebar,
+});
+
 initSidebarResizer();
 buildSidebar();
-document.getElementById('build-badge').textContent=`Portal ${APP_VERSION}`;
-document.getElementById('footer-updated').textContent=`Firebase 動態同步 · ${APP_VERSION}`;
-onAuthStateChanged(auth,async user=>{if(!user||isAuthenticated)return;try{await showAuthenticated(user)}catch(e){document.getElementById('welcome-error').textContent=loginErrorMessage(e)}});
+document.getElementById('build-badge').textContent = `Portal ${APP_VERSION}`;
+document.getElementById('footer-updated').textContent = `Firebase 內容同步 ${APP_VERSION}`;
+onAuthStateChanged(auth, async (user) => {
+  if (!user || isAuthenticated) return;
+  try {
+    await showAuthenticated(user);
+  } catch (error) {
+    document.getElementById('welcome-error').textContent = loginErrorMessage(error);
+  }
+});
+window.addEventListener('beforeunload', revokeAllBlobUrls);
 </script>
 </body>
 </html>
+

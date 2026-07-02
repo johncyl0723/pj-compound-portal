@@ -10,29 +10,17 @@ const callableOptions = {
   region: REGION,
   invoker: "public",
 };
-const BOOTSTRAP_ADMIN_EMAILS = new Set([
-  "john.cyl@gmail.com",
-]);
-
-function normalizeEmail(value) {
-  return String(value || "").trim().toLowerCase();
-}
-
-function isBootstrapAdmin(request) {
-  return BOOTSTRAP_ADMIN_EMAILS.has(normalizeEmail(request?.auth?.token?.email));
-}
 
 function assertAdmin(request) {
-  if (!request.auth ||
-    (request.auth.token.admin !== true && !isBootstrapAdmin(request))) {
-    throw new HttpsError("permission-denied", "只有管理員可以執行這項操作。");
+  if (!request.auth || request.auth.token.admin !== true) {
+    throw new HttpsError("permission-denied", "Only admins can perform this action.");
   }
 }
 
 function normalizeCode(value) {
   const code = String(value || "").trim().toUpperCase();
   if (!/^(PS|CS)\d{3}$/.test(code)) {
-    throw new HttpsError("invalid-argument", "股東戶號格式不正確。");
+    throw new HttpsError("invalid-argument", "Invalid shareholder code format.");
   }
   return code;
 }
@@ -40,7 +28,7 @@ function normalizeCode(value) {
 function validatePassword(value) {
   const password = String(value || "");
   if (password.length < 6) {
-    throw new HttpsError("invalid-argument", "密碼至少需要 6 碼。");
+    throw new HttpsError("invalid-argument", "Password must be at least 6 characters.");
   }
   return password;
 }
@@ -151,11 +139,11 @@ exports.approveShareholder = onCall(callableOptions, async (request) => {
   const draftRef = getFirestore().collection("shareholderDrafts").doc(code);
   const draft = await draftRef.get();
   if (!draft.exists) {
-    throw new HttpsError("not-found", "找不到這筆股東草稿。");
+    throw new HttpsError("not-found", "Shareholder draft not found.");
   }
   const displayName = String(draft.data().displayName || "").trim();
   if (!displayName) {
-    throw new HttpsError("failed-precondition", "請先填寫股東姓名。");
+    throw new HttpsError("failed-precondition", "Display name is required before approval.");
   }
 
   let user;
@@ -178,7 +166,7 @@ exports.approveShareholder = onCall(callableOptions, async (request) => {
   } catch (error) {
     if (user) await getAuth().deleteUser(user.uid);
     if (error.code === "auth/email-already-exists") {
-      throw new HttpsError("already-exists", `${code} 已經建立過 Firebase 帳號。`);
+      throw new HttpsError("already-exists", `${code} already has a Firebase account.`);
     }
     throw error;
   }
@@ -188,7 +176,7 @@ exports.setShareholderPassword = onCall(callableOptions, async (request) => {
   assertAdmin(request);
   const uid = String(request.data.uid || "").trim();
   const password = validatePassword(request.data.password);
-  if (!uid) throw new HttpsError("invalid-argument", "缺少股東 UID。");
+  if (!uid) throw new HttpsError("invalid-argument", "Missing shareholder UID.");
   await getAuth().updateUser(uid, {password});
   await getFirestore().collection("shareholders").doc(uid).update({
     updatedAt: FieldValue.serverTimestamp(),
@@ -201,7 +189,7 @@ exports.setShareholderActive = onCall(callableOptions, async (request) => {
   const uid = String(request.data.uid || "").trim();
   const active = request.data.active;
   if (!uid || typeof active !== "boolean") {
-    throw new HttpsError("invalid-argument", "股東狀態資料不完整。");
+    throw new HttpsError("invalid-argument", "Invalid shareholder status payload.");
   }
   await getAuth().updateUser(uid, {disabled: !active});
   await getFirestore().collection("shareholders").doc(uid).update({
@@ -235,16 +223,16 @@ exports.savePortalAnnouncement = onCall(callableOptions, async (request) => {
   const message = String(request.data.message || "").trim();
   const active = request.data.active;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(noticeDate)) {
-    throw new HttpsError("invalid-argument", "請提供正確的公告日期。");
+    throw new HttpsError("invalid-argument", "Invalid announcement date.");
   }
   if (!title) {
-    throw new HttpsError("invalid-argument", "公告主題為必填欄位");
+    throw new HttpsError("invalid-argument", "Announcement title is required.");
   }
   if (!message) {
-    throw new HttpsError("invalid-argument", "請提供公告內容。");
+    throw new HttpsError("invalid-argument", "Announcement message is required.");
   }
   if (typeof active !== "boolean") {
-    throw new HttpsError("invalid-argument", "請提供公告啟用狀態。");
+    throw new HttpsError("invalid-argument", "Announcement active flag is required.");
   }
 
   const db = getFirestore();
@@ -276,7 +264,7 @@ exports.setPortalAnnouncementActive = onCall(callableOptions, async (request) =>
   const id = String(request.data.id || "").trim();
   const active = request.data.active;
   if (!id || typeof active !== "boolean") {
-    throw new HttpsError("invalid-argument", "請提供正確的公告參數。");
+    throw new HttpsError("invalid-argument", "Invalid announcement activation payload.");
   }
   await getFirestore().collection("portalAnnouncements").doc(id).set({
     active,
@@ -289,7 +277,7 @@ exports.deletePortalAnnouncement = onCall(callableOptions, async (request) => {
   assertAdmin(request);
   const id = String(request.data.id || "").trim();
   if (!id) {
-    throw new HttpsError("invalid-argument", "請提供要刪除的公告編號。");
+    throw new HttpsError("invalid-argument", "Missing announcement id.");
   }
   await getFirestore().collection("portalAnnouncements").doc(id).delete();
   return {id};
