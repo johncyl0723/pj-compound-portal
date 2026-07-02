@@ -68,6 +68,18 @@ function serializeDoc(doc) {
   return {id: doc.id, ...serializeValue(doc.data())};
 }
 
+function topicSortValue(topic) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(topic?.publishDate || "")) ?
+    String(topic.publishDate) : "";
+}
+
+function compareTopics(a, b) {
+  return String(topicSortValue(b)).localeCompare(String(topicSortValue(a))) ||
+    (a.order || 999) - (b.order || 999) ||
+    String(b.id || "").localeCompare(String(a.id || "")) ||
+    String(a.title || "").localeCompare(String(b.title || ""));
+}
+
 async function getShareholderAdminPayload(monthId) {
   const db = getFirestore();
   const shareholdersSnap = await db.collection("shareholders").get();
@@ -113,8 +125,7 @@ async function getPortalAdminPayload() {
       .sort((a, b) => String(b.id || "").localeCompare(String(a.id || "")));
   const topics = topicsSnap.docs
       .map(serializeDoc)
-      .sort((a, b) => (a.order || 999) - (b.order || 999) ||
-        String(a.title || "").localeCompare(String(b.title || "")));
+      .sort(compareTopics);
   const categories = categoriesSnap.docs
       .map((doc) => ({key: doc.id, ...serializeValue(doc.data())}))
       .sort((a, b) => (a.order || 999) - (b.order || 999) ||
