@@ -5,9 +5,10 @@ description: Maintain and publish the P&J Compound portal website in this reposi
 
 # P&J Compound Portal
 
-This repository is the source of truth for the live GitHub Pages site:
+This repository is the source of truth for the live website surfaces:
 
 - Production URL: `https://johncyl0723.github.io/pj-compound-portal/`
+- Firebase Hosting URL: `https://pnj-compound-company-limited.web.app/`
 - Git remote: `origin = https://github.com/johncyl0723/pj-compound-portal.git`
 - Publish branch: `main`
 
@@ -21,6 +22,7 @@ Treat these as website-affecting changes:
 - `index.html`
 - `admin.html`
 - `firebase-admin.html`
+- `structured-statements-admin.html`
 - files under monthly report folders such as `2026_03/`, `2026_04/`, or `2026_05/`
 - shared assets, styles, scripts, or other files rendered by GitHub Pages
 
@@ -30,7 +32,8 @@ After finishing the change:
 2. Stage only the intended files.
 3. Create a normal git commit with a clear message.
 4. Push to `origin main`.
-5. Tell the user that GitHub Pages may take a short time to refresh.
+5. If the change affects a Firebase-hosted admin page or its browser assets, deploy Firebase Hosting too.
+6. Tell the user which live host was updated and that a hard refresh such as `Ctrl+F5` may still be needed.
 
 Do not leave website-affecting changes only in the local workspace unless the user explicitly says not to publish yet.
 
@@ -46,6 +49,33 @@ Use this release flow when the request touches frontend pages plus Firebase-back
 4. Commit with a focused message.
 5. Push to `origin main`.
 6. Tell the user the live GitHub Pages URL may need a hard refresh such as `Ctrl+F5`.
+
+### Firebase Hosting release
+
+Use this whenever the user is viewing or testing a `web.app` URL, or when the change touches Firebase admin pages such as:
+
+- `firebase-admin.html`
+- `structured-statements-admin.html`
+- `firebase-portal.js`
+- `assets/shareholder-statement-template.js`
+
+Required release flow:
+
+1. Finish the code change and verify locally when feasible.
+2. Run `git status --short` and confirm only intended files are included.
+3. Stage only the required files.
+4. Commit with a focused message.
+5. Push to `origin main`.
+6. Deploy Firebase Hosting from the repository root:
+
+```powershell
+npx firebase-tools deploy --only hosting --project pnj-compound-company-limited --non-interactive
+```
+
+7. Verify the live `web.app` page source contains the expected build marker, import cache-buster, or version string before telling the user it is fixed.
+8. Tell the user to hard refresh the exact `web.app` URL they are testing.
+
+Do not assume that pushing to GitHub updates `https://pnj-compound-company-limited.web.app/`. GitHub Pages and Firebase Hosting are separate release targets in this project.
 
 ### Firestore rules release
 
@@ -142,6 +172,22 @@ When debugging “I still see the old page” or “your version is different fr
 2. Prefer adding a visible build/version marker when frontend cache confusion is possible.
 3. Make sure the live URL and the local repository are discussing the same source.
 
+### Firebase Hosting version mismatch rule
+
+If the user is on `pnj-compound-company-limited.web.app`, treat Firebase Hosting as the source of truth for that session, not GitHub Pages.
+
+Required checks:
+
+1. Verify which exact live URL the user opened.
+2. If code was only pushed to GitHub but not deployed to Firebase Hosting, treat the fix as incomplete.
+3. Verify the live page source shows the expected `APP_VERSION`, build badge string, or cache-busted import URLs before telling the user it is fixed.
+
+Known failure mode:
+
+- Local code and `main` already contained a newer fix such as `adminwritefix3`, but `https://pnj-compound-company-limited.web.app/structured-statements-admin.html` still served `adminwritefix2`.
+- Cause: GitHub push completed, but Firebase Hosting deploy was skipped.
+- Required fix pattern: deploy Hosting, then verify the live page source shows the new `APP_VERSION` and import version strings.
+
 ## Safety rule
 
 Before committing, review `git status` and avoid bundling unrelated changes.
@@ -194,6 +240,8 @@ If a fix touches both frontend admin pages and callable function behavior, deplo
 
 Do not assume a Hosting deploy is enough when the bug involves data loading, and do not assume a Functions deploy is enough when the page contains versioned client logic.
 
+If a fix touches only frontend admin pages or shared browser assets used by them, you must still deploy Firebase Hosting. A GitHub push alone is not enough for `web.app` admin URLs.
+
 ### Post-deploy verification rule
 
 After deploying a statement-admin fix, always verify in this order:
@@ -204,6 +252,8 @@ After deploying a statement-admin fix, always verify in this order:
 4. One known shareholder can load non-empty fields in the live admin UI.
 
 Use `CS001` or another known shareholder as a canary record.
+
+If the user reported a Firebase Hosting URL, step 1 and step 2 must be checked against that exact `web.app` URL, not only the GitHub Pages URL.
 
 ### Release hygiene rule
 
