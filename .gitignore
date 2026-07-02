@@ -1,1 +1,9 @@
 公司LOGO/
+.firebase/
+tmp/
+tools/__pycache__/
+firebase-debug.log
+firebase-deploy-output.txt
+functions/package-lock.json
+_portal_script_check.js
+taiwanindex_tip_fund_mapping_2026-07-01.csv
