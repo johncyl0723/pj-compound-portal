@@ -91,13 +91,13 @@
 <div class="build-badge" id="build-badge">Structured</div>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script type="module">
-import { auth, db, functions } from './firebase-portal.js?v=20260702-adminwritefix2';
-import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-adminwritefix2';
+import { auth, db, functions } from './firebase-portal.js?v=20260702-adminwritefix3';
+import { DEFAULT_NOTES, buildShareholderStatementHtml, hasStatementStructuredData, normalizeStatementData } from './assets/shareholder-statement-template.js?v=20260702-adminwritefix3';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { httpsCallable } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-functions.js';
 
-const APP_VERSION = '20260702-adminwritefix2';
+const APP_VERSION = '20260702-adminwritefix3';
 const getShareholderAdminData = httpsCallable(functions, 'getShareholderAdminData');
 let shareholderDocs = [], draftDocs = [], statementDocs = [], editingStatementUid = '';
 let lastLoadedMonthId = '';
@@ -131,8 +131,14 @@ function firebaseActionErrorMessage(error, scope = '操作') {
   }
 }
 
-function statementMonthId() { return $('statement-year').value + $('statement-month').value; }
-function statementLabel() { return `${$('statement-year').value} 年 ${$('statement-month').value} 月`; }
+function monthText(value) { return String(value ?? '').trim().padStart(2, '0'); }
+function formatStatementMonthLabel(year, month) {
+  const safeYear = String(year ?? '').trim();
+  const safeMonth = monthText(month);
+  return safeYear && safeMonth ? `${safeYear} 年 ${safeMonth} 月` : '';
+}
+function statementMonthId() { return $('statement-year').value + monthText($('statement-month').value); }
+function statementLabel() { return formatStatementMonthLabel($('statement-year').value, $('statement-month').value); }
 function statementFor(uid) { return statementDocs.find((s) => shareholderUid(s) === uid); }
 function isPublishedStatement(st) { return !!st && (st.status === 'published' || (!st.status && st.publishedAt)); }
 function hasEditableStatement(st) { return !!st && (hasStatementStructuredData(st) || st.renderMode === 'structured-html'); }
@@ -228,7 +234,7 @@ function renderDividendRows(rows) {
 }
 
 function renderContributionRows(rows) {
-  $('contribution-rows').innerHTML = rows.map((row, index) => `<tr><td><input data-kind="contribution-name" data-index="${index}" value="${esc(row.shareholderName || '')}"></td><td><input data-kind="contribution-amount" data-index="${index}" type="number" step="0.01" value="${esc(row.fundedAmount || '')}"></td><td><input data-kind="contribution-date" data-index="${index}" type="date" value="${esc(row.contributionDate || '')}"></td><td><input data-kind="contribution-nav-label" data-index="${index}" value="${esc(row.navDateLabel || row.navDate || '')}"></td><td><input data-kind="contribution-buy-nav" data-index="${index}" type="number" step="0.0001" value="${esc(row.buyNavPerUnit || '')}"></td><td><input data-kind="contribution-units" data-index="${index}" type="number" step="0.01" value="${esc(row.unitsAcquired || '')}"></td><td><input data-kind="contribution-remark" data-index="${index}" value="${esc(row.remark || '')}"></td><td><button class="btn warn" type="button" onclick="removeContributionRow(${index})">刪除</button></td></tr>`).join('');
+  $('contribution-rows').innerHTML = rows.map((row, index) => `<tr><td><input data-kind="contribution-name" data-index="${index}" value="${esc(row.shareholderName || '')}"></td><td><input data-kind="contribution-amount" data-index="${index}" type="number" step="0.01" value="${esc(row.fundedAmount || '')}"></td><td><input data-kind="contribution-date" data-index="${index}" type="date" value="${esc(row.contributionDate || '')}"></td><td><input data-kind="contribution-nav-label" data-index="${index}" value="${esc(contributionNavInputValue(row))}"></td><td><input data-kind="contribution-buy-nav" data-index="${index}" type="number" step="0.0001" value="${esc(row.buyNavPerUnit || '')}"></td><td><input data-kind="contribution-units" data-index="${index}" type="number" step="0.01" value="${esc(row.unitsAcquired || '')}"></td><td><input data-kind="contribution-remark" data-index="${index}" value="${esc(row.remark || '')}"></td><td><button class="btn warn" type="button" onclick="removeContributionRow(${index})">刪除</button></td></tr>`).join('');
 }
 
 function fillStatementEditor(data) {
@@ -316,6 +322,24 @@ function dateValue(value) {
     return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
   }
   return '';
+}
+
+function normalizeMonthLikeLabel(value) {
+  const text = textValue(value);
+  if (!text) return '';
+  const compact = text.replace(/[^\d]/g, '');
+  if (/^\d{6}$/.test(compact)) return formatStatementMonthLabel(compact.slice(0, 4), compact.slice(4, 6));
+  const slashOrDashMatch = text.match(/^(\d{4})[\/-](\d{1,2})$/);
+  if (slashOrDashMatch) return formatStatementMonthLabel(slashOrDashMatch[1], slashOrDashMatch[2]);
+  const zhMatch = text.match(/^(\d{4})\s*年\s*(\d{1,2})\s*月$/);
+  if (zhMatch) return formatStatementMonthLabel(zhMatch[1], zhMatch[2]);
+  return text;
+}
+
+function contributionNavInputValue(row = {}) {
+  if (textValue(row.navDateLabel)) return normalizeMonthLikeLabel(row.navDateLabel);
+  const navDate = dateValue(row.navDate);
+  return navDate ? navDate.replace(/-/g, '/') : '';
 }
 
 function composeImportedName(parts) {
@@ -411,7 +435,7 @@ function readSheet(sheetName, sheet) {
       templateVersion: 1,
       year: endDate.slice(0, 4),
       month: endDate.slice(5, 7),
-      label: `${endDate.slice(0, 4)} 年 ${endDate.slice(5, 7)} 月`,
+      label: formatStatementMonthLabel(endDate.slice(0, 4), endDate.slice(5, 7)),
       shareholderCode,
       shareholderName,
       shareClass: normalizeShareClass(rows[shareClassRow][1]),
@@ -445,6 +469,67 @@ async function parseWorkbookFile(file) {
 function parseWorkbookBinaryString(binary) {
   if (!window.XLSX) throw new Error('Excel 解析工具尚未載入。');
   return parseWorkbookSheets(XLSX.read(binary, { type: 'binary', cellDates: true }));
+}
+
+function collectStatementForm() {
+  const owner = editorOwner();
+  if (!owner) throw new Error('請先選擇股東。');
+
+  const dividendRows = collectRows('dividend')
+    .map((row, index) => ({
+      year: textValue(row.year),
+      amount: numericValue(row.amount),
+      method: textValue(row.method),
+      sortOrder: index + 1,
+    }))
+    .filter((row) => (row.year || row.amount || row.method) && !isDividendHeaderLike(row));
+
+  const contributionRows = collectRows('contribution')
+    .map((row, index) => {
+      const rawNavLabel = textValue(row['nav-label']);
+      const navDate = dateValue(rawNavLabel);
+      return {
+        shareholderName: textValue(row.name) || owner.displayName || '',
+        fundedAmount: numericValue(row.amount),
+        contributionDate: dateValue(row.date),
+        navDate,
+        navDateLabel: navDate ? '' : normalizeMonthLikeLabel(rawNavLabel),
+        buyNavPerUnit: numericValue(row['buy-nav']),
+        unitsAcquired: numericValue(row.units),
+        remark: textValue(row.remark),
+        sortOrder: index + 1,
+      };
+    })
+    .filter((row) => [row.shareholderName, row.fundedAmount, row.contributionDate, row.navDate, row.navDateLabel, row.buyNavPerUnit, row.unitsAcquired, row.remark].some(Boolean));
+
+  return normalizeStatementData({
+    renderMode: 'structured-html',
+    contentType: 'text/html',
+    templateVersion: 1,
+    year: $('statement-year').value,
+    month: monthText($('statement-month').value),
+    label: statementLabel(),
+    shareholderCode: owner.shareholderCode || '',
+    shareholderName: owner.displayName || '',
+    reportType: textValue($('statement-report-type').value),
+    shareClass: textValue($('statement-share-class').value) || (owner.shareholderCode?.startsWith('CS') ? 'CS' : 'PS'),
+    currency: textValue($('statement-currency').value) || 'USD',
+    endDate: dateValue($('statement-end-date').value),
+    navPerUnit: numericValue($('statement-nav-per-unit').value),
+    investedAmountUsd: numericValue($('statement-invested-amount').value),
+    unitsHeld: numericValue($('statement-units-held').value),
+    ownershipPercent: numericValue($('statement-ownership-percent').value),
+    marketValueUsd: numericValue($('statement-market-value').value),
+    gainUsd: numericValue($('statement-gain-usd').value),
+    returnRatePercent: numericValue($('statement-return-rate').value),
+    dividendRows,
+    contributionRows,
+    notes: [
+      textValue($('statement-note-1').value),
+      textValue($('statement-note-2').value),
+      textValue($('statement-note-3').value),
+    ].filter(Boolean),
+  });
 }
 
 async function importWorkbookDraft() {
