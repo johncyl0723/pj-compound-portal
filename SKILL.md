@@ -61,18 +61,23 @@ If the change updates callable Functions or Firebase-backed admin workflows, do 
 
 Preferred successful flow:
 
-1. Copy only the deployable Firebase files into a short temporary path such as `C:\pjdeploy`:
-   - `.firebaserc`
-   - `firebase.json`
-   - `functions/index.js`
-   - `functions/package.json`
-2. In `C:\pjdeploy\functions`, run:
+1. Prefer deploying from a clean local temp copy instead of the Google Drive workspace itself.
+2. Use this fixed temp path first:
+
+```text
+C:\Users\NB_03\AppData\Local\Temp\pj-compound-deploy
+```
+
+3. Rebuild the deploy copy from the repository root with a mirrored copy that excludes transient folders such as `.git`, `.firebase`, `tmp`, `functions/node_modules`, and `functions/node_modules-google-drive-partial`.
+4. Deploy from the temp copy root, not from the Google Drive path.
+5. In `C:\Users\NB_03\AppData\Local\Temp\pj-compound-deploy\functions`, run:
 
 ```powershell
 npm install
 ```
 
-3. Deploy only the intended functions from `C:\pjdeploy` instead of deploying all functions blindly. This avoids non-interactive failure when Firebase finds an older cloud function that is not present in the local source.
+6. If `npm install` fails inside the Google Drive workspace but succeeds in the temp copy, treat that as expected behavior for this repository. Do not waste time retrying installs in the synced workspace.
+7. Deploy only the intended functions from `C:\Users\NB_03\AppData\Local\Temp\pj-compound-deploy` instead of deploying all functions blindly. This avoids non-interactive failure when Firebase finds an older cloud function that is not present in the local source.
 
 Example successful pattern:
 
@@ -80,9 +85,17 @@ Example successful pattern:
 npx firebase-tools deploy --only "functions:approveShareholder,functions:setShareholderPassword,functions:setShareholderActive,functions:getShareholderAdminData,functions:getPortalAdminData,functions:getPortalAnnouncementsAdminData,functions:savePortalAnnouncement,functions:setPortalAnnouncementActive,functions:deletePortalAnnouncement" --project pnj-compound-company-limited --non-interactive
 ```
 
-4. If Firebase reports that an old function exists in the project but not in local source, do not let non-interactive deploy abort the whole release. Either:
+8. If the release includes frontend files, Firestore rules/indexes, and Functions together, the known-good full deploy command from the temp copy root is:
+
+```powershell
+npx firebase-tools deploy --project pnj-compound-company-limited --only firestore,functions,hosting
+```
+
+9. If Firebase reports that an old function exists in the project but not in local source, do not let non-interactive deploy abort the whole release. Either:
    - deploy only the required functions with the `--only "functions:..."` pattern above, or
    - explicitly delete the obsolete cloud function later in a separate step.
+
+10. The local machine may have a newer global Node version than the Functions runtime. If deploy analysis fails in the synced workspace, prefer the clean temp-copy flow before changing runtime settings.
 
 ### Admin announcement fix pattern
 
