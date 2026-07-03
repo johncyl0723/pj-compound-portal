@@ -590,6 +590,83 @@ body {
   .float-login-en { display: none; }
   .float-login-arrow { font-size: 12px; }
 }
+/* ── Login Form (inside footer) ── */
+.login-form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+  text-align: left;
+}
+.login-field { display: flex; flex-direction: column; gap: 6px; }
+.login-field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.login-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(212,168,67,0.3);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  transition: border-color 0.24s ease, background 0.24s ease;
+}
+.login-input::placeholder { color: rgba(240,237,230,0.25); }
+.login-input:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,0.09); }
+.login-input-wrap { position: relative; }
+.login-input-wrap .login-input { padding-right: 46px; }
+.login-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(240,237,230,0.4);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.login-eye-btn:hover, .login-eye-btn.is-visible { color: var(--gold); }
+.login-eye-btn svg { width: 20px; height: 20px; pointer-events: none; }
+.login-eye-slash { opacity: 0; transition: opacity 0.16s; }
+.login-eye-btn.is-visible .login-eye-slash { opacity: 1; }
+.login-error {
+  min-height: 18px;
+  color: #ff9b9b;
+  font-size: 12px;
+  text-align: center;
+}
+.login-submit-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--gold), #9A6E08);
+  color: #fff;
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.2s;
+}
+.login-submit-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.login-submit-btn:active { transform: translateY(0); }
+.login-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+@media (max-width: 600px) {
+  .login-form { max-width: 100%; }
+  .login-input { min-height: 46px; font-size: 16px; }
+}
 .footer-legal {
   width: 100%;
   max-width: 860px;
@@ -608,14 +685,14 @@ body {
 <!-- Top Nav -->
 <nav class="top-nav">
   <span class="top-nav-brand"><strong>P&amp;J</strong> Compound Company Limited</span>
-  <a class="top-nav-login" href="./portal.html">
+  <a class="top-nav-login" href="#login">
     <span class="top-nav-login-zh">客戶登入</span>
     <span>/ Login &rarr;</span>
   </a>
 </nav>
 
 <!-- Floating Login Button -->
-<a class="float-login" href="./portal.html" aria-label="Client Login">
+<a class="float-login" href="#login" aria-label="Client Login">
   <span class="float-login-zh">客戶登入</span>
   <span class="float-login-en">Login</span>
   <span class="float-login-arrow">&rarr;</span>
@@ -740,17 +817,31 @@ body {
     <div class="footer-contact">
       <div class="footer-contact-label">Contact &middot; 聯絡</div>
       <div>phptan@gmail.com</div>
+      <div>john.cyl@gmail.com</div>
       <button class="footer-cta">安排會談 / Schedule a Meeting</button>
     </div>
   </div>
-  <div class="footer-login-cta reveal">
+  <div class="footer-login-cta reveal" id="login">
     <div class="footer-login-cta-label">Client Portal &middot; 客戶專區</div>
-    <div class="footer-login-cta-title">準備好了？進入您的投資組合</div>
-    <div class="footer-login-cta-sub">Ready to view your portfolio? Access your personalised reports and insights.</div>
-    <a class="footer-login-btn" href="./portal.html">
-      <span class="footer-login-btn-zh">客戶登入</span>
-      <span>/ Login &rarr;</span>
-    </a>
+    <div class="footer-login-cta-title">準備好了？登入您的投資組合</div>
+    <div class="footer-login-cta-sub">Ready to view your portfolio? Sign in below.</div>
+    <div class="login-form">
+      <div class="login-field">
+        <label class="login-field-label" for="login-code">股東戶號 / Shareholder ID</label>
+        <input class="login-input" id="login-code" name="username" autocomplete="username" autocapitalize="characters" spellcheck="false" placeholder="請輸入 PS001">
+      </div>
+      <div class="login-field">
+        <label class="login-field-label" for="login-password">登入密碼 / Password</label>
+        <div class="login-input-wrap">
+          <input class="login-input" type="password" id="login-password" name="password" autocomplete="current-password" spellcheck="false" placeholder="請輸入股東專屬登入密碼">
+          <button class="login-eye-btn" type="button" id="login-eye" aria-label="顯示密碼" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="login-eye-slash" d="M4 4l16 16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="login-submit-btn" id="login-submit-btn" type="button">登入 &rarr;</button>
+    </div>
   </div>
   <div class="footer-legal">
     &copy; 2026 P&amp;J Compound Company Limited &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp;
@@ -1057,6 +1148,133 @@ window.addEventListener('resize', function() {
   if (cRafId) { stopCurves();  initCurves();  drawCurves();  }
   if (sRafId) { stopExp();     initExp();     drawExp();     }
 });
+</script>
+
+<script type="module">
+import { auth, shareholderEmail } from './firebase-portal.js';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
+
+const db = getFirestore();
+const LOGIN_COOLDOWN_MS = 3000;
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_LOCKOUT_MS = 60000;
+let loginAttempts = 0;
+let loginLockedUntil = 0;
+let lastLoginTime = 0;
+
+const codeInput = document.getElementById('login-code');
+const passwordInput = document.getElementById('login-password');
+const errorEl = document.getElementById('login-error');
+const submitBtn = document.getElementById('login-submit-btn');
+const eyeBtn = document.getElementById('login-eye');
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+  try {
+    const snap = await getDoc(doc(db, 'shareholders', user.uid));
+    if (snap.exists() && snap.data().active !== false) {
+      location.replace('./portal.html');
+    }
+  } catch (_) {}
+});
+
+function loginErrorMessage(error) {
+  switch (error?.code) {
+    case 'auth/missing-password':
+      return '請輸入密碼後再登入。';
+    case 'auth/invalid-credential':
+    case 'auth/wrong-password':
+    case 'auth/user-not-found':
+      return '登入資料不正確，請確認股東戶號與密碼。';
+    case 'auth/user-disabled':
+      return '這個帳號目前已停用，請聯絡管理員。';
+    case 'auth/too-many-requests':
+      return '嘗試次數過多，請稍後再試。';
+    default:
+      return error?.message || '登入失敗，請稍後再試。';
+  }
+}
+
+async function attemptLogin() {
+  const code = codeInput.value.trim().toUpperCase();
+  const password = passwordInput.value;
+  errorEl.textContent = '';
+
+  const now = Date.now();
+  if (now < loginLockedUntil) {
+    const secs = Math.ceil((loginLockedUntil - now) / 1000);
+    errorEl.textContent = `嘗試次數過多，請等待 ${secs} 秒後再試。`;
+    return;
+  }
+  if (now - lastLoginTime < LOGIN_COOLDOWN_MS) {
+    errorEl.textContent = '操作過於頻繁，請稍後再試。';
+    return;
+  }
+  if (!/^(PS|CS)\d{3}$/.test(code)) {
+    errorEl.textContent = '請輸入正確的股東戶號，例如 PS001。';
+    codeInput.focus();
+    return;
+  }
+  if (password.length === 0) {
+    errorEl.textContent = '請輸入密碼後再登入。';
+    passwordInput.focus();
+    return;
+  }
+
+  lastLoginTime = now;
+  submitBtn.disabled = true;
+  submitBtn.textContent = '登入中...';
+
+  try {
+    const cred = await signInWithEmailAndPassword(auth, shareholderEmail(code), password);
+    const snap = await getDoc(doc(db, 'shareholders', cred.user.uid));
+    if (!snap.exists() || snap.data().active === false) {
+      await signOut(auth);
+      errorEl.textContent = '這個帳號目前沒有可用的股東資料。';
+      return;
+    }
+    location.replace('./portal.html');
+  } catch (error) {
+    loginAttempts += 1;
+    if (loginAttempts >= LOGIN_MAX_ATTEMPTS) {
+      loginLockedUntil = Date.now() + LOGIN_LOCKOUT_MS;
+      loginAttempts = 0;
+      errorEl.textContent = '嘗試次數過多，帳號暫時鎖定 60 秒。';
+    } else {
+      errorEl.textContent = loginErrorMessage(error);
+    }
+    passwordInput.value = '';
+    await signOut(auth).catch(() => {});
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '登入 →';
+  }
+}
+
+submitBtn.addEventListener('click', attemptLogin);
+
+codeInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') passwordInput.focus();
+});
+passwordInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') attemptLogin();
+});
+
+eyeBtn.addEventListener('click', () => {
+  const isVisible = passwordInput.type === 'password';
+  passwordInput.type = isVisible ? 'text' : 'password';
+  eyeBtn.classList.toggle('is-visible', isVisible);
+  eyeBtn.setAttribute('aria-pressed', String(isVisible));
+  eyeBtn.setAttribute('aria-label', isVisible ? '隱藏密碼' : '顯示密碼');
+});
+
+if (location.hash === '#login') {
+  setTimeout(() => {
+    document.getElementById('login')?.scrollIntoView({ behavior: 'smooth' });
+  }, 800);
+}
 </script>
 </body>
 </html>

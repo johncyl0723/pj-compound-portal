@@ -973,7 +973,11 @@ buildSidebar();
 document.getElementById('build-badge').textContent = `Portal ${APP_VERSION}`;
 document.getElementById('footer-updated').textContent = `Firebase 內容同步 ${APP_VERSION}`;
 onAuthStateChanged(auth, async (user) => {
-  if (!user || isAuthenticated) return;
+  if (isAuthenticated) return;
+  if (!user) {
+    location.replace('./index.html#login');
+    return;
+  }
   try {
     await showAuthenticated(user);
   } catch (error) {
