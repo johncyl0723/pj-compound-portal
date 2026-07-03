@@ -312,7 +312,7 @@
         </div>
       </div>
     </section>
-    <iframe id="content-iframe" title="投資內容檢視"></iframe>
+    <iframe id="content-iframe" title="投資內容檢視" sandbox="allow-same-origin allow-popups"></iframe>
     <div id="pdf-viewer"><div id="pdf-pages"></div></div>
     <div class="build-badge" id="build-badge">Portal</div>
   </main>
@@ -497,6 +497,7 @@ function showInFrame(url) {
   const frame = document.getElementById('content-iframe');
   viewer.style.display = 'none';
   document.getElementById('pdf-pages').innerHTML = '';
+  frame.sandbox = 'allow-same-origin allow-scripts allow-popups';
   frame.style.display = 'block';
   frame.removeAttribute('srcdoc');
   frame.src = url;
@@ -507,6 +508,7 @@ function showHtmlDocument(html) {
   const frame = document.getElementById('content-iframe');
   viewer.style.display = 'none';
   document.getElementById('pdf-pages').innerHTML = '';
+  frame.sandbox = 'allow-same-origin allow-popups';
   frame.style.display = 'block';
   frame.removeAttribute('src');
   frame.srcdoc = html;
