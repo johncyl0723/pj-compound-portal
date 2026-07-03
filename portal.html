@@ -318,15 +318,21 @@
   </main>
 </div>
 <script type="module">
-import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260702-statementfix1';
-import { buildShareholderStatementHtml, hasStatementStructuredData } from './assets/shareholder-statement-template.js?v=20260702-statementfix1';
+import { auth, db, storage, shareholderEmail } from './firebase-portal.js?v=20260703-securityfix1';
+import { buildShareholderStatementHtml, hasStatementStructuredData } from './assets/shareholder-statement-template.js?v=20260703-securityfix1';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js';
 import { doc, getDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js';
 import { ref, getBlob } from 'https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js';
 
-const APP_VERSION = '20260702-statementfix1';
+const APP_VERSION = '20260703-securityfix1';
 const SIDEBAR_WIDTH_KEY = 'pj-portal-sidebar-width';
 const SIDEBAR_MIN_WIDTH = 220;
+const LOGIN_COOLDOWN_MS = 3000;
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_LOCKOUT_MS = 60000;
+let loginAttempts = 0;
+let loginLockedUntil = 0;
+let lastLoginTime = 0;
 const SIDEBAR_MAX_WIDTH = 420;
 
 let isAuthenticated = false;
@@ -632,6 +638,16 @@ async function attemptLogin() {
   const errorEl = document.getElementById('welcome-error');
   const button = document.querySelector('.login-btn');
   errorEl.textContent = '';
+  const now = Date.now();
+  if (now < loginLockedUntil) {
+    const secs = Math.ceil((loginLockedUntil - now) / 1000);
+    errorEl.textContent = `嘗試次數過多，請等待 ${secs} 秒後再試。`;
+    return;
+  }
+  if (now - lastLoginTime < LOGIN_COOLDOWN_MS) {
+    errorEl.textContent = '操作過於頻繁，請稍後再試。';
+    return;
+  }
   if (!/^(PS|CS)\d{3}$/.test(code)) {
     errorEl.textContent = '請輸入正確的股東戶號，例如 PS001。';
     codeInput.focus();
@@ -642,18 +658,27 @@ async function attemptLogin() {
     passwordInput.focus();
     return;
   }
+  lastLoginTime = now;
   button.disabled = true;
   button.textContent = '登入中...';
   try {
     const cred = await signInWithEmailAndPassword(auth, shareholderEmail(code), password);
+    loginAttempts = 0;
     await showAuthenticated(cred.user);
   } catch (error) {
-    errorEl.textContent = loginErrorMessage(error);
+    loginAttempts += 1;
+    if (loginAttempts >= LOGIN_MAX_ATTEMPTS) {
+      loginLockedUntil = Date.now() + LOGIN_LOCKOUT_MS;
+      loginAttempts = 0;
+      errorEl.textContent = '嘗試次數過多，帳號暫時鎖定 60 秒。';
+    } else {
+      errorEl.textContent = loginErrorMessage(error);
+    }
     passwordInput.value = '';
     await signOut(auth).catch(() => {});
   } finally {
     button.disabled = false;
-    button.textContent = '進入 →';
+    button.textContent = '登入 →';
   }
 }
 
